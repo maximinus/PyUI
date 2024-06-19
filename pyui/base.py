@@ -34,13 +34,22 @@ class Margin:
 
 
 class Align:
-    START = 0
-    CENTER = 1
-    END = 2
+    LEFT = 1
+    RIGHT = 2
+    TOP = 4
+    BOTTOM = 8
+    CENTER = 16
 
-    def __init__(self, horizontal=START, vertical=START):
-        self.horizontal = horizontal
-        self.vertical = vertical
+    def __init__(self, alignment):
+        self.alignment = alignment
+
+    def horizontal(self):
+        horizontal_alignment = self.alignment & (self.LEFT | self.RIGHT)
+        return horizontal_alignment if horizontal_alignment else self.CENTER
+
+    def vertical(self):
+        vertical_alignment = self.alignment & (self.TOP | self.BOTTOM)
+        return vertical_alignment if vertical_alignment else self.CENTER
 
 
 class Size:

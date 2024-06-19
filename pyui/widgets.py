@@ -6,7 +6,7 @@ class Widget:
     def __init__(self, expand=Expand.NONE, margin=None, align=None):
         self.expand = expand
         self.margin = margin if margin is not None else Margin()
-        self.align = align if align is not None else Align()
+        self.align = Align(align) if align is not None else Align(Align.TOP|Align.LEFT)
         self.size = Size(0, 0)
 
     @property
@@ -24,30 +24,41 @@ class ColorRect(Widget):
         self.color = color
 
     def render(self, surface, x, y, available_size):
-        size = self.min_size
+        render_size = Size(0, 0)
         # only draw to the space we need to
         x += self.margin.left
         y += self.margin.top
-        width = size.width - self.margin.left - self.margin.right
-        height = size.height - self.margin.top - self.margin.bottom
+        if self.expand.is_horizontal:
+            # fill the space
+            width = available_size.width - (self.margin.left + self.margin.right)
+        else:
+            width = self.size.width - (self.margin.left + self.margin.right)
+        if self.expand.is_vertical:
+            height = available_size.height - (self.margin.top - self.margin.bottom)
+        else:
+            height = self.size.height - (self.margin.top - self.margin.bottom)
 
-        if self.expand in [Expand.HORIZONTAL, Expand.BOTH]:
-            if self.align.horizontal == Align.CENTER:
+        if self.expand.is_horizontal:
+            horiz_align = self.align.horizontal()
+            if horiz_align == Align.CENTER:
                 x += (available_size.width - width) // 2
-            elif self.align.horizontal == Align.END:
+            elif horiz_align == Align.RIGHT:
                 x += (available_size.width - width)
 
-        if self.expand in [Expand.VERTICAL, Expand.BOTH]:
-            if self.align.vertical == Align.CENTER:
+        if self.expand.is_vertical:
+            vert_align = self.align.vertical()
+            if vert_align == Align.CENTER:
                 y += (available_size.height - height) // 2
-            elif self.align.vertical == Align.END:
+            elif vert_align == Align.BOTTOM:
                 y += (available_size.height - height)
 
         pygame.draw.rect(surface, self.color, (x, y, width, height))
 
 
 class Box(Widget):
-    def __init__(self, horizontal=True, margin=None, expand=Expand.NONE, align=None):
+    def __init__(self, horizontal=True, margin=None, expand=None, align=None):
+        if expand is not None:
+            raise AttributeError('Box widgets cannot be passed an expand variable')
         super().__init__(expand, margin, align)
         self.horizontal = horizontal
         self.widgets = []
@@ -83,8 +94,8 @@ class Box(Widget):
 
 
 class HBox(Box):
-    def __init__(self, margin=None, expand=Expand.NONE, align=None, widgets=None):
-        super().__init__(horizontal=True, margin=margin, expand=expand, align=align)
+    def __init__(self, margin=None, align=None, widgets=None):
+        super().__init__(horizontal=True, margin=margin, align=align)
         if widgets is not None:
             self.widgets = widgets
 
@@ -151,8 +162,8 @@ class HBox(Box):
 
 
 class VBox(Box):
-    def __init__(self, margin=None, expand=Expand.NONE, align=None, widgets=None):
-        super().__init__(horizontal=False, margin=margin, expand=expand, align=align)
+    def __init__(self, margin=None, align=None, widgets=None):
+        super().__init__(horizontal=False, margin=margin, align=align)
         if widgets is not None:
             self.widgets = widgets
 

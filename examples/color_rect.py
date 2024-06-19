@@ -17,20 +17,18 @@ def screen1():
 
 
 def screen2():
-    # three ColorRects that do not expand and are in the center of the expanded hbox
-    box = HBox(expand=Expand.BOTH,
-               widgets=[ColorRect(Size(50, 50), Color.RED, align=Align.CENTER),
-                        ColorRect(Size(50, 50), Color.GREEN, align=Align.CENTER),
-                        ColorRect(Size(50, 50), Color.BLUE, align=Align.CENTER)])
+    # three ColorRects that expand and are in the center of the expanded hbox
+    box = HBox(widgets=[ColorRect(Size(50, 50), Color.RED, align=Align.CENTER, expand=Expand.HORIZONTAL),
+                        ColorRect(Size(50, 50), Color.GREEN, align=Align.CENTER, expand=Expand.HORIZONTAL),
+                        ColorRect(Size(50, 50), Color.BLUE, align=Align.CENTER, expand=Expand.HORIZONTAL)])
     return box
 
 
 def screen3():
     # as 2, but aligned left, middle and right
-    box = HBox(expand=Expand.BOTH,
-               widgets=[ColorRect(Size(50, 50), Color.RED, align=Align.START),
-                        ColorRect(Size(50, 50), Color.GREEN, align=Align.CENTER),
-                        ColorRect(Size(50, 50), Color.BLUE, align=Align.END)])
+    box = HBox(widgets=[ColorRect(Size(100, 150), Color.RED, align=Align.LEFT, expand=Expand.HORIZONTAL),
+                        ColorRect(Size(100, 150), Color.GREEN, align=Align.CENTER, expand=Expand.HORIZONTAL),
+                        ColorRect(Size(100, 150), Color.BLUE, align=Align.RIGHT, expand=Expand.HORIZONTAL)])
     return box
 
 
