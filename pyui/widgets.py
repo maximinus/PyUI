@@ -55,6 +55,32 @@ class Box(Widget):
     def add_widget(self, widget):
         self.widgets.append(widget)
 
+    @property
+    def expand(self):
+        # whether a box will expand or not depends on it's children
+        x_expand = False
+        y_expand = False
+        for widget in self.widgets:
+            if widget.expand != Expand.NONE:
+                if widget.expand == Expand.BOTH:
+                    return Expand.BOTH
+            if widget.expand == Expand.HORIZONTAL:
+                x_expand = True
+            if widget.expand == Expand.VERTICAL:
+                y_expand = True
+            if x_expand and y_expand:
+                return Expand.BOTH
+        if x_expand:
+            return Expand.HORIZONTAL
+        if y_expand:
+            return Expand.VERTICAL
+        return Expand.NONE
+
+    @expand.setter
+    def expand(self, new_value):
+        # cannot set this value in a Box
+        pass
+
 
 class HBox(Box):
     def __init__(self, margin=None, expand=Expand.NONE, align=None, widgets=None):
@@ -70,9 +96,10 @@ class HBox(Box):
             child_size = child.min_size
             base_size.width += child_size.width
             base_size.height = max(base_size.height, child_size.height)
-        return base_size
+        return base_size.add_margin(self.margin)
 
     def calculate_sizes(self, available_size):
+        available_size = available_size.subtract_margin(self.margin)
         fixed_width = 0
         expandable_count = 0
 
@@ -116,12 +143,11 @@ class HBox(Box):
         return final_widths
 
     def render(self, surface, x, y, available_size):
-        self.calculate_sizes(available_size)
+        available_size = available_size.subtract_margin(self.margin)
         current_x = x + self.margin.left
-        for widget in self.widgets:
-            width = widget.size.width if widget.expand not in [Expand.HORIZONTAL, Expand.BOTH] else widget.size.width
-            widget.render(surface, current_x, y, Size(width, available_size.height))
-            current_x += width + widget.margin.left + widget.margin.right
+        for widget, widget_size in zip(self.widgets, self.calculate_sizes(available_size)):
+            widget.render(surface, current_x, y, widget_size)
+            current_x += widget_size.width + widget.margin.left + widget.margin.right
 
 
 class VBox(Box):
@@ -184,12 +210,11 @@ class VBox(Box):
         return final_heights
 
     def render(self, surface, x, y, available_size):
-        self.calculate_sizes(available_size)
+        available_size = available_size.subtract_margin(self.margin)
         current_y = y + self.margin.top
-        for widget in self.widgets:
-            height = widget.size.height if widget.expand not in [Expand.VERTICAL, Expand.BOTH] else widget.size.height
-            widget.render(surface, x, current_y, Size(available_size.width, height))
-            current_y += height + widget.margin.top + widget.margin.bottom
+        for widget, widget_size in zip(self.widgets, self.calculate_sizes(available_size)):
+            widget.render(surface, x, current_y, widget_size)
+            current_y += widget_size.height + widget.margin.top + widget.margin.bottom
 
 
 class NinePatch(Widget):

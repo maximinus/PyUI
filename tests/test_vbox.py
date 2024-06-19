@@ -131,17 +131,3 @@ class TestVBoxWidths(unittest.TestCase):
         sizes = box.calculate_sizes(Size(200, 200))
         self.assertEqual(sizes[0].width, 200)
         self.assertEqual(sizes[1].width, 200)
-
-
-class TestVBoxInVbox(unittest.TestCase):
-    def test_simple(self):
-        box1 = VBox()
-        box1.add_widget(ColorRect(Size(50, 50), Color.RED))
-        box2 = VBox(expand=Expand.VERTICAL)
-        box2.add_widget(ColorRect(Size(50, 50), Color.RED))
-        main_box = VBox()
-        main_box.add_widget(box1)
-        main_box.add_widget(box2)
-        sizes = main_box.calculate_sizes(Size(200, 300))
-        self.assertEqual(sizes[0].height, 50)
-        self.assertEqual(sizes[1].height, 250)

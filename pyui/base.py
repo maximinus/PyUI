@@ -53,5 +53,18 @@ class Size:
         height = self.height + margin.top + margin.bottom
         return Size(width, height)
 
+    def subtract_margin(self, margin):
+        width = self.width - (margin.left + margin.right)
+        height = self.height - (margin.top + margin.bottom)
+        return Size(width, height)
+
     def __add__(self, other):
         return Size(self.width + other.width, self.height + other.height)
+
+    def __eq__(self, other):
+        if isinstance(other, Size):
+            return self.width == other.width and self.height == other.height
+        return False
+
+    def __repr__(self):
+        return f'Size(width={self.width}, height={self.height})'

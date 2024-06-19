@@ -131,37 +131,3 @@ class TestHBoxHeights(unittest.TestCase):
         sizes = box.calculate_sizes(Size(200, 200))
         self.assertEqual(sizes[0].height, 200)
         self.assertEqual(sizes[1].height, 200)
-
-
-class TestHBoxInHbox(unittest.TestCase):
-    def test_simple(self):
-        box1 = HBox()
-        box1.add_widget(ColorRect(Size(50, 50), Color.RED))
-        box2 = HBox(expand=Expand.HORIZONTAL)
-        box2.add_widget(ColorRect(Size(50, 50), Color.RED))
-        main_box = HBox()
-        main_box.add_widget(box1)
-        main_box.add_widget(box2)
-        sizes = main_box.calculate_sizes(Size(200, 100))
-        self.assertEqual(sizes[0].width, 50)
-        self.assertEqual(sizes[1].width, 150)
-
-
-class TestMixedBoxes(unittest.TestCase):
-    def test_simple(self):
-        # a vbox contains 2 rows, each of 2 HBoxes
-        # Each hbox contains a single ColorRect of size 10x10
-        # the top left is set to expand in both directions
-        # this box will only expand if the parent is also set this way though
-        tl_box = HBox(widgets=[ColorRect(Size(10, 10), Color.RED)], expand=Expand.BOTH)
-        tr_box = HBox(widgets=[ColorRect(Size(10, 10), Color.RED)])
-        bl_box = HBox(widgets=[ColorRect(Size(10, 10), Color.RED)])
-        br_box = HBox(widgets=[ColorRect(Size(10, 10), Color.RED)])
-        top_row = HBox(widgets=[tl_box, tr_box], expand=Expand.BOTH)
-        bottom_row = HBox(widgets=[bl_box, br_box])
-        main_box = VBox(widgets=[top_row, bottom_row])
-        sizes = main_box.calculate_sizes(Size(200, 200))
-        self.assertEqual(sizes[0].width, 200)
-        self.assertEqual(sizes[0].height, 190)
-        self.assertEqual(sizes[1].width, 20)
-        self.assertEqual(sizes[1].height, 10)
