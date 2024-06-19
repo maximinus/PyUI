@@ -3,8 +3,8 @@ from pyui.base import Expand, Margin, Align, Size
 
 
 class Widget:
-    def __init__(self, expand=Expand.NONE, margin=None, align=None):
-        self.expand = expand
+    def __init__(self, expand=None, margin=None, align=None):
+        self.expand = expand if expand is not None else Expand.NONE
         self.margin = margin if margin is not None else Margin()
         self.align = Align(align) if align is not None else Align(Align.TOP|Align.LEFT)
         self.size = Size(0, 0)
@@ -18,7 +18,7 @@ class Widget:
 
 
 class ColorRect(Widget):
-    def __init__(self, size, color, expand=Expand.NONE, margin=None, align=None, fill=Expand.NONE):
+    def __init__(self, size, color, expand=None, margin=None, align=None, fill=Expand.NONE):
         super().__init__(expand, margin, align)
         self.size = size
         self.color = color
@@ -285,14 +285,16 @@ class TextLabel(Widget):
         width = available_size.width - self.margin.left - self.margin.right
         height = available_size.height - self.margin.top - self.margin.bottom
 
-        if self.align.horizontal == Align.CENTER:
+        horiz_align = self.align.horizontal()
+        if horiz_align == Align.CENTER:
             x += (available_size.width - self.size.width) // 2
-        elif self.align.horizontal == Align.END:
+        elif horiz_align == Align.RIGHT:
             x += (available_size.width - self.size.width)
 
-        if self.align.vertical == Align.CENTER:
+        vert_align = self.align.vertical()
+        if vert_align == Align.CENTER:
             y += (available_size.height - self.size.height) // 2
-        elif self.align.vertical == Align.END:
+        elif vert_align == Align.BOTTOM:
             y += (available_size.height - self.size.height)
 
         surface.blit(self.image, (x, y))
