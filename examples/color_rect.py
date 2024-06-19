@@ -11,7 +11,7 @@ BACKGROUND_COLOR = (80, 80, 80)
 def screen1():
     # a single HBox filling all space, has 3 widgets: the middle does not fill vertically
     box = HBox(widgets=[ColorRect(Size(50, 50), Color.RED, expand=Expand.BOTH),
-                        ColorRect(Size(50, 50), Color.GREEN, expand=Expand.HORIZONTAL),
+                        ColorRect(Size(50, 50), Color.GREEN, expand=Expand.HORIZONTAL, fill=Expand.HORIZONTAL),
                         ColorRect(Size(50, 50), Color.BLUE, expand=Expand.BOTH)])
     return box
 
@@ -25,8 +25,8 @@ def screen2():
 
 
 def screen3():
-    # as 2, but aligned left, middle and right
-    box = HBox(widgets=[ColorRect(Size(100, 150), Color.RED, align=Align.LEFT, expand=Expand.HORIZONTAL),
+    # as 2, but aligned left, middle and right, and the left fills all it's space
+    box = HBox(widgets=[ColorRect(Size(100, 150), Color.RED, align=Align.LEFT, expand=Expand.HORIZONTAL, fill=Expand.BOTH),
                         ColorRect(Size(100, 150), Color.GREEN, align=Align.CENTER, expand=Expand.HORIZONTAL),
                         ColorRect(Size(100, 150), Color.BLUE, align=Align.RIGHT, expand=Expand.HORIZONTAL)])
     return box
