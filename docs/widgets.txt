@@ -1,0 +1,26 @@
+Basics
+======
+
+A widget doesn't usually have a fixed size. For example:
+
+    A text widget renders text, and that's all. So its size depends on the text.
+    The same for a button. It's some extra space for the button image, but the size is text dependant.
+    Same for text entry boxes, menu drop downs and so on
+
+This does mean that the HEIGHT of anything with text requires that the every line of text is the same height.
+
+
+Boxes
+=====
+
+Now let's look at a box.
+
+The job of a box is to contain other widgets. A box itself may expand or not, as may the widgets.
+A box will be given a certain size to fit into. The logic is:
+
+When a widget is passed a given size, it can either expand or not.
+If it can expand:
+    The widget will return a size that is the maximum allocated
+Otherwise:
+    The widget will return a size that is equal to or smaller than the given size
+    If any widget is set to expand, then the size returned will be equal to the given size
