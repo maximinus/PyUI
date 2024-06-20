@@ -1,7 +1,7 @@
 import pygame
 from pyui.setup import init, await_keypress, DEFAULT_SIZE
-from pyui.base import Expand, Size, Color, Align
-from pyui.widgets import ColorRect, HBox
+from pyui.base import Expand, Size, Color, Align, Margin
+from pyui.widgets import ColorRect, HBox, VBox
 
 BACKGROUND_COLOR = (80, 80, 80)
 
@@ -32,9 +32,35 @@ def screen3():
     return box
 
 
+def screen4():
+    # 3 rows of 3 ColorRects, the centre one fills, the rest are centered
+    row1 = HBox(widgets=[ColorRect(Size(50, 50), Color.RED, align=Align.CENTER, expand=Expand.BOTH),
+                         ColorRect(Size(50, 50), Color.RED, align=Align.CENTER, expand=Expand.BOTH),
+                         ColorRect(Size(50, 50), Color.RED, align=Align.CENTER, expand=Expand.BOTH)])
+    row2 = HBox(widgets=[ColorRect(Size(50, 50), Color.RED, align=Align.CENTER, expand=Expand.BOTH),
+                         ColorRect(Size(50, 50), Color.RED, align=Align.CENTER, expand=Expand.BOTH, fill=Expand.BOTH),
+                         ColorRect(Size(50, 50), Color.RED, align=Align.CENTER, expand=Expand.BOTH)])
+    row3 = HBox(widgets=[ColorRect(Size(50, 50), Color.RED, align=Align.CENTER, expand=Expand.BOTH),
+                         ColorRect(Size(50, 50), Color.RED, align=Align.CENTER, expand=Expand.BOTH),
+                         ColorRect(Size(50, 50), Color.RED, align=Align.CENTER, expand=Expand.BOTH)])
+    return VBox(widgets=[row1, row2, row3])
+
+
+def screen5():
+    # 3x1 array, but give a margin of differing sizes to each, center vertically
+    m = Margin(10, 10, 10, 10)
+    box = HBox(widgets=[ColorRect(Size(50, 50), Color.BLUE, align=Align.CENTER,
+                                  expand=Expand.BOTH, fill=Expand.HORIZONTAL, margin=m),
+                        ColorRect(Size(50, 50), Color.BLUE, align=Align.CENTER,
+                                  expand=Expand.BOTH, fill=Expand.HORIZONTAL, margin=m),
+                        ColorRect(Size(50, 50), Color.BLUE, align=Align.CENTER,
+                                  expand=Expand.BOTH, fill=Expand.HORIZONTAL, margin=m)])
+    return box
+
+
 if __name__ == '__main__':
     display = init()
-    screens = [screen1(), screen2(), screen3()]
+    screens = [screen1(), screen2(), screen3(), screen4(), screen5()]
     for single_screen in screens:
         display.fill(BACKGROUND_COLOR)
         single_screen.render(display, 0, 0, DEFAULT_SIZE)
