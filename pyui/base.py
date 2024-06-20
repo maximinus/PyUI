@@ -1,3 +1,7 @@
+import os.path
+import pygame
+
+from pathlib import Path
 from enum import Enum, auto
 
 
@@ -52,6 +56,15 @@ class Align:
         return vertical_alignment if vertical_alignment else self.CENTER
 
 
+class Position:
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
+
+    def __repr__(self):
+        return f'Pos(x={self.x}, y={self.y})'
+
+
 class Size:
     def __init__(self, width, height):
         self.width = width
@@ -77,3 +90,15 @@ class Size:
 
     def __repr__(self):
         return f'Size(width={self.width}, height={self.height})'
+
+
+def get_asset(asset_name):
+    # relative to this file, the assets are in ../assets
+    assets_path = Path(__file__).parent.parent / 'assets'
+    fullpath = assets_path / asset_name
+    if not os.path.exists(fullpath):
+        raise OSError(f'File {fullpath} does not exist')
+    if fullpath.suffix == 'png':
+        # load image as alpha and return
+        return pygame.image.load(fullpath).convert_alpha()
+    raise RuntimeError(f'File type {asset_name} not supported')
