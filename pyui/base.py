@@ -104,7 +104,7 @@ def get_asset(asset_name):
     fullpath = assets_path / asset_name
     if not os.path.exists(fullpath):
         raise OSError(f'File {fullpath} does not exist')
-    if fullpath.suffix == 'png':
+    if fullpath.suffix == '.png':
         # load image as alpha and return
         return pygame.image.load(fullpath).convert_alpha()
-    raise RuntimeError(f'File type {asset_name} not supported')
+    raise RuntimeError(f'File type {fullpath.suffix} not supported')
