@@ -12,6 +12,7 @@ class Color:
     BLUE = (32, 32, 192)
     WHITE = (255, 255, 255)
     BLACK = (0, 0, 0)
+    BACKGROUND = (200, 200, 200)
 
 
 class Expand(Enum):
@@ -69,6 +70,11 @@ class Size:
     def __init__(self, width, height):
         self.width = width
         self.height = height
+
+    def invert(self):
+        tmp = self.width
+        self.width = self.height
+        self.height = tmp
 
     def add_margin(self, margin):
         width = self.width + margin.left + margin.right
