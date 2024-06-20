@@ -20,13 +20,30 @@ class Frame(Widget):
 
 
 class Border(Widget):
-    def __init__(self, background=Color.BACKGROUND, margin=None):
+    def __init__(self, background=Color.BACKGROUND, widget=None):
+        # the border contains another widget, however the default will be to grab the default size of the widget
+        # there is a resize method if you want to change this
+        # the actual size of the Border will be the child widget min size + border size
+        # the border size will depend on the size of the nine-patch
+        # the widget render will occur at the corner of the child widget
+        # any margin will be ignored
         super().__init__()
         self.image = get_asset('frame.png')
         self.corner = Size(8, 8)
         self.middle = Size(4, 8)
         self.background = background
-        self.size = Size(120, 80)
+        self.widget = widget
+        if widget is None:
+            self.size = Size(0, 0)
+        else:
+            self.size = widget.min_size()
+
+    def update_widget(self, widget):
+        self.widget = widget
+        self.size = widget.min_size()
+
+    def update_size(self, new_size):
+        self.size = new_size
 
     def render(self, surface, x, y, available_size):
         # draw the top left
@@ -69,6 +86,6 @@ class Border(Widget):
         surface.blit(bottom_side, (x + self.corner.width, y + self.size.height - self.middle.height))
 
         # draw the middle
-        pygame.draw.rect(surface, Color.BACKGROUND, (x + self.corner.width, y + self.corner.width,
+        pygame.draw.rect(surface, self.background, (x + self.corner.width, y + self.corner.width,
                                                      self.size.width - (2 * self.corner.width),
                                                      self.size.height - (2 * self.corner.height)))
