@@ -23,19 +23,17 @@ class ColorRect(Widget):
             width = available_size.width - (self.margin.left + self.margin.right)
         else:
             width = self.size.width - (self.margin.left + self.margin.right)
-        if self.expand.is_vertical and self.fill.is_vertical:
-            height = available_size.height - (self.margin.top - self.margin.bottom)
-        else:
-            height = self.size.height - (self.margin.top - self.margin.bottom)
-
-        if self.expand.is_horizontal:
+            # and align here as well, since we are not filling
             horiz_align = self.align.horizontal()
             if horiz_align == Align.CENTER:
                 x += (available_size.width - width) // 2
             elif horiz_align == Align.RIGHT:
                 x += (available_size.width - width)
-
-        if self.expand.is_vertical:
+        if self.expand.is_vertical and self.fill.is_vertical:
+            height = available_size.height - (self.margin.top - self.margin.bottom)
+        else:
+            height = self.size.height - (self.margin.top - self.margin.bottom)
+            # align here since we are not filling
             vert_align = self.align.vertical()
             if vert_align == Align.CENTER:
                 y += (available_size.height - height) // 2

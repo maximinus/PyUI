@@ -1,6 +1,6 @@
 import unittest
 
-from pyui.base import Color, Expand, Size
+from pyui.base import Color, Expand, Size, Margin, Align
 from pyui.widgets import HBox, VBox, ColorRect
 
 
@@ -13,7 +13,7 @@ class TestMixedBoxes(unittest.TestCase):
         tr_box = HBox(widgets=[ColorRect(Size(10, 10), Color.RED)])
         bl_box = HBox(widgets=[ColorRect(Size(10, 10), Color.RED)])
         br_box = HBox(widgets=[ColorRect(Size(10, 10), Color.RED)])
-        top_row = HBox(widgets=[tl_box, tr_box], expand=Expand.BOTH)
+        top_row = HBox(widgets=[tl_box, tr_box])
         bottom_row = HBox(widgets=[bl_box, br_box])
         main_box = VBox(widgets=[top_row, bottom_row])
         sizes = main_box.calculate_sizes(Size(200, 200))
@@ -33,3 +33,17 @@ class TestOldFailingExamples(unittest.TestCase):
         self.assertEqual(sizes[0], Size(300, 600))
         self.assertEqual(sizes[1], Size(300, 50))
         self.assertEqual(sizes[2], Size(300, 600))
+
+    def test_2(self):
+        m = Margin(10, 10, 10, 10)
+        box = HBox(widgets=[ColorRect(Size(50, 50), Color.BLUE, align=Align.CENTER,
+                                      expand=Expand.BOTH, fill=Expand.HORIZONTAL, margin=m),
+                            ColorRect(Size(50, 50), Color.BLUE, align=Align.CENTER,
+                                      expand=Expand.BOTH, fill=Expand.HORIZONTAL, margin=m),
+                            ColorRect(Size(50, 50), Color.BLUE, align=Align.CENTER,
+                                      expand=Expand.BOTH, fill=Expand.HORIZONTAL, margin=m)])
+        sizes = box.calculate_sizes(Size(800, 600))
+        # we expect them to all have very similar sizes, around 800/3 = 266 or 267
+        self.assertTrue(266 <= sizes[0].width <= 267)
+        self.assertTrue(266 <= sizes[1].width <= 267)
+        self.assertTrue(266 <= sizes[2].width <= 267)

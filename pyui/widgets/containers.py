@@ -105,7 +105,8 @@ class HBox(Box):
         current_x = x + self.margin.left
         for widget, widget_size in zip(self.widgets, self.calculate_sizes(available_size)):
             widget.render(surface, current_x, y, widget_size)
-            current_x += widget_size.width + widget.margin.left + widget.margin.right
+            # no need to add the margin because it is computed in the widget size
+            current_x += widget_size.width
 
 
 class VBox(Box):
@@ -172,4 +173,4 @@ class VBox(Box):
         current_y = y + self.margin.top
         for widget, widget_size in zip(self.widgets, self.calculate_sizes(available_size)):
             widget.render(surface, x, current_y, widget_size)
-            current_y += widget_size.height + widget.margin.top + widget.margin.bottom
+            current_y += widget_size.height

@@ -49,11 +49,11 @@ def screen4():
 def screen5():
     # 3x1 array, but give a margin of differing sizes to each, center vertically
     m = Margin(10, 10, 10, 10)
-    box = HBox(widgets=[ColorRect(Size(50, 50), Color.BLUE, align=Align.CENTER,
+    box = HBox(widgets=[ColorRect(Size(50, 50), Color.RED, align=Align.CENTER,
                                   expand=Expand.BOTH, fill=Expand.HORIZONTAL, margin=m),
                         ColorRect(Size(50, 50), Color.BLUE, align=Align.CENTER,
                                   expand=Expand.BOTH, fill=Expand.HORIZONTAL, margin=m),
-                        ColorRect(Size(50, 50), Color.BLUE, align=Align.CENTER,
+                        ColorRect(Size(50, 50), Color.GREEN, align=Align.CENTER,
                                   expand=Expand.BOTH, fill=Expand.HORIZONTAL, margin=m)])
     return box
 
