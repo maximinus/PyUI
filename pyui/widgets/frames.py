@@ -93,9 +93,11 @@ class Border(Widget):
         surface.blit(bottom_side, (x + self.corner.width, y + self.size.height - self.middle.height))
 
         # draw the middle
-        pygame.draw.rect(surface, self.background, (x + self.corner.width, y + self.corner.width,
-                                                     self.size.width - (2 * self.corner.width),
-                                                     self.size.height - (2 * self.corner.height)))
+        # TODO: border covers the inside by 1 pixel, so it is calculated wrong
+        # This will need to be fixed by adding an "inset" value or similar
+        pygame.draw.rect(surface, self.background, (x + self.corner.width - 1, y + self.corner.width - 1,
+                                                     self.size.width - (2 * self.corner.width) + 2,
+                                                     self.size.height - (2 * self.corner.height) + 2))
 
         x += self.corner.width
         y += self.corner.height
