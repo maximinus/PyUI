@@ -36,7 +36,11 @@ class Border(Widget):
         if widget is None:
             self.size = Size(0, 0)
         else:
-            self.size = widget.min_size()
+            self.size = widget.min_size
+        self.size += self.get_border_size()
+
+    def get_border_size(self):
+        return Size(self.corner.width * 2, self.corner.height * 2)
 
     def update_widget(self, widget):
         self.widget = widget
@@ -89,3 +93,5 @@ class Border(Widget):
         pygame.draw.rect(surface, self.background, (x + self.corner.width, y + self.corner.width,
                                                      self.size.width - (2 * self.corner.width),
                                                      self.size.height - (2 * self.corner.height)))
+
+        self.widget.render(surface, x, y, )

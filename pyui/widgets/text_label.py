@@ -14,7 +14,9 @@ class TextLabel(Widget):
         self.image = self.font.render(text, True, color)
         self.size = Size(self.image.get_width(), self.image.get_height())
 
-    def render(self, surface, x, y, available_size):
+    def render(self, surface, x, y, available_size=None):
+        if available_size is None:
+            available_size = self.min_size
         x += self.margin.left
         y += self.margin.top
         width = available_size.width - self.margin.left - self.margin.right

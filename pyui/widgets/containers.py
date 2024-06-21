@@ -125,7 +125,9 @@ class VBox(Box):
             base_size.height += child_size.height
         return base_size
 
-    def calculate_sizes(self, available_size):
+    def calculate_sizes(self, available_size=None):
+        if available_size is None:
+            available_size = self.min_size
         fixed_height = 0
         expandable_count = 0
 

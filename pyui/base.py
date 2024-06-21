@@ -12,7 +12,7 @@ class Color:
     BLUE = (32, 32, 192)
     WHITE = (255, 255, 255)
     BLACK = (0, 0, 0)
-    BACKGROUND = (200, 200, 200)
+    BACKGROUND = (232, 232, 232)
 
 
 class Expand(Enum):

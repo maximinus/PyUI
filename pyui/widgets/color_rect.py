@@ -13,7 +13,9 @@ class ColorRect(Widget):
         # otherwise the widget will expand but be the same size (which is the norm)
         self.fill = fill
 
-    def render(self, surface, x, y, available_size):
+    def render(self, surface, x, y, available_size=None):
+        if available_size is None:
+            available_size = self.min_size
         render_size = Size(0, 0)
         # only draw to the space we need to
         x += self.margin.left

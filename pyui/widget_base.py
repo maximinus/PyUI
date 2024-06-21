@@ -12,5 +12,6 @@ class Widget:
     def min_size(self):
         return self.size.add_margin(self.margin)
 
-    def render(self, surface, x, y, available_size):
+    def render(self, surface, x, y, available_size=None):
+        # if the available size is None, then the default is to render at the minimum size
         pass

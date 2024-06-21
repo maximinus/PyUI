@@ -1,0 +1,38 @@
+Our aim is to make enough GUI to build an IDE.
+
+To not get side-tracked, we need to build towards this rather than anything else.
+This means that, at a minimum, we need to solve the following:
+
+1: We need drop-down menus
+2: We need a text widget
+3: The window must be re-sizeable
+4: We need to be able to produce a new window
+5: We need to get fonts from the system and use them
+6: We need a file selector
+7: We need a tree widget
+8: We need to have a scrollable box widget
+9: We need a widget model that responds to events
+10: Other widgets: Checkbox, Drop-down menu, text input, splitter, tabs, icon, button
+
+
+Plan
+----
+
+1: Get a single menu displaying
+2: Connect that to a menubar
+3: Get the mouse working with a connection to the menu items
+4: Add actions to the system to handle callbacks
+5: Allow the window to be resized
+6: Add a text editor widget
+7: Allow editing of text
+8: Add a file manager to the lhs; include a splitter widget
+9: Fill in the menus
+10: Add search / replace
+11: Add allowing to make an extra window
+12: Allow saving and loading
+13: Add tabs to the text editor
+
+Phase 2
+-------
+
+At this point, we start to move to Lisp.
