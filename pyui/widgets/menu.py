@@ -7,10 +7,20 @@ class MenuItem(Widget):
     def __init__(self, text, icon_name=None):
         super().__init__()
         self.box = HBox()
-        self.icon = None
+        text_label = TextLabel(text)
         if icon_name is not None:
-            self.icon = get_asset(f'icons/{icon_name}.png')
-            self.box.add_widget(Image(self.icon))
+            icon_image = Image(get_asset(f'icons/{icon_name}.png'))
+            # either one of the following is true:
+            # the icon and text are the same size -> nothing to do
+            # the icon is bigger or the text is bigger: center the other one
+            icon_height = icon_image.min_size.height
+            text_height = text_label.min_size.height
+            if icon_height != text_height:
+                if icon_height > text_height:
+                    text_label.align = Align(Align.LEFT|Align.CENTER)
+                else:
+                    icon_image.align = Align(Align.LEFT|Align.CENTER)
+            self.box.add_widget(icon_image)
         self.box.add_widget(TextLabel(text))
         self.size = self.box.min_size
 

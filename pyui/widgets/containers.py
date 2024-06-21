@@ -86,9 +86,9 @@ class HBox(Box):
 
         # Set final widths
         final_widths = []
+        # note: the height for each widget should be the same as highest widget, else the widget cannot center
+        height = max([x.min_size.height for x in self.widgets])
         for widget in self.widgets:
-            # calculate height, is easy
-            height = widget.min_size.height
             if widget.expand.is_vertical:
                 height = available_size.height
             if widget.expand.is_horizontal:
