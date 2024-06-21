@@ -7,7 +7,7 @@ from pyui.widget_base import Widget
 class ColorRect(Widget):
     def __init__(self, size, color, expand=None, margin=None, align=None, fill=Expand.NONE):
         super().__init__(expand, margin, align)
-        self.size = sizeit
+        self.size = size
         self.color = color
         # fill means "fill the expanded area (if there is any) with the expanded rect"
         # otherwise the widget will expand but be the same size (which is the norm)
