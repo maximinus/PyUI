@@ -49,8 +49,11 @@ class Border(Widget):
     def update_size(self, new_size):
         self.size = new_size
 
-    def render(self, surface, x, y, available_size):
+    def render(self, surface, x, y, available_size=None):
         # draw the top left
+        x -= self.corner.width
+        y -= self.corner.height
+
         surface.blit(self.image, (x, y), (0, 0, self.corner.width, self.corner.height))
         # top right
         surface.blit(self.image, (x + self.size.width - self.corner.width, y),
@@ -94,4 +97,6 @@ class Border(Widget):
                                                      self.size.width - (2 * self.corner.width),
                                                      self.size.height - (2 * self.corner.height)))
 
+        x += self.corner.width
+        y += self.corner.height
         self.widget.render(surface, x, y, self.widget.min_size)

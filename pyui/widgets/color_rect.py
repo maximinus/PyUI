@@ -24,7 +24,8 @@ class ColorRect(Widget):
             # fill the space
             width = available_size.width - (self.margin.left + self.margin.right)
         else:
-            width = self.size.width - (self.margin.left + self.margin.right)
+            # the size does not include the width, but it will have been calculated in the min size
+            width = self.size.width
             # and align here as well, since we are not filling
             horiz_align = self.align.horizontal()
             if horiz_align == Align.CENTER:
@@ -34,7 +35,7 @@ class ColorRect(Widget):
         if self.expand.is_vertical and self.fill.is_vertical:
             height = available_size.height - (self.margin.top - self.margin.bottom)
         else:
-            height = self.size.height - (self.margin.top - self.margin.bottom)
+            height = self.size.height
             # align here since we are not filling
             vert_align = self.align.vertical()
             if vert_align == Align.CENTER:

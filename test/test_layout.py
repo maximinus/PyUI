@@ -1,7 +1,7 @@
 import unittest
 
 from pyui.base import Color, Expand, Size, Margin, Align
-from pyui.widgets import HBox, VBox, ColorRect
+from pyui.widgets import HBox, VBox, ColorRect, Spacer
 
 
 class TestMixedBoxes(unittest.TestCase):
@@ -47,3 +47,11 @@ class TestOldFailingExamples(unittest.TestCase):
         self.assertTrue(266 <= sizes[0].width <= 267)
         self.assertTrue(266 <= sizes[1].width <= 267)
         self.assertTrue(266 <= sizes[2].width <= 267)
+
+    def test_3(self):
+        box = HBox(widgets=[ColorRect(Size(50, 50), Color.BLUE, margin=Margin(10, 10, 10, 10)),
+                            Spacer(Size(200, 0)),
+                            ColorRect(Size(50, 50), Color.BLUE, margin=Margin(10, 10, 10, 10))])
+        size = box.min_size
+        # since nothing is growing, the size should be ((50 + 10 + 10) * 2) + 200 = 340
+        self.assertEqual(size.width, 340)
