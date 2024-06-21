@@ -1,3 +1,4 @@
+import json
 import os.path
 import pygame
 
@@ -98,6 +99,11 @@ class Size:
         return f'Size(width={self.width}, height={self.height})'
 
 
+def load_json(filepath):
+    with open(filepath) as f:
+        return json.load(f)
+
+
 def get_asset(asset_name):
     # relative to this file, the assets are in ../assets
     assets_path = Path(__file__).parent.parent / 'assets'
@@ -107,4 +113,6 @@ def get_asset(asset_name):
     if fullpath.suffix == '.png':
         # load image as alpha and return
         return pygame.image.load(fullpath).convert_alpha()
+    if fullpath.suffix == '.json':
+        return load_json(fullpath)
     raise RuntimeError(f'File type {fullpath.suffix} not supported')

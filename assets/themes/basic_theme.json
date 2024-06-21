@@ -1,0 +1,17 @@
+{
+    "colors": {},
+    "icons": {
+        "open": "open"
+    },
+    "text": {
+        "menu": {
+            "size":  24,
+            "color": [20, 20, 20],
+            "font": "Inconsolata"
+        }
+    },
+    "nine_patch": {
+        "button": "button",
+        "frame": "frame"
+    }
+}
