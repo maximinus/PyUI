@@ -13,7 +13,7 @@ class Frame(Widget):
         self.size = size
         self.widget = widget
 
-    def render(self, surface, x, y, available_size):
+    def render(self, surface, x, y, available_size=None):
         if self.widget is None:
             return
         self.widget.render(surface, x, y, self.size)
@@ -28,7 +28,7 @@ class Border(Widget):
         # the widget render will occur at the corner of the child widget
         # any margin will be ignored
         super().__init__()
-        self.image = get_asset('frame.png')
+        self.image = get_asset('nine_patch/frame.png')
         self.corner = Size(8, 8)
         self.middle = Size(4, 8)
         self.background = background
