@@ -45,6 +45,8 @@ class HBox(Box):
         super().__init__(horizontal=True, margin=margin, align=align)
         if widgets is not None:
             self.widgets = widgets
+        else:
+            self.widgets = []
 
     @property
     def min_size(self):
@@ -114,6 +116,8 @@ class VBox(Box):
         super().__init__(horizontal=False, margin=margin, align=align)
         if widgets is not None:
             self.widgets = widgets
+        else:
+            self.widgets = []
 
     @property
     def min_size(self):

@@ -94,4 +94,4 @@ class Border(Widget):
                                                      self.size.width - (2 * self.corner.width),
                                                      self.size.height - (2 * self.corner.height)))
 
-        self.widget.render(surface, x, y, )
+        self.widget.render(surface, x, y, self.widget.min_size)
