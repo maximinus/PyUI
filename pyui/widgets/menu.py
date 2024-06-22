@@ -8,13 +8,13 @@ class MenuItem(Widget):
         super().__init__()
         self.box = HBox()
         if icon_name is not None:
-            icon = Image(get_asset(f'icons/{icon_name}.png'), margin=Margin(2, 2, 2, 2))
+            icon = Image(get_asset(f'icons/{icon_name}.png'), margin=Margin(2, 4, 4, 4))
             self.box.add_widget(icon)
         else:
             # add a spacer
             self.box.add_widget(Spacer(size=Size(20, 20)))
 
-        self.box.add_widget(TextLabel(text, margin=Margin(2, 2, 2, 2)))
+        self.box.add_widget(TextLabel(text))
         self.size = self.box.min_size
 
     def render(self, surface, x, y, available_size=None):
@@ -23,7 +23,7 @@ class MenuItem(Widget):
 
 class Menu(Border):
     def __init__(self, items=None):
-        box = VBox(margin=Margin(0, 0, 0, 0))
+        box = VBox(margin=Margin(6, 6, 6, 6))
         if items is not None:
             for item in items:
                 box.add_widget(item)

@@ -5,7 +5,7 @@
     },
     "text": {
         "menu": {
-            "size":  24,
+            "size":  18,
             "color": [20, 20, 20],
             "font": "Inconsolata"
         }

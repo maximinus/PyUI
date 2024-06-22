@@ -12,7 +12,7 @@ class TextLabel(Widget):
         self.style = style
         if style is None:
             self.style = THEME.text['menu']
-        self.font = pygame.font.Font(None, self.style.size)
+        self.font = pygame.font.Font(self.style.font, self.style.size)
         self.image = self.font.render(text, True, self.style.color)
         self.size = Size(self.image.get_width(), self.image.get_height())
 

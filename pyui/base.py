@@ -120,7 +120,7 @@ def get_asset(asset_name):
 
 class TextStyle:
     def __init__(self, font, size, color):
-        self.font = font
+        self.font = pygame.font.match_font(font)
         self.size = size
         self.color = color
 
