@@ -9,9 +9,8 @@ from pyui.widget_base import Widget
 
 class Frame(Widget):
     # a frame is a container that holds a single widget, and is a fixed size
-    def __init__(self, position, widget=None, margin=None):
+    def __init__(self, widget=None, margin=None):
         super().__init__(margin=margin)
-        self.position = position
         self.size = Size(0, 0)
         self.widget = widget
         if widget is not None:
