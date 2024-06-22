@@ -5,7 +5,7 @@ class Widget:
     def __init__(self, expand=None, margin=None, align=None):
         self.expand = expand if expand is not None else Expand.NONE
         self.margin = margin if margin is not None else Margin()
-        self.align = Align(align) if align is not None else Align(Align.TOP|Align.LEFT)
+        self.align = Align(align) if align is not None else Align(Align.CENTER)
         self.size = Size(0, 0)
 
     @property

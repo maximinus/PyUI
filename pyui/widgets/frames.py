@@ -5,13 +5,17 @@ from pyui.base import get_asset, Color, Size
 from pyui.widget_base import Widget
 
 
+# these items have a size, which is the size of the area to render other widgets
+
 class Frame(Widget):
     # a frame is a container that holds a single widget, and is a fixed size
-    def __init__(self, position, size, widget=None):
-        super().__init__()
+    def __init__(self, position, widget=None, margin=None):
+        super().__init__(margin=margin)
         self.position = position
-        self.size = size
+        self.size = Size(0, 0)
         self.widget = widget
+        if widget is not None:
+            self.size = widget.min_size
 
     def render(self, surface, x, y, available_size=None):
         if self.widget is None:
@@ -37,10 +41,6 @@ class Border(Widget):
             self.size = Size(0, 0)
         else:
             self.size = widget.min_size
-        self.size += self.get_border_size()
-
-    def get_border_size(self):
-        return Size(self.corner.width * 2, self.corner.height * 2)
 
     def update_widget(self, widget):
         self.widget = widget
@@ -101,4 +101,4 @@ class Border(Widget):
 
         x += self.corner.width
         y += self.corner.height
-        self.widget.render(surface, x, y, self.widget.min_size)
+        self.widget.render(surface, x, y, self.size)

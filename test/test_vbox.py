@@ -142,3 +142,19 @@ class TestVBoxWidths(unittest.TestCase):
         sizes = box.calculate_sizes(Size(200, 200))
         self.assertEqual(sizes[0].width, 200)
         self.assertEqual(sizes[1].width, 200)
+
+    def test_with_margin(self):
+        box = VBox(margin=Margin(10, 10, 10, 10))
+        box.add_widget(ColorRect(Size(20, 20), Color.RED))
+        box.add_widget(ColorRect(Size(20, 20), Color.RED))
+        # none are expanding, so the size should be consistent
+        size = box.min_size
+        self.assertEqual(size.height, 60)
+
+    def test_with_all_margins(self):
+        box = VBox(margin=Margin(10, 10, 10, 10))
+        box.add_widget(ColorRect(Size(20, 20), Color.RED, margin=Margin(10, 10, 10, 10)))
+        box.add_widget(ColorRect(Size(20, 20), Color.RED, margin=Margin(10, 10, 10, 10)))
+        # none are expanding, so the size should be consistent
+        size = box.min_size
+        self.assertEqual(size.height, 100)

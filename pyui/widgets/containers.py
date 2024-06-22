@@ -1,3 +1,5 @@
+import pygame.draw
+
 from pyui.base import Expand, Size
 from pyui.widget_base import Widget
 
@@ -9,9 +11,14 @@ class Box(Widget):
         super().__init__(expand, margin, align)
         self.horizontal = horizontal
         self.widgets = []
+        self.size = Size(0, 0)
 
     def add_widget(self, widget):
         self.widgets.append(widget)
+        # a box has to account for the child widgets, so we don't use size
+        self.size = Size(0, 0)
+        for widget in self.widgets:
+            self.size += widget.min_size
 
     @property
     def expand(self):
@@ -109,8 +116,9 @@ class HBox(Box):
             return
         available_size = available_size.subtract_margin(self.margin)
         current_x = x + self.margin.left
+        current_y = y + self.margin.top
         for widget, widget_size in zip(self.widgets, self.calculate_sizes(available_size)):
-            widget.render(surface, current_x, y, widget_size)
+            widget.render(surface, current_x, current_y, widget_size)
             # no need to add the margin because it is computed in the widget size
             current_x += widget_size.width
 
@@ -131,7 +139,7 @@ class VBox(Box):
             child_size = child.min_size
             base_size.width = max(base_size.width, child_size.width)
             base_size.height += child_size.height
-        return base_size
+        return base_size.add_margin(self.margin)
 
     def calculate_sizes(self, available_size=None):
         if available_size is None:
@@ -183,7 +191,8 @@ class VBox(Box):
         if available_size is None:
             return
         available_size = available_size.subtract_margin(self.margin)
+        current_x = x + self.margin.left
         current_y = y + self.margin.top
         for widget, widget_size in zip(self.widgets, self.calculate_sizes(available_size)):
-            widget.render(surface, x, current_y, widget_size)
+            widget.render(surface, current_x, current_y, widget_size)
             current_y += widget_size.height

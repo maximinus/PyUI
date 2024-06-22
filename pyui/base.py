@@ -116,3 +116,14 @@ def get_asset(asset_name):
     if fullpath.suffix == '.json':
         return load_json(fullpath)
     raise RuntimeError(f'File type {fullpath.suffix} not supported')
+
+
+class TextStyle:
+    def __init__(self, font, size, color):
+        self.font = font
+        self.size = size
+        self.color = color
+
+    @classmethod
+    def from_json_data(cls, data):
+        return cls(data['font'], data['size'], data['color'])

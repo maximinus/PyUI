@@ -1,17 +1,6 @@
-from pyui.base import get_asset
+from pyui.base import get_asset, TextStyle
 
 DEFAULT_THEME = 'themes/basic_theme.json'
-
-
-class TextStyle:
-    def __init__(self, font, size, color):
-        self.font = font
-        self.size = size
-        self.color = color
-
-    @classmethod
-    def from_json_data(cls, data):
-        return cls(data['font'], data['size'], data['color'])
 
 
 class Theme:

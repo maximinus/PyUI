@@ -1,7 +1,9 @@
+import pygame
 import unittest
 
+from pyui.setup import init
 from pyui.base import Color, Expand, Size, Margin, Align
-from pyui.widgets import HBox, VBox, ColorRect, Spacer
+from pyui.widgets import HBox, VBox, ColorRect, Spacer, TextLabel, Border
 
 
 class TestMixedBoxes(unittest.TestCase):
@@ -24,6 +26,14 @@ class TestMixedBoxes(unittest.TestCase):
 
 
 class TestOldFailingExamples(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        init()
+
+    @classmethod
+    def tearDownClass(cls):
+        pygame.quit()
+
     def test_1(self):
         # a single HBox filling all space, has 3 widgets: the middle does not fill vertically
         box = HBox(widgets=[ColorRect(Size(50, 50), Color.RED, expand=Expand.BOTH),
@@ -55,3 +65,16 @@ class TestOldFailingExamples(unittest.TestCase):
         size = box.min_size
         # since nothing is growing, the size should be ((50 + 10 + 10) * 2) + 200 = 340
         self.assertEqual(size.width, 340)
+
+    def test_4(self):
+        box = HBox(widgets=[ColorRect(Size(50, 50), Color.BLUE), TextLabel('Hello, World')])
+        # there is no margin, and the textsize is 24, so we expect the min_size to be 50 height
+        min_size = box.min_size
+        self.assertEqual(min_size.height, 50)
+        # if it's in a border, it will be bigger by twice the corner height
+        border = Border(widget=box)
+        min_size = border.min_size
+        # the border size is the size of the widget inside the border
+        self.assertEqual(min_size.height, 50)
+        # which should be equal to it's size
+        self.assertEqual(border.size.height, min_size.height)
