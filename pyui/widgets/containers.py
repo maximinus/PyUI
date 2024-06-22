@@ -87,7 +87,9 @@ class HBox(Box):
         # Set final widths
         final_widths = []
         # note: the height for each widget should be the same as highest widget, else the widget cannot center
-        height = max([x.min_size.height for x in self.widgets])
+        height = 0
+        if len(self.widgets) > 0:
+            height = max([x.min_size.height for x in self.widgets])
         for widget in self.widgets:
             if widget.expand.is_vertical:
                 height = available_size.height
@@ -102,7 +104,9 @@ class HBox(Box):
                 final_widths.append(Size(widget.min_size.width, height))
         return final_widths
 
-    def render(self, surface, x, y, available_size):
+    def render(self, surface, x, y, available_size=None):
+        if available_size is None:
+            return
         available_size = available_size.subtract_margin(self.margin)
         current_x = x + self.margin.left
         for widget, widget_size in zip(self.widgets, self.calculate_sizes(available_size)):
@@ -156,11 +160,12 @@ class VBox(Box):
             expand_height = 0
             extra_height = 0
 
-        # Set final widths
+        # Set final values
         final_heights = []
+        width = 0
+        if len(self.widgets) > 0:
+            width = max([x.min_size.width for x in self.widgets])
         for widget in self.widgets:
-            # calculate width, is easy
-            width = widget.min_size.width
             if widget.expand.is_horizontal:
                 width = available_size.width
             if widget.expand.is_vertical:
@@ -174,7 +179,9 @@ class VBox(Box):
                 final_heights.append(Size(width, widget.min_size.height))
         return final_heights
 
-    def render(self, surface, x, y, available_size):
+    def render(self, surface, x, y, available_size=None):
+        if available_size is None:
+            return
         available_size = available_size.subtract_margin(self.margin)
         current_y = y + self.margin.top
         for widget, widget_size in zip(self.widgets, self.calculate_sizes(available_size)):

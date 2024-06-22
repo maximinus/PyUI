@@ -117,12 +117,23 @@ class TestVBoxWidths(unittest.TestCase):
         self.assertEqual(sizes[0].width, 20)
 
     def test_two_one_expanding(self):
+        # in a VBox, all widgets are passed the same value for width
         box = VBox()
         box.add_widget(ColorRect(Size(20, 30), Color.RED, expand=Expand.HORIZONTAL))
         box.add_widget(ColorRect(Size(20, 30), Color.RED))
         sizes = box.calculate_sizes(Size(200, 200))
         self.assertEqual(sizes[0].width, 200)
-        self.assertEqual(sizes[1].width, 20)
+        self.assertEqual(sizes[1].width, 200)
+
+    def test_max_width(self):
+        # in a VBox, all widgets are passed the same value for width, the
+        # size of the longest widget
+        box = VBox()
+        box.add_widget(ColorRect(Size(200, 30), Color.RED))
+        box.add_widget(ColorRect(Size(20, 30), Color.RED))
+        sizes = box.calculate_sizes(Size(200, 200))
+        self.assertEqual(sizes[0].width, 200)
+        self.assertEqual(sizes[1].width, 200)
 
     def test_two_both_expanding(self):
         box = VBox()

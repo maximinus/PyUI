@@ -117,12 +117,14 @@ class TestHBoxHeights(unittest.TestCase):
         self.assertEqual(sizes[0].height, 30)
 
     def test_two_one_expanding(self):
+        # if 2 items are in an HBox, then all children will get the same size height
+        # Whether they choose to use it or not is a different thing
         box = HBox()
         box.add_widget(ColorRect(Size(20, 30), Color.RED, expand=Expand.VERTICAL))
         box.add_widget(ColorRect(Size(20, 30), Color.RED))
         sizes = box.calculate_sizes(Size(200, 200))
         self.assertEqual(sizes[0].height, 200)
-        self.assertEqual(sizes[1].height, 30)
+        self.assertEqual(sizes[1].height, 200)
 
     def test_two_both_expanding(self):
         box = HBox()

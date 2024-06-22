@@ -19,7 +19,7 @@ class TestMixedBoxes(unittest.TestCase):
         sizes = main_box.calculate_sizes(Size(200, 200))
         self.assertEqual(sizes[0].width, 200)
         self.assertEqual(sizes[0].height, 190)
-        self.assertEqual(sizes[1].width, 20)
+        self.assertEqual(sizes[1].width, 200)
         self.assertEqual(sizes[1].height, 10)
 
 
@@ -31,7 +31,7 @@ class TestOldFailingExamples(unittest.TestCase):
                             ColorRect(Size(50, 50), Color.BLUE, expand=Expand.BOTH)])
         sizes = box.calculate_sizes(Size(900, 600))
         self.assertEqual(sizes[0], Size(300, 600))
-        self.assertEqual(sizes[1], Size(300, 50))
+        self.assertEqual(sizes[1], Size(300, 600))
         self.assertEqual(sizes[2], Size(300, 600))
 
     def test_2(self):
