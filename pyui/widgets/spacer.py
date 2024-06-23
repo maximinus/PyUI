@@ -1,3 +1,5 @@
+import pygame
+
 from pyui.widget_base import Widget
 
 
@@ -8,5 +10,9 @@ class Spacer(Widget):
         super().__init__(expand=expand)
         self.size = size
 
-    def render(self, surface, x, y, available_size=None):
-        pass
+    @property
+    def min_size(self):
+        return self.size
+
+    def render(self, surface, pos, available_size=None):
+        self.render_rect = pygame.Rect(pos.x, pos.y, self.size.width, self.size.height)

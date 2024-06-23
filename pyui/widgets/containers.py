@@ -111,13 +111,15 @@ class HBox(Box):
                 final_widths.append(Size(widget.min_size.width, height))
         return final_widths
 
-    def render(self, surface, x, y, available_size=None):
-        if available_size is None:
+    def render(self, surface, pos, available_size=None):
+        if available_size is None or len(self.widgets) == 0:
             return
         available_size = available_size.subtract_margin(self.margin)
-        current_x = x + self.margin.left
-        current_y = y + self.margin.top
-        for widget, widget_size in zip(self.widgets, self.calculate_sizes(available_size)):
+        current_x = pos.x + self.margin.left
+        current_y = pos.y + self.margin.top
+        all_sizes = self.calculate_sizes(available_size)
+        self.render_rect = pygame.Rect(current_x, current_y, sum([x.width for x in all_sizes]), all_sizes[0].height)
+        for widget, widget_size in zip(self.widgets, all_sizes):
             widget.render(surface, current_x, current_y, widget_size)
             # no need to add the margin because it is computed in the widget size
             current_x += widget_size.width
@@ -187,12 +189,14 @@ class VBox(Box):
                 final_heights.append(Size(width, widget.min_size.height))
         return final_heights
 
-    def render(self, surface, x, y, available_size=None):
-        if available_size is None:
+    def render(self, surface, pos, available_size=None):
+        if available_size is None or len(self.widgets) == 0:
             return
         available_size = available_size.subtract_margin(self.margin)
-        current_x = x + self.margin.left
-        current_y = y + self.margin.top
-        for widget, widget_size in zip(self.widgets, self.calculate_sizes(available_size)):
+        current_x = pos.x + self.margin.left
+        current_y = pos.y + self.margin.top
+        all_sizes = self.calculate_sizes(available_size)
+        self.render_rect = pygame.Rect(current_x, current_y, all_sizes[0].width, sum([x.height for x in all_sizes]))
+        for widget, widget_size in zip(self.widgets, all_sizes):
             widget.render(surface, current_x, current_y, widget_size)
             current_y += widget_size.height

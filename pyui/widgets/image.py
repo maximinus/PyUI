@@ -1,3 +1,5 @@
+import pygame
+
 from pyui.base import Expand, Size, Align
 from pyui.widget_base import Widget
 
@@ -10,5 +12,11 @@ class Image(Widget):
         self.size = Size(image.get_width(), image.get_height())
         self.fill = fill
 
-    def render(self, surface, x, y, available_size=None):
-        surface.blit(self.image, (x + self.margin.left, y + self.margin.top))
+    @property
+    def min_size(self):
+        return self.size.add_margin(self.margin)
+
+    def render(self, surface, pos, available_size=None):
+        surface.blit(self.image, (pos.x + self.margin.left, pos.y + self.margin.top))
+        self.render_rect = pygame.Rect(pos.x + self.margin.left, pos.y + self.margin.top,
+                                       self.size.width, self.size.height)

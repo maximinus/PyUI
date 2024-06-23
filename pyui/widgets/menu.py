@@ -17,8 +17,9 @@ class MenuItem(Widget):
         self.box.add_widget(TextLabel(text))
         self.size = self.box.min_size
 
-    def render(self, surface, x, y, available_size=None):
-        self.box.render(surface, x, y, available_size)
+    def render(self, surface, pos, available_size=None):
+        self.box.render(surface, pos.x, pos.y, available_size)
+        self.render_rect = self.box.render_rect
 
 
 class Menu(Border):

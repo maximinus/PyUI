@@ -13,13 +13,15 @@ class ColorRect(Widget):
         # otherwise the widget will expand but be the same size (which is the norm)
         self.fill = fill
 
-    def render(self, surface, x, y, available_size=None):
+    def render(self, surface, pos, available_size=None):
+        x = pos.x
+        y = pos.y
         if available_size is None:
             available_size = self.min_size
         render_size = Size(0, 0)
         # only draw to the space we need to
-        x += self.margin.left
-        y += self.margin.top
+        pos.x += self.margin.left
+        pos.y += self.margin.top
         if self.expand.is_horizontal and self.fill.is_horizontal:
             # fill the space
             width = available_size.width - (self.margin.left + self.margin.right)
@@ -44,3 +46,4 @@ class ColorRect(Widget):
                 y += (available_size.height - height)
 
         pygame.draw.rect(surface, self.color, (x, y, width, height))
+        self.render_rect = pygame.Rect(x, y, width, height)

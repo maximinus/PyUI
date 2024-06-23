@@ -9,17 +9,28 @@ from pyui.widget_base import Widget
 
 class Frame(Widget):
     # a frame is a container that holds a single widget, and is a fixed size
-    def __init__(self, widget=None, margin=None):
+    # the size does NOT include the margin
+    def __init__(self, size=None, widget=None, margin=None):
         super().__init__(margin=margin)
-        self.size = Size(0, 0)
-        self.widget = widget
-        if widget is not None:
+        if size is None:
+            # infer the size from the widget
+            if widget is None:
+                raise AttributeError('Frame must have a size or a widget')
             self.size = widget.min_size
+            self.size = self.size.add_margin(self.margin)
+        else:
+            self.size = size
+        self.widget = widget
 
-    def render(self, surface, x, y, available_size=None):
+    @property
+    def min_size(self):
+        return self.size.add_margin(self.margin)
+
+    def render(self, surface, pos, available_size=None):
         if self.widget is None:
             return
-        self.widget.render(surface, x, y, self.size)
+        self.widget.render(surface, pos, self.size)
+        self.render_rect = self.widget.render_rect
 
 
 class Border(Widget):
@@ -41,6 +52,10 @@ class Border(Widget):
         else:
             self.size = widget.min_size
 
+    @property
+    def min_size(self):
+        return self.size.add_margin(self.margin)
+
     def update_widget(self, widget):
         self.widget = widget
         self.size = widget.min_size()
@@ -48,10 +63,10 @@ class Border(Widget):
     def update_size(self, new_size):
         self.size = new_size
 
-    def render(self, surface, x, y, available_size=None):
+    def render(self, surface, pos, available_size=None):
         # draw the top left
-        x -= self.corner.width
-        y -= self.corner.height
+        x = pos.x - self.corner.width
+        y = pos.y - self.corner.height
 
         # the size of the area the widgets need
         render_size = self.min_size
@@ -68,8 +83,6 @@ class Border(Widget):
                      (self.corner.width + self.middle.width, self.corner.height + self.middle.width, self.corner.height, self.corner.width))
 
         # draw the borders by using pygame.transform.smoothscale to create a new image and blitting that
-        #side_width = render_size.width
-        #side_height = render_size.height
         side_ypos = y + self.corner.height
 
         left_unscaled = pygame.Surface((self.middle.height, self.middle.width), pygame.SRCALPHA)
@@ -100,3 +113,4 @@ class Border(Widget):
         x += self.corner.width
         y += self.corner.height
         self.widget.render(surface, x, y, render_size)
+        self.render_rect = pygame.Rect(x, y, render_size.width, render_size.height)

@@ -16,7 +16,13 @@ class TextLabel(Widget):
         self.image = self.font.render(text, True, self.style.color)
         self.size = Size(self.image.get_width(), self.image.get_height())
 
-    def render(self, surface, x, y, available_size=None):
+    @property
+    def min_size(self):
+        return self.size.add_margin(self.margin)
+
+    def render(self, surface, pos, available_size=None):
+        x = pos.x
+        y = pos.y
         if available_size is None:
             available_size = self.min_size
         x += self.margin.left
@@ -35,3 +41,5 @@ class TextLabel(Widget):
             y += (available_size.height - self.size.height)
 
         surface.blit(self.image, (x, y))
+        self.render_rect = pygame.Rect(pos.x + self.margin.left, pos.y + self.margin.top,
+                                       self.size.width, self.size.height)
