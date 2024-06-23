@@ -11,22 +11,4 @@ from enum import Enum, auto
 # Things can send events, it's not just the SDL events that cause this
 # As a GUI, we only look at key presses and mouse clicks for now
 
-class EventType(Enum):
-    KeyPress = auto()
-    MouseClick = auto()
-
-
-class KeyPress:
-    type = EventType.KeyPress
-
-    def __init__(self, key, modifiers):
-        self.key = key
-        self.modifiers = modifiers
-
-
-class MouseClick:
-    type = EventType.MouseClick
-
-    def __init__(self, position, button):
-        self.position = position
-        self.button = button
+# No need to rewrite events classes, use the SDL ones

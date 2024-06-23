@@ -32,6 +32,27 @@ Plan
 12: Allow saving and loading
 13: Add tabs to the text editor
 
+
+Current Work and Latest:
+
+Seperate rendering so a widget will render itself at a given size (and none expanding will cache).
+When the size changes, the widget re-rendering will change
+Work the the SDL system to catch events, and have this as a loop.
+It should be:
+    Create a GUI that sets things up.
+    PyUI main loop.
+So we need a "window" list for frames and borders.
+Keep this in a stack.
+Now filter messages through that.
+
+Ensure menuitems are highlighted by mouse-over
+Ensure menuitem selection function called when clicked
+Menu is attached to top menu
+Multi-menus, one at a time
+Menus look ok
+Basic text widget added.
+
+
 Phase 2
 -------
 
