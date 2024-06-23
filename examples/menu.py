@@ -46,7 +46,7 @@ def screen5():
 
 if __name__ == '__main__':
     display = init()
-    screens = [screen2(), screen3(), screen4(), screen5()]
+    screens = [screen1(), screen2(), screen3(), screen4(), screen5()]
     for single_screen in screens:
         display.fill(BACKGROUND_COLOR)
         single_screen.render(display, 100, 100, Size(250, 200))

@@ -49,6 +49,7 @@ Ensure menuitems are highlighted by mouse-over
 Ensure menuitem selection function called when clicked
 Menu is attached to top menu
 Multi-menus, one at a time
+Window can be resized
 Menus look ok
 Basic text widget added.
 
