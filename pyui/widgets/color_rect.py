@@ -31,22 +31,24 @@ class ColorRect(Widget):
         else:
             # the size does not include the width, but it will have been calculated in the min size
             width = self.size.width
+            width_plus_margin = width + self.margin.left + self.margin.right
             # and align here as well, since we are not filling
             horiz_align = self.align.horizontal()
             if horiz_align == Align.CENTER:
-                x += (available_size.width - width) // 2
+                x += (available_size.width - width_plus_margin) // 2
             elif horiz_align == Align.RIGHT:
-                x += (available_size.width - width)
+                x += (available_size.width - width_plus_margin)
         if self.expand.is_vertical and self.fill.is_vertical:
             height = available_size.height - (self.margin.top - self.margin.bottom)
         else:
             height = self.size.height
+            height_plus_margin = height + self.margin.top + self.margin.bottom
             # align here since we are not filling
             vert_align = self.align.vertical()
             if vert_align == Align.CENTER:
-                y += (available_size.height - height) // 2
+                y += (available_size.height - height_plus_margin) // 2
             elif vert_align == Align.BOTTOM:
-                y += (available_size.height - height)
+                y += (available_size.height - height_plus_margin)
 
         pygame.draw.rect(surface, self.color, (x, y, width, height))
         self.render_rect = pygame.Rect(x, y, width, height)

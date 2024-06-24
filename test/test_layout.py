@@ -78,3 +78,11 @@ class TestOldFailingExamples(unittest.TestCase):
         self.assertEqual(min_size.height, 50)
         # which should be equal to it's size
         self.assertEqual(border.size.height, min_size.height)
+
+    def test_5(self):
+        box = HBox(widgets=[ColorRect(Size(50, 50), Color.BLUE, margin=Margin(10, 10, 10, 10)),
+                            Spacer(Size(200, 0)),
+                            ColorRect(Size(50, 50), Color.BLUE, margin=Margin(10, 10, 10, 10))])
+        min_size = box.min_size
+        self.assertEqual(min_size.width, 70 + 200 + 70)
+        self.assertEqual(min_size.height, 70)

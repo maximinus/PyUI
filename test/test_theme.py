@@ -26,7 +26,8 @@ class TestDefaultTheme(unittest.TestCase):
         self.assertTrue(isinstance(THEME.icons['open'], pygame.Surface))
 
     def test_text_type(self):
-        self.assertEqual(len(THEME.text), 1)
+        # we have default + menu right now
+        self.assertEqual(len(THEME.text), 2)
         self.assertTrue(isinstance(THEME.text['menu'], TextStyle))
 
     def test_text_size(self):

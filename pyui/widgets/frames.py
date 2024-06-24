@@ -108,9 +108,8 @@ class Border(Widget):
         surface.blit(bottom_side, (x + self.corner.width, y + self.corner.height + render_size.height))
 
         # draw the middle
-        pygame.draw.rect(surface, self.background,
-                         (x + self.corner.width, y + self.corner.width, render_size.width, render_size.height))
         x += self.corner.width
         y += self.corner.height
+        pygame.draw.rect(surface, self.background, (x, y, render_size.width, render_size.height))
         self.widget.render(surface, Position(x, y), render_size)
         self.render_rect = pygame.Rect(x, y, render_size.width, render_size.height)
