@@ -46,6 +46,12 @@ class Box(Widget):
         # cannot set this value in a Box
         pass
 
+    def handle_event(self, event):
+        for widget in self.widgets:
+            if widget.handle_event(event):
+                return True
+        return False
+
 
 class HBox(Box):
     def __init__(self, margin=None, align=None, widgets=None):

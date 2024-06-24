@@ -16,8 +16,11 @@ import pygame
 # No need to rewrite events classes, use the SDL ones
 
 class PyUIApp:
-    def __init__(self):
-        self.frames = []
+    def __init__(self, frame=None):
+        if frame is None:
+            self.frames = []
+        else:
+            self.frames = [frame]
 
     def push_frame(self, frame):
         # when push and pop are done like this, we can iterate from
@@ -40,8 +43,14 @@ class PyUIApp:
 
     def handle_event(self, event):
         # get the event and pass to the top window
-        # if not consumed, then it goes to the next, and so one
+        # if not consumed, then it goes to the next, and so on
         # the parent of the widget is the one that will know if the event can
         # be processed or not; and every widget needs a parent frame or border
+        # It's not as simple as that entirely though; a widget might need to know
+        # if the mouse is outside the widget in question
+
+        # for now, only handle mouse events
+        if event.type != pygame.MOUSEMOTION:
+            return
         for frame in self.frames:
             frame.handle_event(event)
