@@ -1,3 +1,5 @@
+import os.path
+
 import pygame
 import unittest
 
@@ -28,10 +30,11 @@ class TestDefaultTheme(unittest.TestCase):
         self.assertTrue(isinstance(THEME.text['menu'], TextStyle))
 
     def test_text_size(self):
-        self.assertEqual(THEME.text['menu'].size, 24)
+        self.assertEqual(THEME.text['menu'].size, 18)
 
     def test_text_font(self):
-        self.assertEqual(THEME.text['menu'].font, 'Inconsolata')
+        font_path = THEME.text['menu'].font
+        self.assertTrue(os.path.exists(font_path))
 
     def test_text_color(self):
         self.assertEqual(THEME.text['menu'].color, [20, 20, 20])

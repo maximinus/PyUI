@@ -15,9 +15,9 @@ class Frame(Widget):
         if size is None:
             # infer the size from the widget
             if widget is None:
-                raise AttributeError('Frame must have a size or a widget')
-            self.size = widget.min_size
-            self.size = self.size.add_margin(self.margin)
+                self.size = Size(0, 0)
+            else:
+                self.size = widget.min_size
         else:
             self.size = size
         self.widget = widget

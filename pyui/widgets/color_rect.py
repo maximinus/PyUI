@@ -13,6 +13,10 @@ class ColorRect(Widget):
         # otherwise the widget will expand but be the same size (which is the norm)
         self.fill = fill
 
+    @property
+    def min_size(self):
+        return self.size.add_margin(self.margin)
+
     def render(self, surface, pos, available_size=None):
         x = pos.x
         y = pos.y
