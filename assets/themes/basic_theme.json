@@ -4,6 +4,11 @@
         "open": "open"
     },
     "text": {
+        "default": {
+            "size":  16,
+            "color": [20, 20, 20],
+            "font": "Inconsolata"
+        },
         "menu": {
             "size":  18,
             "color": [20, 20, 20],
