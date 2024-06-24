@@ -12,7 +12,7 @@ class Widget:
         self.expand = expand if expand is not None else Expand.NONE
         self.margin = margin if margin is not None else Margin()
         self.align = Align(align) if align is not None else Align(Align.CENTER)
-        self.render_rect = pygame.Rect(0, 0, 0, 0)
+        self.render_rect = None
 
     @property
     def min_size(self):

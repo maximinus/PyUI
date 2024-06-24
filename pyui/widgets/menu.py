@@ -25,6 +25,15 @@ class MenuItem(Widget):
         self.box.render(surface, pos, available_size)
         self.render_rect = self.box.render_rect
 
+    def handle_event(self, event):
+        # is the event in this widget?
+        if self.render_rect is None:
+            return False
+        if self.render_rect.collidepoint(event.pos[0], event.pos[1]):
+            print(f'Mouseover {self}')
+            return True
+        return False
+
 
 class Menu(Border):
     def __init__(self, items=None):
