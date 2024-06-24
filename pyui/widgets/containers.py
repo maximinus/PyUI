@@ -1,6 +1,6 @@
 import pygame.draw
 
-from pyui.base import Expand, Size
+from pyui.base import Expand, Size, Position
 from pyui.widget_base import Widget
 
 
@@ -120,7 +120,7 @@ class HBox(Box):
         all_sizes = self.calculate_sizes(available_size)
         self.render_rect = pygame.Rect(current_x, current_y, sum([x.width for x in all_sizes]), all_sizes[0].height)
         for widget, widget_size in zip(self.widgets, all_sizes):
-            widget.render(surface, current_x, current_y, widget_size)
+            widget.render(surface, Position(current_x, current_y), widget_size)
             # no need to add the margin because it is computed in the widget size
             current_x += widget_size.width
 
@@ -198,5 +198,5 @@ class VBox(Box):
         all_sizes = self.calculate_sizes(available_size)
         self.render_rect = pygame.Rect(current_x, current_y, all_sizes[0].width, sum([x.height for x in all_sizes]))
         for widget, widget_size in zip(self.widgets, all_sizes):
-            widget.render(surface, current_x, current_y, widget_size)
+            widget.render(surface, Position(current_x, current_y), widget_size)
             current_y += widget_size.height

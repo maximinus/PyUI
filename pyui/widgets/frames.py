@@ -1,7 +1,7 @@
 import pygame
 import pygame.gfxdraw
 
-from pyui.base import get_asset, Color, Size
+from pyui.base import get_asset, Color, Size, Position
 from pyui.widget_base import Widget
 
 
@@ -112,5 +112,5 @@ class Border(Widget):
                          (x + self.corner.width, y + self.corner.width, render_size.width, render_size.height))
         x += self.corner.width
         y += self.corner.height
-        self.widget.render(surface, x, y, render_size)
+        self.widget.render(surface, Position(x, y), render_size)
         self.render_rect = pygame.Rect(x, y, render_size.width, render_size.height)

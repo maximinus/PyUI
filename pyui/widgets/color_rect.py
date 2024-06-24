@@ -22,10 +22,9 @@ class ColorRect(Widget):
         y = pos.y
         if available_size is None:
             available_size = self.min_size
-        render_size = Size(0, 0)
         # only draw to the space we need to
-        pos.x += self.margin.left
-        pos.y += self.margin.top
+        x += self.margin.left
+        y += self.margin.top
         if self.expand.is_horizontal and self.fill.is_horizontal:
             # fill the space
             width = available_size.width - (self.margin.left + self.margin.right)
