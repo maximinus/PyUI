@@ -43,8 +43,11 @@ class Box(Widget):
 
     @expand.setter
     def expand(self, new_value):
-        # cannot set this value in a Box
         pass
+
+    def refresh(self, surface):
+        for i in self.widgets:
+            i.refresh(surface)
 
     def handle_event(self, event):
         for widget in self.widgets:

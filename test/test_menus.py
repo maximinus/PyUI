@@ -2,6 +2,7 @@ import pygame
 import unittest
 
 from pyui.setup import init
+from pyui.base import Position
 from pyui.widgets import MenuItem, Menu
 
 
@@ -41,7 +42,7 @@ class TestMenu(unittest.TestCase):
         menu1 = MenuItem('Hello')
         menu2 = MenuItem('World')
         menu3 = MenuItem('There')
-        menu = Menu(items=[menu1, menu2, menu3])
+        menu = Menu(Position(0, 0), items=[menu1, menu2, menu3])
         height = menu.min_size.height
         # must be a multiple of 3
         self.assertTrue((height % 3) == 0)

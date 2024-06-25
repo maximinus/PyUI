@@ -1,4 +1,4 @@
-from pyui.base import get_asset, Size, Margin
+from pyui.base import get_asset, Size, Margin, Position
 from pyui.widget_base import Widget
 from pyui.widgets import Border, VBox, HBox, TextLabel, Image, Spacer
 
@@ -33,17 +33,18 @@ class MenuItem(Widget):
         if self.render_rect.collidepoint(event.pos[0], event.pos[1]):
             print(f'Mouseover {self}')
             # we need to repaint the widget
+            self.redraw = True
             return True
         return False
 
 
 class Menu(Border):
-    def __init__(self, items=None):
+    def __init__(self, pos, items=None):
         box = VBox(margin=Margin(6, 6, 6, 6))
         if items is not None:
             for item in items:
                 box.add_widget(item)
-        super().__init__(widget=box)
+        super().__init__(pos, widget=box)
 
     def add_menu_item(self, menu_item):
         self.widget.add_widget(menu_item)

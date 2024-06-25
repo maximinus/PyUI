@@ -25,6 +25,11 @@ class Widget:
         # if the available size is None, then the default is to render at the minimum size
         self.render_rect = pygame.Rect(pos.x, pos.y, 0, 0)
 
+    def refresh(self, surface):
+        if self.redraw:
+            self.render(surface, Position(self.render_rect.x, self.render_rect.y),
+                        Size(self.render_rect.width, self.render_rect.height))
+
     def handle_event(self, event):
         # return true to indicate event has been processed
         return False

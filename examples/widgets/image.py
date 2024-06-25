@@ -10,7 +10,7 @@ BACKGROUND_COLOR = (80, 80, 80)
 
 def screen1():
     texture = get_asset('images/dog.png')
-    return Border(widget=Image(texture, margin=Margin(20, 20, 20, 20)))
+    return Border(Position(100, 100), widget=Image(texture, margin=Margin(20, 20, 20, 20)))
 
 
 if __name__ == '__main__':
@@ -18,7 +18,7 @@ if __name__ == '__main__':
     screens = [screen1()]
     for single_screen in screens:
         display.fill(BACKGROUND_COLOR)
-        single_screen.render(display, Position(100, 100), DEFAULT_SIZE)
+        single_screen.draw(display)
         pygame.display.flip()
         await_keypress()
     pygame.quit()

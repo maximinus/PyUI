@@ -1,5 +1,5 @@
 import pygame
-from pyui.setup import init, await_keypress, DEFAULT_SIZE
+from pyui.setup import init, await_keypress
 from pyui.base import Margin, Size, Color, Position
 from pyui.widgets import ColorRect, HBox, Spacer, Border
 
@@ -15,7 +15,7 @@ def screen1():
     box = HBox(widgets=[ColorRect(Size(50, 50), Color.BLUE, margin=Margin(10, 10, 10, 10)),
                         Spacer(Size(200, 0)),
                         ColorRect(Size(50, 50), Color.BLUE, margin=Margin(10, 10, 10, 10))])
-    return Border(background=Color.BACKGROUND, widget=box)
+    return Border(Position(100, 100), background=Color.BACKGROUND, widget=box)
 
 
 if __name__ == '__main__':
@@ -23,7 +23,7 @@ if __name__ == '__main__':
     screens = [screen1()]
     for single_screen in screens:
         display.fill(BACKGROUND_COLOR)
-        single_screen.render(display, Position(100, 100), DEFAULT_SIZE)
+        single_screen.draw(display)
         pygame.display.flip()
         await_keypress()
     pygame.quit()

@@ -2,7 +2,7 @@ import pygame
 import unittest
 
 from pyui.setup import init
-from pyui.base import Color, Expand, Size, Margin, Align
+from pyui.base import Color, Expand, Size, Margin, Align, Position
 from pyui.widgets import HBox, VBox, ColorRect, Spacer, TextLabel, Border
 
 
@@ -72,7 +72,7 @@ class TestOldFailingExamples(unittest.TestCase):
         min_size = box.min_size
         self.assertEqual(min_size.height, 50)
         # if it's in a border, it will be bigger by twice the corner height
-        border = Border(widget=box)
+        border = Border(Position(0, 0), widget=box)
         min_size = border.min_size
         # the border size is the size of the widget inside the border
         self.assertEqual(min_size.height, 50)

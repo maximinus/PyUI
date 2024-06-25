@@ -1,7 +1,7 @@
 import sys
 
 import pygame
-
+from pyui.setup import init, get_clock
 
 # When a widget is created, it can ask for events or not
 # When a SDL event happens, we first of all look at what widget is covering that screen
@@ -15,8 +15,10 @@ import pygame
 
 # No need to rewrite events classes, use the SDL ones
 
+
 class PyUIApp:
     def __init__(self, frame=None):
+        init()
         if frame is None:
             self.frames = []
         else:
@@ -32,13 +34,14 @@ class PyUIApp:
             self.frames.pop(0)
 
     def event_loop(self):
-        clock = pygame.time.Clock()
+        clock = get_clock()
         while True:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
                     sys.exit(True)
                 self.handle_event(event)
+                self.update_frames()
                 clock.tick(60)
 
     def handle_event(self, event):
@@ -53,4 +56,9 @@ class PyUIApp:
         if event.type != pygame.MOUSEMOTION:
             return
         for frame in self.frames:
-            frame.handle_event(event)
+            if frame.handle_event(event):
+                break
+
+    def update_frames(self):
+        for frame in self.frames:
+            frame.refresh()
