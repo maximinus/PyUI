@@ -31,6 +31,7 @@ class Frame(Widget):
             return
         self.widget.render(surface, pos, self.size)
         self.render_rect = self.widget.render_rect
+        self.redraw = False
 
 
 class Border(Widget):
@@ -113,3 +114,4 @@ class Border(Widget):
         pygame.draw.rect(surface, self.background, (x, y, render_size.width, render_size.height))
         self.widget.render(surface, Position(x, y), render_size)
         self.render_rect = pygame.Rect(x, y, render_size.width, render_size.height)
+        self.redraw = False

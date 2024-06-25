@@ -24,6 +24,7 @@ class MenuItem(Widget):
     def render(self, surface, pos, available_size=None):
         self.box.render(surface, pos, available_size)
         self.render_rect = self.box.render_rect
+        self.redraw = False
 
     def handle_event(self, event):
         # is the event in this widget?
@@ -31,6 +32,7 @@ class MenuItem(Widget):
             return False
         if self.render_rect.collidepoint(event.pos[0], event.pos[1]):
             print(f'Mouseover {self}')
+            # we need to repaint the widget
             return True
         return False
 

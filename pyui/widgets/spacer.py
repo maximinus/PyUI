@@ -9,6 +9,8 @@ class Spacer(Widget):
         # it has no margin
         super().__init__(expand=expand)
         self.size = size
+        # we never draw this widget
+        self.redraw = False
 
     @property
     def min_size(self):

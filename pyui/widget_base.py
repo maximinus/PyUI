@@ -6,6 +6,7 @@ from pyui.base import Expand, Margin, Align, Size, Position
 # a widget always has:
 # a min_size: the smallest this widget can be
 # a render_rect; the area where the widget was drawn to (this does not include the margin)
+# a boolean "redraw" which lets us know the widget needs to be redrawn
 
 class Widget:
     def __init__(self, expand=None, margin=None, align=None):
@@ -13,6 +14,7 @@ class Widget:
         self.margin = margin if margin is not None else Margin()
         self.align = Align(align) if align is not None else Align(Align.CENTER)
         self.render_rect = None
+        self.redraw = True
 
     @property
     def min_size(self):

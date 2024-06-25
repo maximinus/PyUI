@@ -129,6 +129,7 @@ class HBox(Box):
             widget.render(surface, Position(current_x, current_y), widget_size)
             # no need to add the margin because it is computed in the widget size
             current_x += widget_size.width
+        self.redraw = False
 
 
 class VBox(Box):
@@ -206,3 +207,4 @@ class VBox(Box):
         for widget, widget_size in zip(self.widgets, all_sizes):
             widget.render(surface, Position(current_x, current_y), widget_size)
             current_y += widget_size.height
+        self.redraw = False
