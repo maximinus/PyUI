@@ -7,6 +7,7 @@ from pyui.base import Expand, Margin, Align, Size, Position
 # a min_size: the smallest this widget can be
 # a render_rect; the area where the widget was drawn to (this does not include the margin)
 # a boolean "redraw" which lets us know the widget needs to be redrawn
+# "parent" which is the parent widget, or None if the root
 
 class Widget:
     def __init__(self, expand=None, margin=None, align=None):
@@ -15,6 +16,7 @@ class Widget:
         self.align = Align(align) if align is not None else Align(Align.CENTER)
         self.render_rect = None
         self.redraw = True
+        self.parent = None
 
     @property
     def min_size(self):
@@ -25,6 +27,7 @@ class Widget:
         # if the available size is None, then the default is to render at the minimum size
         self.render_rect = pygame.Rect(pos.x, pos.y, 0, 0)
 
-    def handle_event(self, event):
-        # return true to indicate event has been processed
-        return False
+    def get_root(self):
+        if self.parent is None:
+            return self
+        return self.parent.get_root()

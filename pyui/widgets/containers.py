@@ -5,16 +5,22 @@ from pyui.widget_base import Widget
 
 
 class Box(Widget):
-    def __init__(self, horizontal=True, margin=None, expand=None, align=None, background=None):
+    def __init__(self, widgets=None, horizontal=True, margin=None, expand=None, align=None, background=None):
         if expand is not None:
             raise AttributeError('Box widgets cannot be passed an expand variable')
         super().__init__(expand, margin, align)
         self.background = background
         self.horizontal = horizontal
-        self.widgets = []
+        if widgets is not None:
+            for widget in widgets:
+                widget.parent = self
+            self.widgets = widgets
+        else:
+            self.widgets = []
         self.size = Size(0, 0)
 
     def add_widget(self, widget):
+        widget.parent = self
         self.widgets.append(widget)
         # a box has to account for the child widgets, so we don't use size
         self.size = Size(0, 0)
@@ -56,10 +62,6 @@ class Box(Widget):
 class HBox(Box):
     def __init__(self, margin=None, align=None, widgets=None, background=None):
         super().__init__(horizontal=True, margin=margin, align=align, background=background)
-        if widgets is not None:
-            self.widgets = widgets
-        else:
-            self.widgets = []
 
     @property
     def min_size(self):
@@ -137,10 +139,6 @@ class HBox(Box):
 class VBox(Box):
     def __init__(self, margin=None, align=None, widgets=None, background=None):
         super().__init__(horizontal=False, margin=margin, align=align, background=background)
-        if widgets is not None:
-            self.widgets = widgets
-        else:
-            self.widgets = []
 
     @property
     def min_size(self):

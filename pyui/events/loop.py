@@ -22,6 +22,7 @@ class PyUIApp:
     def __init__(self, window_size=None):
         self.display = init(size=window_size)
         self.frames = []
+        self.callbacks = {}
 
     def push_frame(self, frame):
         # when push and pop are done like this, we can iterate from
@@ -50,6 +51,11 @@ class PyUIApp:
         for frame in self.frames:
             frame.render(self.display, None, DEFAULT_SIZE)
         pygame.display.flip()
+
+    def register(self, widget, event_mask, callback):
+        # we are going to need to know the root frame that contains this widget
+        # because that frame may be modal
+        self.callbacks[event_mask] = [widget, callback]
 
     def handle_event(self, event):
         # get the event and pass to the top window

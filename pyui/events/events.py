@@ -1,16 +1,24 @@
 import pygame
+from enum import Enum, auto
+
 
 MOUSE_BUTTON_LEFT = 1
 MOUSE_BUTTON_MIDDLE = 2
 MOUSE_BUTTON_RIGHT = 3
 
-# an event is something that a widget will ask for a callback for
+
+class Event(Enum):
+    # an event is something that a widget will ask for a callback for
+    EventNull = auto()
+    MouseMove = auto()
+    MouseLeftClickDown = auto()
+    MouseRightClickDown = auto()
+    MouseLeftClickUp = auto()
+    MouseRightClickUp = auto()
 
 
 class PyUiEvent:
-    @property
-    def name(self):
-        return f'{self.__class__.__name__}'
+    type = Event.EventNull
 
     @classmethod
     def event(cls, event):
@@ -33,6 +41,8 @@ class PyUiEvent:
 
 
 class MouseMove(PyUiEvent):
+    type = Event.MouseMove
+
     def __init__(self, event):
         self.xpos = event.pos[0]
         self.ypos = event.pos[1]
@@ -41,24 +51,32 @@ class MouseMove(PyUiEvent):
 
 
 class MouseLeftClickDown(PyUiEvent):
+    type = Event.MouseLeftClickDown
+
     def __init__(self, event):
         self.xpos = event.pos[0]
         self.ypos = event.pos[1]
 
 
 class MouseRightClickDown(PyUiEvent):
+    type = Event.MouseRightClickDown
+
     def __init__(self, event):
         self.xpos = event.pos[0]
         self.ypos = event.pos[1]
 
 
 class MouseLeftClickUp(PyUiEvent):
+    type = Event.MouseLeftClickUp
+
     def __init__(self, event):
         self.xpos = event.pos[0]
         self.ypos = event.pos[1]
 
 
 class MouseRightClickUp(PyUiEvent):
+    type = Event.MouseRightClickUp
+
     def __init__(self, event):
         self.xpos = event.pos[0]
         self.ypos = event.pos[1]

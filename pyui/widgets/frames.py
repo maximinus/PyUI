@@ -24,7 +24,10 @@ class Frame(Widget):
                 self.size = widget.min_size
         else:
             self.size = size
+        widget.parent = self
         self.widget = widget
+        # null container, is parent
+        self.container = None
 
     @property
     def min_size(self):
@@ -57,11 +60,13 @@ class Border(Widget):
         if background is None:
             background = THEME.color['widget_background']
         self.background = background
+        widget.parent = self
         self.widget = widget
         if widget is None:
             self.size = Size(0, 0)
         else:
             self.size = widget.min_size
+        self.parent = None
 
     @property
     def min_size(self):

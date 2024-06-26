@@ -1,8 +1,8 @@
-import pygame
-
-from pyui.base import get_asset, Size, Margin, Position
+from pyui.base import get_asset, Size, Margin
 from pyui.widget_base import Widget
 from pyui.widgets import Border, VBox, HBox, TextLabel, Image, Spacer
+from pyui.events.loop import app
+from pyui.events.events import Event
 
 
 class MenuItem(Widget):
@@ -39,5 +39,25 @@ class Menu(Border):
     def add_menu_item(self, menu_item):
         self.widget.add_widget(menu_item)
 
+    def mouse_move(self, event):
+        # called when we get a mouse move
+        # return True to "consume", i.e., stop the event being sent anywhere else
+        # we need to check if we are in or out of any vbox widgets
+        for widget in self.widget.widgets:
+            if widget.render_rect.collidepoint((event.xpos, event.ypos)):
+                # yes, we are over
+                if widget.highlighted:
+                    return True
+                # update the new rect
+                widget.highlighted = False
+                app.set_dirty(widget)
+                # can't be in the other widget
+                return True
+            if widget.highlighted:
+                widget.highlighted = False
+                app.set_dirty(widget)
+            return False
+
     def register_events(self):
-        pass
+        # what we want to do is find an easy way to register a callback
+        app.register(self, Event.MouseMove, self.mouse_move)
