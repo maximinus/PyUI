@@ -55,7 +55,7 @@ class Border(Widget):
         self.corner = Size(8, 8)
         self.middle = Size(4, 8)
         if background is None:
-            background = THEME.colors['widget_background']
+            background = THEME.color['widget_background']
         self.background = background
         self.widget = widget
         if widget is None:

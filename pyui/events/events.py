@@ -34,31 +34,31 @@ class PyUiEvent:
 
 class MouseMove(PyUiEvent):
     def __init__(self, event):
-        self.xpos = event.pos.x
-        self.ypos = event.pos.y
-        self.xmove = event.rel.x
-        self.ymove = event.rel.y
+        self.xpos = event.pos[0]
+        self.ypos = event.pos[1]
+        self.xmove = event.rel[0]
+        self.ymove = event.rel[1]
 
 
 class MouseLeftClickDown(PyUiEvent):
-    def __init__(self, click_event):
-        self.xpos = click_event.xpos
-        self.ypos = click_event.ypos
+    def __init__(self, event):
+        self.xpos = event.pos[0]
+        self.ypos = event.pos[1]
 
 
 class MouseRightClickDown(PyUiEvent):
-    def __init__(self, click_event):
-        self.xpos = click_event.xpos
-        self.ypos = click_event.ypos
+    def __init__(self, event):
+        self.xpos = event.pos[0]
+        self.ypos = event.pos[1]
 
 
 class MouseLeftClickUp(PyUiEvent):
-    def __init__(self, click_event):
-        self.xpos = click_event.xpos
-        self.ypos = click_event.ypos
+    def __init__(self, event):
+        self.xpos = event.pos[0]
+        self.ypos = event.pos[1]
 
 
 class MouseRightClickUp(PyUiEvent):
-    def __init__(self, click_event):
-        self.xpos = click_event.xpos
-        self.ypos = click_event.ypos
+    def __init__(self, event):
+        self.xpos = event.pos[0]
+        self.ypos = event.pos[1]

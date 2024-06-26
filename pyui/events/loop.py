@@ -1,7 +1,9 @@
 import sys
-
 import pygame
+
 from pyui.setup import init, get_clock, DEFAULT_SIZE
+from pyui.theme import THEME
+from pyui.events.events import PyUiEvent
 
 BACKGROUND_COLOR = (140, 140, 140)
 
@@ -14,8 +16,6 @@ BACKGROUND_COLOR = (140, 140, 140)
 
 # Things can send events, it's not just the SDL events that cause this
 # As a GUI, we only look at key presses and mouse clicks for now
-
-# No need to rewrite events classes, use the SDL ones
 
 
 class PyUIApp:
@@ -33,7 +33,7 @@ class PyUIApp:
             self.frames.pop(0)
 
     def event_loop(self):
-        self.display.fill(BACKGROUND_COLOR)
+        self.display.fill(THEME.color['widget_background'])
         self.draw_all_frames()
         clock = get_clock()
         while True:
@@ -41,8 +41,9 @@ class PyUIApp:
                 if event.type == pygame.QUIT:
                     pygame.quit()
                     sys.exit(True)
-                self.handle_event(event)
-            #self.update_frames()
+                pyui_event = PyUiEvent.event(event)
+                if pyui_event is not None:
+                    self.handle_event(event)
             clock.tick(60)
 
     def draw_all_frames(self):
@@ -64,11 +65,6 @@ class PyUIApp:
         for frame in self.frames:
             if frame.handle_event(event):
                 break
-
-    def update_frames(self):
-        for frame in self.frames:
-            frame.refresh(self.display)
-        pygame.display.flip()
 
 
 app = PyUIApp()

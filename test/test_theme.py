@@ -18,12 +18,12 @@ class TestDefaultTheme(unittest.TestCase):
 
     def test_colors(self):
         # no default colors
-        self.assertEqual(len(THEME.colors), 0)
+        self.assertEqual(len(THEME.color), 0)
 
     def test_icons(self):
         # basic icon should be a surface
-        self.assertEqual(len(THEME.icons), 1)
-        self.assertTrue(isinstance(THEME.icons['open'], pygame.Surface))
+        self.assertEqual(len(THEME.icon), 1)
+        self.assertTrue(isinstance(THEME.icon['open'], pygame.Surface))
 
     def test_text_type(self):
         # we have default + menu right now
