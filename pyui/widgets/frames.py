@@ -1,7 +1,8 @@
 import pygame
 import pygame.gfxdraw
 
-from pyui.base import get_asset, Color, Size, Position
+from pyui.theme import THEME
+from pyui.base import get_asset, Size, Position
 from pyui.widget_base import Widget
 
 
@@ -32,7 +33,7 @@ class Frame(Widget):
     def render(self, surface, _, available_size=None):
         if self.widget is None:
             return
-        self.widget.render(surface, pos, self.size)
+        self.widget.render(surface, self.position, self.size)
         self.render_rect = self.widget.render_rect
 
     def draw(self, surface):
@@ -40,7 +41,7 @@ class Frame(Widget):
 
 
 class Border(Widget):
-    def __init__(self, pos, modal=False, background=Color.BACKGROUND, widget=None):
+    def __init__(self, pos, modal=False, background=None, widget=None):
         # the border contains another widget, however the default will be to grab the default size of the widget
         # there is a resize method if you want to change this
         # the actual size of the Border will be the child widget min size + border size
@@ -53,6 +54,8 @@ class Border(Widget):
         self.image = get_asset('nine_patch/frame.png')
         self.corner = Size(8, 8)
         self.middle = Size(4, 8)
+        if background is None:
+            background = THEME.colors['widget_background']
         self.background = background
         self.widget = widget
         if widget is None:

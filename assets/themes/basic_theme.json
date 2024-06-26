@@ -1,5 +1,8 @@
 {
-    "colors": {},
+    "colors": {
+        "widget_background": [232, 232, 232],
+        "menu_background": [160, 160, 160]
+    },
     "icons": {
         "open": "open"
     },
