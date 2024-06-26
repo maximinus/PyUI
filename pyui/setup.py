@@ -12,6 +12,8 @@ def get_clock():
 
 
 def init(size=DEFAULT_SIZE, title='PyUI'):
+    if size is None:
+        size = DEFAULT_SIZE
     pygame.init()
     screen = pygame.display.set_mode((size.width, size.height))
     pygame.display.set_caption(title)

@@ -1,7 +1,9 @@
 import sys
 
 import pygame
-from pyui.setup import init, get_clock
+from pyui.setup import init, get_clock, DEFAULT_SIZE
+
+BACKGROUND_COLOR = (140, 140, 140)
 
 # When a widget is created, it can ask for events or not
 # When a SDL event happens, we first of all look at what widget is covering that screen
@@ -17,12 +19,9 @@ from pyui.setup import init, get_clock
 
 
 class PyUIApp:
-    def __init__(self, frame=None):
-        init()
-        if frame is None:
-            self.frames = []
-        else:
-            self.frames = [frame]
+    def __init__(self, window_size=None):
+        self.display = init(size=window_size)
+        self.frames = []
 
     def push_frame(self, frame):
         # when push and pop are done like this, we can iterate from
@@ -34,6 +33,8 @@ class PyUIApp:
             self.frames.pop(0)
 
     def event_loop(self):
+        self.display.fill(BACKGROUND_COLOR)
+        self.draw_all_frames()
         clock = get_clock()
         while True:
             for event in pygame.event.get():
@@ -41,8 +42,13 @@ class PyUIApp:
                     pygame.quit()
                     sys.exit(True)
                 self.handle_event(event)
-                self.update_frames()
-                clock.tick(60)
+            #self.update_frames()
+            clock.tick(60)
+
+    def draw_all_frames(self):
+        for frame in self.frames:
+            frame.render(self.display, None, DEFAULT_SIZE)
+        pygame.display.flip()
 
     def handle_event(self, event):
         # get the event and pass to the top window
@@ -61,4 +67,8 @@ class PyUIApp:
 
     def update_frames(self):
         for frame in self.frames:
-            frame.refresh()
+            frame.refresh(self.display)
+        pygame.display.flip()
+
+
+app = PyUIApp()

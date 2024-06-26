@@ -45,10 +45,6 @@ class Box(Widget):
     def expand(self, new_value):
         pass
 
-    def refresh(self, surface):
-        for i in self.widgets:
-            i.refresh(surface)
-
     def handle_event(self, event):
         for widget in self.widgets:
             if widget.handle_event(event):
