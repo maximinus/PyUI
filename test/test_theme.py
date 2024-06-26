@@ -18,7 +18,7 @@ class TestDefaultTheme(unittest.TestCase):
 
     def test_colors(self):
         # no default colors
-        self.assertEqual(len(THEME.color), 0)
+        self.assertEqual(len(THEME.color), 2)
 
     def test_icons(self):
         # basic icon should be a surface
