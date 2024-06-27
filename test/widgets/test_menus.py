@@ -46,3 +46,24 @@ class TestMenu(unittest.TestCase):
         height = menu.min_size.height
         # must be a multiple of 3
         self.assertTrue((height % 3) == 0)
+
+
+class TestSimpleCollision(unittest.TestCase):
+    def test_simple_collision(self):
+        render_rect = pygame.Rect(0, 0, 100, 100)
+        self.assertTrue(render_rect.collidepoint(50, 50))
+
+    def test_simple_collision_with_offset(self):
+        render_rect = pygame.Rect(100, 100, 100, 100)
+        self.assertTrue(render_rect.collidepoint(150, 150))
+
+    def test_real_collision(self):
+        # pygame seems funny about this
+        # the rect is actually left, top, width, height
+        render_rect = pygame.Rect(206, 156, 105, 24)
+        # the collide_rect does not actually allow for the top and bottom, it checks against width and height
+        self.assertTrue(render_rect.collidepoint(210, 160))
+
+    def test_real_no_collision(self):
+        render_rect = pygame.Rect(206, 156, 105, 24)
+        self.assertFalse(render_rect.collidepoint(0, 0))

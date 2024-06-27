@@ -46,6 +46,7 @@ class Menu(Border):
         # we need to check if we are in or out of any vbox widgets
         for widget in self.widget.widgets:
             if widget.render_rect.collidepoint((event.xpos, event.ypos)):
+                print(widget.render_rect, event.xpos, event.ypos)
                 # yes, we are over
                 if widget.highlighted:
                     print(f'Over menu {widget}')

@@ -102,11 +102,9 @@ class PyUIApp:
 
     def handle_event(self, event):
         # cycle through the frames
-        print(event)
         for frame in self.frames:
-            print(frame.get_handlers(event.type))
             for handler in frame.get_handlers(event.type):
-                if handler(event):
+                if handler.callback(event):
                     # event has been dealt with
                     return
 
