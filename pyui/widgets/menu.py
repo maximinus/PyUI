@@ -45,19 +45,19 @@ class Menu(Border):
         # return True to "consume", i.e., stop the event being sent anywhere else
         # we need to check if we are in or out of any vbox widgets
         for widget in self.widget.widgets:
-            if widget.render_rect.collidepoint((event.xpos, event.ypos)):
-                print(widget.render_rect, event.xpos, event.ypos)
+            if widget.render_rect.collidepoint(event.xpos, event.ypos):
                 # yes, we are over
                 if widget.highlighted:
-                    print(f'Over menu {widget}')
+                    # nothing changed
                     return True
+                print(f'Over menu {widget}')
                 # update the new rect
-                widget.highlighted = False
+                widget.highlighted = True
                 app.set_dirty(widget)
-                # can't be in the other widget
-                return True
+                # can't be in the other widgets, so return early
+                return
+            # we are not over the menu item
             if widget.highlighted:
-                print(f'Excited menu {widget}')
+                print(f'Exited menu {widget}')
                 widget.highlighted = False
                 app.set_dirty(widget)
-            return False
