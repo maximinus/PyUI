@@ -18,16 +18,39 @@ BACKGROUND_COLOR = (140, 140, 140)
 # As a GUI, we only look at key presses and mouse clicks for now
 
 
+class Callback:
+    def __init__(self, callback, event_type):
+        self.callback = callback
+        self.event_type = event_type
+
+
+class FrameEvents:
+    # all the frames have a list of events as well
+    def __init__(self, frame, callbacks=None):
+        self.frame = frame
+        if callbacks is None:
+            self.events = []
+        else:
+            self.events = callbacks
+
+    def get_handlers(self, event_type):
+        # go through list in reverse
+        all_callbacks = []
+        for callback in reversed(self.callbacks):
+            if callback.event_type == event_type:
+                all_callbacks.append(callback)
+        return all_callbacks
+
+
 class PyUIApp:
     def __init__(self, window_size=None):
         self.display = init(size=window_size)
         self.frames = []
-        self.callbacks = {}
 
     def push_frame(self, frame):
         # when push and pop are done like this, we can iterate from
         # newest to oldest
-        self.frames.insert(0, frame)
+        self.frames.insert(0, FrameEvents(frame))
 
     def pop_frame(self):
         if len(self.frames) > 0:
@@ -49,28 +72,24 @@ class PyUIApp:
 
     def draw_all_frames(self):
         for frame in self.frames:
-            frame.render(self.display, None, DEFAULT_SIZE)
+            frame.frame.render(self.display, None, DEFAULT_SIZE)
         pygame.display.flip()
 
-    def register(self, widget, event_mask, callback):
+    def register(self, widget, event_type, callback):
         # we are going to need to know the root frame that contains this widget
         # because that frame may be modal
-        self.callbacks[event_mask] = [widget, callback]
+        root_frame = widget.get_parent()
+        for frame in self.frames:
+            if frame.frame == root_frame:
+                frame.callbacks.append(Callback(callback, event_type))
 
     def handle_event(self, event):
-        # get the event and pass to the top window
-        # if not consumed, then it goes to the next, and so on
-        # the parent of the widget is the one that will know if the event can
-        # be processed or not; and every widget needs a parent frame or border
-        # It's not as simple as that entirely though; a widget might need to know
-        # if the mouse is outside the widget in question
-
-        # for now, only handle mouse events
-        if event.type != pygame.MOUSEMOTION:
-            return
+        # cycle through the frames
         for frame in self.frames:
-            if frame.handle_event(event):
-                break
+            for handler in frame.get_handlers(event.type):
+                if handler(event):
+                    # event has been dealt with
+                    return
 
 
 app = PyUIApp()
