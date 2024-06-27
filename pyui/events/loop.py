@@ -42,15 +42,32 @@ class FrameEvents:
         return all_callbacks
 
 
+def get_ordered_callbacks(frame):
+    # get the children by depth first search
+    all_widgets = []
+
+    def depth_first_search(widget):
+        for child in widget.children:
+            depth_first_search(child)
+        all_widgets.append(widget)
+
+    # iterate over list and return all callbacks
+    depth_first_search(frame)
+    callbacks = []
+    for widget in all_widgets:
+        callbacks.extend(widget.callbacks)
+    return callbacks
+
+
 class PyUIApp:
     def __init__(self, window_size=None):
         self.display = init(size=window_size)
         self.frames = []
 
     def push_frame(self, frame):
-        # when push and pop are done like this, we can iterate from
-        # newest to oldest
-        self.frames.insert(0, FrameEvents(frame))
+        # when push and pop are done like this, so we can iterate from newest to oldest
+        callbacks = get_ordered_callbacks(frame)
+        self.frames.insert(0, FrameEvents(frame, callbacks))
 
     def pop_frame(self):
         if len(self.frames) > 0:
@@ -67,7 +84,7 @@ class PyUIApp:
                     sys.exit(True)
                 pyui_event = PyUiEvent.event(event)
                 if pyui_event is not None:
-                    self.handle_event(event)
+                    self.handle_event(pyui_event)
             clock.tick(60)
 
     def draw_all_frames(self):
@@ -78,18 +95,24 @@ class PyUIApp:
     def register(self, widget, event_type, callback):
         # we are going to need to know the root frame that contains this widget
         # because that frame may be modal
-        root_frame = widget.get_parent()
+        root_frame = widget.get_root()
         for frame in self.frames:
             if frame.frame == root_frame:
                 frame.callbacks.append(Callback(callback, event_type))
 
     def handle_event(self, event):
         # cycle through the frames
+        print(event)
         for frame in self.frames:
+            print(frame.get_handlers(event.type))
             for handler in frame.get_handlers(event.type):
                 if handler(event):
                     # event has been dealt with
                     return
+
+    def set_dirty(self, rect):
+        # tells the app what to redraw next frame
+        pass
 
 
 app = PyUIApp()

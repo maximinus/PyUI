@@ -35,6 +35,7 @@ class Menu(Border):
             for item in items:
                 box.add_widget(item)
         super().__init__(pos, widget=box)
+        self.connect(Event.MouseMove, self.mouse_move)
 
     def add_menu_item(self, menu_item):
         self.widget.add_widget(menu_item)
@@ -47,6 +48,7 @@ class Menu(Border):
             if widget.render_rect.collidepoint((event.xpos, event.ypos)):
                 # yes, we are over
                 if widget.highlighted:
+                    print(f'Over menu {widget}')
                     return True
                 # update the new rect
                 widget.highlighted = False
@@ -54,10 +56,7 @@ class Menu(Border):
                 # can't be in the other widget
                 return True
             if widget.highlighted:
+                print(f'Excited menu {widget}')
                 widget.highlighted = False
                 app.set_dirty(widget)
             return False
-
-    def register_events(self):
-        # what we want to do is find an easy way to register a callback
-        app.register(self, Event.MouseMove, self.mouse_move)

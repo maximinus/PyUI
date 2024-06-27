@@ -30,6 +30,10 @@ class Frame(Widget):
         self.container = None
 
     @property
+    def children(self):
+        return [self.widget]
+
+    @property
     def min_size(self):
         return self.size.add_margin(self.margin)
 
@@ -67,6 +71,10 @@ class Border(Widget):
             self.size = widget.min_size
             self.widget.parent = self
         self.parent = None
+
+    @property
+    def children(self):
+        return [self.widget]
 
     @property
     def min_size(self):

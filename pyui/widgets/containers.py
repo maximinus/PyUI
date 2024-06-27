@@ -28,6 +28,10 @@ class Box(Widget):
             self.size += widget.min_size
 
     @property
+    def children(self):
+        return self.widgets
+
+    @property
     def expand(self):
         # whether a box will expand or not depends on it's children
         x_expand = False
