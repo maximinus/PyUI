@@ -29,9 +29,9 @@ class FrameEvents:
     def __init__(self, frame, callbacks=None):
         self.frame = frame
         if callbacks is None:
-            self.events = []
+            self.callbacks = []
         else:
-            self.events = callbacks
+            self.callbacks = callbacks
 
     def get_handlers(self, event_type):
         # go through list in reverse
