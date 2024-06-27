@@ -22,9 +22,9 @@ class Frame(Widget):
                 self.size = Size(0, 0)
             else:
                 self.size = widget.min_size
+                widget.parent = self
         else:
             self.size = size
-        widget.parent = self
         self.widget = widget
         # null container, is parent
         self.container = None
@@ -60,12 +60,12 @@ class Border(Widget):
         if background is None:
             background = THEME.color['widget_background']
         self.background = background
-        widget.parent = self
         self.widget = widget
         if widget is None:
             self.size = Size(0, 0)
         else:
             self.size = widget.min_size
+            self.widget.parent = self
         self.parent = None
 
     @property

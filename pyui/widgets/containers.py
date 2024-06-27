@@ -61,7 +61,7 @@ class Box(Widget):
 
 class HBox(Box):
     def __init__(self, margin=None, align=None, widgets=None, background=None):
-        super().__init__(horizontal=True, margin=margin, align=align, background=background)
+        super().__init__(horizontal=True, margin=margin, align=align, background=background, widgets=widgets)
 
     @property
     def min_size(self):
@@ -138,7 +138,7 @@ class HBox(Box):
 
 class VBox(Box):
     def __init__(self, margin=None, align=None, widgets=None, background=None):
-        super().__init__(horizontal=False, margin=margin, align=align, background=background)
+        super().__init__(horizontal=False, margin=margin, align=align, background=background, widgets=widgets)
 
     @property
     def min_size(self):
