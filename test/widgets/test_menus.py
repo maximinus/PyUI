@@ -3,7 +3,8 @@ import unittest
 
 from pyui.events.events import MouseMove
 from pyui.setup import init
-from pyui.base import Position
+from pyui.base import Position, Margin, TextStyle
+from pyui.theme import THEME
 from pyui.widgets import MenuItem, Menu
 
 
@@ -113,3 +114,28 @@ class TestHighlightDetection(unittest.TestCase):
         self.assertTrue(self.menuitem.highlighted)
         self.menu.mouse_move(second_event)
         self.assertFalse(self.menuitem.highlighted)
+
+
+class TestMenuItemHeights(unittest.TestCase):
+    def test_default_margin_is_zero(self):
+        item = MenuItem('Hello')
+        self.assertEqual(item.margin.top, 0)
+        self.assertEqual(item.margin.bottom, 0)
+
+    def test_one_item_no_change(self):
+        item = MenuItem('Hello')
+        _ = Menu(Position(0, 0), items=[item])
+        self.assertEqual(item.margin.top, 0)
+        self.assertEqual(item.margin.bottom, 0)
+
+    def test_two_items_mismatched_margins(self):
+        # use 2 different text styles, but the final heights should be equal
+        init()
+        style = THEME.text['default']
+        item1 = MenuItem('Hello', style=style)
+        style.size = 40
+        item2 = MenuItem('Hello', style=style)
+        _ = Menu(Position(0, 0), items=[item1, item2])
+        # the min size height of both should be the same
+        self.assertEqual(item1.min_size.height, item2.min_size.height)
+        pygame.quit()

@@ -6,8 +6,12 @@ from pyui.events.loop import app
 from pyui.events.events import Event
 
 
+# TODO: We want every menu item to be the same size height
+# We cannot know what the size is beforehand as it depends on the font used
+# therefore we will have to sort out with increasing the margin on the items as they come in
+
 class MenuItem(Widget):
-    def __init__(self, text, icon_name=None):
+    def __init__(self, text, icon_name=None, style=None):
         super().__init__()
         self.widget = HBox(fill=Expand.HORIZONTAL)
         if icon_name is not None:
@@ -15,7 +19,7 @@ class MenuItem(Widget):
             self.widget.add_widget(icon)
         else:
             self.widget.add_widget(Spacer(size=Size(22, 20)))
-        self.widget.add_widget(TextLabel(text))
+        self.widget.add_widget(TextLabel(text, style=style))
         self.size = self.widget.min_size
         self.highlighted = False
 
@@ -32,11 +36,27 @@ class MenuItem(Widget):
         self.render_rect = self.widget.render_rect
 
 
+def set_item_heights(items):
+    item_height = max([x.min_size.height for x in items])
+    for item in items:
+        height_diff = item_height - item.min_size.height
+        if height_diff == 0:
+            continue
+        if height_diff % 2 == 1:
+            height_diff -= 1
+            item.margin.bottom += 1
+        if height_diff > 0:
+            height_div = height_diff // 2
+            item.margin.top += height_div
+            item.margin.bottom += height_div
+    return items
+
+
 class Menu(Border):
     def __init__(self, pos, items=None):
         box = VBox(margin=Margin(6, 6, 6, 6))
         if items is not None:
-            for item in items:
+            for item in set_item_heights(items):
                 box.add_widget(item)
         # menus are modal by default
         super().__init__(pos, widget=box, modal=True)
