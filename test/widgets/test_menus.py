@@ -77,7 +77,16 @@ class FakeMoveEvent:
 
 
 class TestHighlightDetection(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        init()
+
+    @classmethod
+    def tearDownClass(cls):
+        pygame.quit()
+
     def setUp(self):
+        # we need pygame setup else the font is not there
         self.menuitem = MenuItem('Test')
         # we are going to fake a render_rect to avoid rendering to screen
         self.menuitem.render_rect = pygame.Rect(100, 100, 100, 100)
