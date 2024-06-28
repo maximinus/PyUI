@@ -58,8 +58,7 @@ class Menu(Border):
                 # update the new rect
                 widget.highlighted = True
                 app.set_dirty(widget)
-                # can't be in the other widgets, so return early
-                return
+                # don't return early, we still to check the other widgets
             else:
                 # we are not over the menu item
                 if widget.highlighted:
