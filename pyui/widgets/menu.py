@@ -6,10 +6,6 @@ from pyui.events.loop import app
 from pyui.events.events import Event
 
 
-# TODO: We want every menu item to be the same size height
-# We cannot know what the size is beforehand as it depends on the font used
-# therefore we will have to sort out with increasing the margin on the items as they come in
-
 class MenuItem(Widget):
     def __init__(self, text, icon_name=None, style=None):
         super().__init__()
