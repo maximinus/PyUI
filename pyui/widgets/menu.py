@@ -1,4 +1,5 @@
 from pyui.base import get_asset, Size, Margin
+from pyui.theme import THEME
 from pyui.widget_base import Widget
 from pyui.widgets import Border, VBox, HBox, TextLabel, Image, Spacer
 from pyui.events.loop import app
@@ -23,6 +24,10 @@ class MenuItem(Widget):
         return self.size.add_margin(self.margin)
 
     def render(self, surface, pos, available_size=None):
+        if self.highlighted:
+            self.widget.background = THEME.color['menu_background']
+        else:
+            self.widget.background = THEME.color['widget_background']
         self.widget.render(surface, pos, available_size)
         self.render_rect = self.widget.render_rect
         self.redraw = False
