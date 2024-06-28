@@ -17,6 +17,7 @@ class Image(Widget):
         return self.size.add_margin(self.margin)
 
     def render(self, surface, pos, available_size=None):
+        # images ignore the fill, they are always a fixed size
         surface.blit(self.image, (pos.x + self.margin.left, pos.y + self.margin.top))
         self.render_rect = pygame.Rect(pos.x + self.margin.left, pos.y + self.margin.top,
                                        self.size.width, self.size.height)

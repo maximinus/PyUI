@@ -5,6 +5,10 @@ from pyui.events.loop import Callback
 
 
 # a widget always has:
+# "expand", does the widget ask for as much space as possible?
+# a "margin" around the widget
+# "fill", whether the widget should expand into any extra space passed to it to render in
+# "align", if the widget should be the left / middle / top / bottom of the free space
 # a min_size: the smallest this widget can be
 # a render_rect; the area where the widget was drawn to (this does not include the margin)
 # a boolean "redraw" which lets us know the widget needs to be redrawn
@@ -13,10 +17,11 @@ from pyui.events.loop import Callback
 # a property "children" which returns all children
 
 class Widget:
-    def __init__(self, expand=None, margin=None, align=None):
+    def __init__(self, expand=None, margin=None, align=None, fill=Expand.NONE):
         self.expand = expand if expand is not None else Expand.NONE
         self.margin = margin if margin is not None else Margin()
         self.align = Align(align) if align is not None else Align(Align.CENTER)
+        self.fill = fill
         self.render_rect = None
         self.redraw = True
         self.parent = None

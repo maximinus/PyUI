@@ -62,6 +62,16 @@ class Box(Widget):
                 return True
         return False
 
+    def draw_background(self, available_size, surface):
+        if self.background is not None:
+            # if Expand is set to horizontal or vertical, fill the background
+            background_rect = self.render_rect.copy()
+            if self.expand.is_horizontal:
+                background_rect.width = available_size.width
+            if self.expand.is_vertical:
+                background_rect.height = available_size.height
+            pygame.draw.rect(surface, self.background, background_rect)
+
 
 class HBox(Box):
     def __init__(self, margin=None, align=None, widgets=None, background=None):
@@ -131,8 +141,7 @@ class HBox(Box):
         current_y = pos.y + self.margin.top
         all_sizes = self.calculate_sizes(available_size)
         self.render_rect = pygame.Rect(current_x, current_y, sum([x.width for x in all_sizes]), all_sizes[0].height)
-        if self.background is not None:
-            pygame.draw.rect(surface, self.background, self.render_rect)
+        self.draw_background(available_size, surface)
         for widget, widget_size in zip(self.widgets, all_sizes):
             widget.render(surface, Position(current_x, current_y), widget_size)
             # no need to add the margin because it is computed in the widget size
@@ -208,8 +217,7 @@ class VBox(Box):
         current_y = pos.y + self.margin.top
         all_sizes = self.calculate_sizes(available_size)
         self.render_rect = pygame.Rect(current_x, current_y, all_sizes[0].width, sum([x.height for x in all_sizes]))
-        if self.background is not None:
-            pygame.draw.rect(surface, self.background, self.render_rect)
+        self.draw_background(available_size, surface)
         for widget, widget_size in zip(self.widgets, all_sizes):
             widget.render(surface, Position(current_x, current_y), widget_size)
             current_y += widget_size.height

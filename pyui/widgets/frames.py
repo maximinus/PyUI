@@ -88,7 +88,6 @@ class Border(Widget):
         self.size = new_size
 
     def render(self, surface, _, available_size=None):
-        available_size = self.size
         # draw the top left
         x = self.position.x - self.corner.width
         y = self.position.y - self.corner.height

@@ -6,8 +6,8 @@ from pyui.theme import THEME
 
 
 class TextLabel(Widget):
-    def __init__(self, text, style=None, expand=None, margin=None, align=None):
-        super().__init__(expand, margin, align)
+    def __init__(self, text, style=None, expand=None, margin=None, align=None, fill=None):
+        super().__init__(expand, margin, align, fill)
         self.text = text
         self.style = style
         if style is None:
@@ -21,6 +21,7 @@ class TextLabel(Widget):
         return self.size.add_margin(self.margin)
 
     def render(self, surface, pos, available_size=None):
+        # text labels ignore "fill" as they cannot naturally expand
         x = pos.x
         y = pos.y
         if available_size is None:
