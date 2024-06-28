@@ -128,6 +128,8 @@ class PyUIApp:
             # because of this, we need a routine that checks for overlaps and then redraws any
             # parts of the frames that are in front of the one that was updated
         pygame.display.flip()
+        # finally, clear all list or dirty widgets
+        self.dirty_widgets = []
 
 
 app = PyUIApp()
