@@ -4,17 +4,16 @@ from pyui.base import Expand, Margin, Align, Size, Position
 from pyui.events.loop import Callback
 
 
-# a widget always has:
-# "expand", does the widget ask for as much space as possible?
-# a "margin" around the widget
-# "fill", whether the widget should expand into any extra space passed to it to render in
-# "align", if the widget should be the left / middle / top / bottom of the free space
-# a min_size: the smallest this widget can be
-# a render_rect; the area where the widget was drawn to (this does not include the margin)
-# a boolean "redraw" which lets us know the widget needs to be redrawn
-# "parent" which is the parent widget, or None if the root
-# a series of callbacks, which consist of the message to catch and the callback when this happens
-# a property "children" which returns all children
+# Widget
+#  expand:      does the widget ask for as much space as possible, or just the minimum?
+#  fill:        whether the widget should expand into any extra space when given it anyway
+#  margin:      the size of the margin around the widget
+#  min_size:    the smallest size the widget could be, with its margin
+#  align:       if there is more size than the min size, and we are not filling, where should we align the widget?
+#  render_rect: the rectangular area of the last blit we made to draw the widget
+#  parent:      the parent widget, or None if the root
+# callbacks:    array of [event, callback] ro capture events
+# children:     returns an array of all children (no children - an empty array)
 
 class Widget:
     def __init__(self, expand=None, margin=None, align=None, fill=None):
