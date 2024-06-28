@@ -117,6 +117,14 @@ class TestHighlightDetection(unittest.TestCase):
 
 
 class TestMenuItemHeights(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        init()
+
+    @classmethod
+    def tearDownClass(cls):
+        pygame.quit()
+
     def test_default_margin_is_zero(self):
         item = MenuItem('Hello')
         self.assertEqual(item.margin.top, 0)
@@ -130,7 +138,6 @@ class TestMenuItemHeights(unittest.TestCase):
 
     def test_two_items_mismatched_margins(self):
         # use 2 different text styles, but the final heights should be equal
-        init()
         style = THEME.text['default']
         item1 = MenuItem('Hello', style=style)
         style.size = 40
@@ -138,4 +145,3 @@ class TestMenuItemHeights(unittest.TestCase):
         _ = Menu(Position(0, 0), items=[item1, item2])
         # the min size height of both should be the same
         self.assertEqual(item1.min_size.height, item2.min_size.height)
-        pygame.quit()

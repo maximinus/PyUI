@@ -80,3 +80,16 @@ class Menu(Border):
                 if widget.highlighted:
                     widget.highlighted = False
                     app.set_dirty(widget)
+
+
+class MenuBar(HBox):
+    def __init__(self):
+        super().__init__()
+        self.bar = HBox()
+        self.menus = []
+
+    def add_menu(self, text, menu):
+        pass
+
+    def render(self, surface, pos, available_size=None):
+        self.bar.render()

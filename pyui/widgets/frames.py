@@ -7,6 +7,9 @@ from pyui.widget_base import Widget
 
 
 # these items have a size, which is the size of the area to render other widgets
+# TODO: these widgets must have their own surface, which the child widgets render to
+# this means that the positions for rendering must be realtive to the parent widget
+# this makes dirty rect drawing a lot easier
 
 class Frame(Widget):
     # a frame is a container that holds a single widget, and is a fixed size

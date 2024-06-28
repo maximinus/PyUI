@@ -6,8 +6,6 @@ from pyui.widget_base import Widget
 
 class Box(Widget):
     def __init__(self, widgets=None, horizontal=True, margin=None, expand=None, align=None, fill=None, background=None):
-        if expand is not None:
-            raise AttributeError('Box widgets cannot be passed an expand variable')
         super().__init__(expand, margin, align, fill)
         self.background = background
         self.horizontal = horizontal
