@@ -56,7 +56,8 @@ class Menu(Border):
                 app.set_dirty(widget)
                 # can't be in the other widgets, so return early
                 return
-            # we are not over the menu item
-            if widget.highlighted:
-                widget.highlighted = False
-                app.set_dirty(widget)
+            else:
+                # we are not over the menu item
+                if widget.highlighted:
+                    widget.highlighted = False
+                    app.set_dirty(widget)

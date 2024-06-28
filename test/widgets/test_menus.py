@@ -1,6 +1,7 @@
 import pygame
 import unittest
 
+from pyui.events.events import MouseMove
 from pyui.setup import init
 from pyui.base import Position
 from pyui.widgets import MenuItem, Menu
@@ -67,3 +68,39 @@ class TestSimpleCollision(unittest.TestCase):
     def test_real_no_collision(self):
         render_rect = pygame.Rect(206, 156, 105, 24)
         self.assertFalse(render_rect.collidepoint(0, 0))
+
+
+class FakeMoveEvent:
+    def __init__(self, pos):
+        self.pos = pos
+        self.rel = [0, 0]
+
+
+class TestHighlightDetection(unittest.TestCase):
+    def setUp(self):
+        self.menuitem = MenuItem('Test')
+        # we are going to fake a render_rect to avoid rendering to screen
+        self.menuitem.render_rect = pygame.Rect(100, 100, 100, 100)
+        self.menu = Menu(Position(0, 0), items=[self.menuitem])
+
+    def test_starts_unhighlighted(self):
+        self.assertFalse(self.menuitem.highlighted)
+
+    def test_highlight_added_after_move(self):
+        event = MouseMove(FakeMoveEvent([150, 150]))
+        self.menu.mouse_move(event)
+        self.assertTrue(self.menuitem.highlighted)
+        self.menuitem.highlighted = False
+
+    def test_highlighted_false_after_missed_move(self):
+        event = MouseMove(FakeMoveEvent([0, 0]))
+        self.menu.mouse_move(event)
+        self.assertFalse(self.menuitem.highlighted)
+
+    def test_highlighted_false_after_over_and_not_over(self):
+        first_event = MouseMove(FakeMoveEvent([150, 150]))
+        second_event = MouseMove(FakeMoveEvent([0, 0]))
+        self.menu.mouse_move(first_event)
+        self.assertTrue(self.menuitem.highlighted)
+        self.menu.mouse_move(second_event)
+        self.assertFalse(self.menuitem.highlighted)
