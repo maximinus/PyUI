@@ -4,4 +4,4 @@ from .text_label import TextLabel
 from .frames import Frame, Border
 from .image import Image
 from .spacer import Spacer
-from .menu import MenuItem, Menu
+from .menu import MenuItem, Menu, MenuBar

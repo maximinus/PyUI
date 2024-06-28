@@ -1,4 +1,4 @@
-from pyui.base import get_asset, Size, Margin, Expand
+from pyui.base import get_asset, Size, Margin, Expand, Align
 from pyui.theme import THEME
 from pyui.widget_base import Widget
 from pyui.widgets import Border, VBox, HBox, TextLabel, Image, Spacer
@@ -82,14 +82,20 @@ class Menu(Border):
                     app.set_dirty(widget)
 
 
+class MenuHeader(TextLabel):
+    def __init__(self, text, menu):
+        super().__init__(text, THEME.text['menu_header'], margin=Margin(6, 6, 4, 4), align=Align.CENTER)
+        self.connect(Event.MouseLeftClickDown, self.clicked)
+        self.menu = menu
+
+    def clicked(self, event):
+        print('I was clicked!')
+
+
 class MenuBar(HBox):
     def __init__(self):
-        super().__init__()
-        self.bar = HBox()
-        self.menus = []
+        super().__init__(expand=Expand.HORIZONTAL)
+        self.background = THEME.color['menubar_background']
 
     def add_menu(self, text, menu):
-        pass
-
-    def render(self, surface, pos, available_size=None):
-        self.bar.render()
+        self.add_widget(MenuHeader(text, menu))

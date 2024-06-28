@@ -1,7 +1,8 @@
 {
     "colors": {
         "widget_background": [232, 232, 232],
-        "menu_background": [160, 160, 160]
+        "menu_background": [160, 160, 160],
+        "menubar_background": [160, 160, 160]
     },
     "icons": {
         "open": "open"
@@ -15,6 +16,11 @@
         "menu": {
             "size":  18,
             "color": [20, 20, 20],
+            "font": "Inconsolata"
+        },
+        "menu_header": {
+            "size":  18,
+            "color": [50, 50, 50],
             "font": "Inconsolata"
         }
     },
