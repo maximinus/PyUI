@@ -21,4 +21,3 @@ class Image(Widget):
         surface.blit(self.image, (pos.x + self.margin.left, pos.y + self.margin.top))
         self.render_rect = pygame.Rect(pos.x + self.margin.left, pos.y + self.margin.top,
                                        self.size.width, self.size.height)
-        self.redraw = False

@@ -1,4 +1,4 @@
-from pyui.base import get_asset, Size, Margin
+from pyui.base import get_asset, Size, Margin, Expand
 from pyui.theme import THEME
 from pyui.widget_base import Widget
 from pyui.widgets import Border, VBox, HBox, TextLabel, Image, Spacer
@@ -9,9 +9,9 @@ from pyui.events.events import Event
 class MenuItem(Widget):
     def __init__(self, text, icon_name=None):
         super().__init__()
-        self.widget = HBox()
+        self.widget = HBox(fill=Expand.HORIZONTAL)
         if icon_name is not None:
-            icon = Image(get_asset(f'icons/{icon_name}.png'), margin=Margin(2, 6, 4, 4))
+            icon = Image(get_asset(f'icons/{icon_name}.png'), margin=Margin(2, 6, 2, 2))
             self.widget.add_widget(icon)
         else:
             self.widget.add_widget(Spacer(size=Size(22, 20)))
@@ -30,7 +30,6 @@ class MenuItem(Widget):
             self.widget.background = THEME.color['widget_background']
         self.widget.render(surface, pos, available_size)
         self.render_rect = self.widget.render_rect
-        self.redraw = False
 
 
 class Menu(Border):

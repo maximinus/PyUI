@@ -49,4 +49,3 @@ class ColorRect(Widget):
 
         pygame.draw.rect(surface, self.color, (x, y, width, height))
         self.render_rect = pygame.Rect(x, y, width, height)
-        self.redraw = False

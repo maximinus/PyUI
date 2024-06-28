@@ -10,10 +10,6 @@ class TestBaseWidget(unittest.TestCase):
         widget = Widget()
         self.assertIsNone(widget.render_rect)
 
-    def test_start_needing_redraw(self):
-        widget = Widget()
-        self.assertTrue(widget.redraw)
-
     def test_parent_is_none(self):
         widget = Widget()
         self.assertIsNone(widget.parent)

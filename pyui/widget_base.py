@@ -17,13 +17,12 @@ from pyui.events.loop import Callback
 # a property "children" which returns all children
 
 class Widget:
-    def __init__(self, expand=None, margin=None, align=None, fill=Expand.NONE):
+    def __init__(self, expand=None, margin=None, align=None, fill=None):
         self.expand = expand if expand is not None else Expand.NONE
         self.margin = margin if margin is not None else Margin()
         self.align = Align(align) if align is not None else Align(Align.CENTER)
-        self.fill = fill
+        self.fill = fill if fill is not None else Expand.NONE
         self.render_rect = None
-        self.redraw = True
         self.parent = None
         self.callbacks = []
 
