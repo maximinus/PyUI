@@ -47,6 +47,8 @@ def get_ordered_callbacks(frame):
     all_widgets = []
 
     def depth_first_search(widget):
+        if widget is None:
+            return
         for child in widget.children:
             depth_first_search(child)
         all_widgets.append(widget)
@@ -62,16 +64,17 @@ def get_ordered_callbacks(frame):
 class PyUIApp:
     def __init__(self, window_size=None):
         self.display = init(size=window_size)
-        self.frames = []
+        self.frame_events = []
+        self.dirty_widgets = []
 
     def push_frame(self, frame):
         # when push and pop are done like this, so we can iterate from newest to oldest
         callbacks = get_ordered_callbacks(frame)
-        self.frames.insert(0, FrameEvents(frame, callbacks))
+        self.frame_events.insert(0, FrameEvents(frame, callbacks))
 
     def pop_frame(self):
-        if len(self.frames) > 0:
-            self.frames.pop(0)
+        if len(self.frame_events) > 0:
+            self.frame_events.pop(0)
 
     def event_loop(self):
         self.display.fill(THEME.color['widget_background'])
@@ -85,32 +88,46 @@ class PyUIApp:
                 pyui_event = PyUiEvent.event(event)
                 if pyui_event is not None:
                     self.handle_event(pyui_event)
+            self.update_dirty_widgets()
             clock.tick(60)
 
     def draw_all_frames(self):
-        for frame in self.frames:
+        for frame in self.frame_events:
             frame.frame.render(self.display, None, DEFAULT_SIZE)
         pygame.display.flip()
 
-    def register(self, widget, event_type, callback):
-        # we are going to need to know the root frame that contains this widget
-        # because that frame may be modal
-        root_frame = widget.get_root()
-        for frame in self.frames:
-            if frame.frame == root_frame:
-                frame.callbacks.append(Callback(callback, event_type))
-
     def handle_event(self, event):
         # cycle through the frames
-        for frame in self.frames:
+        for frame in self.frame_events:
             for handler in frame.get_handlers(event.type):
                 if handler.callback(event):
                     # event has been dealt with
                     return
 
-    def set_dirty(self, rect):
-        # tells the app what to redraw next frame
-        pass
+    def set_dirty(self, widget):
+        # store a widget that needs to be updated
+        # the widget should know what to do to update itself
+        self.dirty_widgets.append(widget)
+
+    def update_dirty_widgets(self):
+        # go through all dirty rects and sort by frame (we draw from back to front)
+        frame_rects = {}
+        for widget in self.dirty_widgets:
+            parent = widget.get_root()
+            if parent in frame_rects:
+                frame_rects[parent].append(widget)
+            else:
+                frame_rects[parent] = [widget]
+        # loop through frames looking for a match
+        for frame_event in reversed(self.frame_events):
+            if frame_event.frame in frame_rects:
+                # update all the widgets that are dirty in this frame
+                for widget in frame_rects[frame_event.frame]:
+                    widget.update(self.display)
+            # TODO: Since we render from the back to the front, a widget may overwrite a frame in front
+            # because of this, we need a routine that checks for overlaps and then redraws any
+            # parts of the frames that are in front of the one that was updated
+        pygame.display.flip()
 
 
 app = PyUIApp()

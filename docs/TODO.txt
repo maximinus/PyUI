@@ -18,10 +18,10 @@ This means that, at a minimum, we need to solve the following:
 Plan
 ----
 
-1: Get a single menu displaying
+* Get a single menu displaying
 2: Connect that to a menubar
 3: Get the mouse working with a connection to the menu items
-4: Add actions to the system to handle callbacks
+* Add actions to the system to handle callbacks
 5: Allow the window to be resized
 6: Add a text editor widget
 7: Allow editing of text

@@ -34,7 +34,8 @@ class Menu(Border):
         if items is not None:
             for item in items:
                 box.add_widget(item)
-        super().__init__(pos, widget=box)
+        # menus are modal by default
+        super().__init__(pos, widget=box, modal=True)
         self.connect(Event.MouseMove, self.mouse_move)
 
     def add_menu_item(self, menu_item):
@@ -50,7 +51,6 @@ class Menu(Border):
                 if widget.highlighted:
                     # nothing changed
                     return True
-                print(f'Over menu {widget}')
                 # update the new rect
                 widget.highlighted = True
                 app.set_dirty(widget)
@@ -58,6 +58,5 @@ class Menu(Border):
                 return
             # we are not over the menu item
             if widget.highlighted:
-                print(f'Exited menu {widget}')
                 widget.highlighted = False
                 app.set_dirty(widget)
