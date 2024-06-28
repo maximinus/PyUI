@@ -31,7 +31,7 @@ class Widget:
     def children(self):
         return []
 
-    def render(self, surface, pos=None, available_size=None):
+    def render(self, surface, pos, available_size=None):
         # if the available size is None, then the default is to render at the minimum size
         self.render_rect = pygame.Rect(pos.x, pos.y, 0, 0)
 
