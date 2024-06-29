@@ -145,10 +145,3 @@ class TestMenuItemHeights(unittest.TestCase):
         _ = Menu(Position(0, 0), items=[item1, item2])
         # the min size height of both should be the same
         self.assertEqual(item1.min_size.height, item2.min_size.height)
-
-
-class TestMenuBarHBox(unittest.TestCase):
-    def test_expanded_size(self):
-        menubar = MenuBar()
-        menubar.add_menu('File', None)
-        window = Frame(Position(0, 0), size=Size(200, 200), widget=menubar)

@@ -73,6 +73,7 @@ class PyUIApp:
         self.dirty_widgets = []
         self.looping = False
         self.deferred_frames = []
+        self.dead_frames = []
 
     def push_frame(self, frame):
         # push and pop are done like this to iterate from newest to oldest
@@ -91,6 +92,9 @@ class PyUIApp:
         if len(self.frame_events) > 0:
             self.frame_events.pop(0)
 
+    def remove_frame(self, frame):
+        self.dead_frames.append(frame)
+
     def event_loop(self):
         self.display.fill(THEME.color['widget_background'])
         self.draw_all_frames()
@@ -105,8 +109,13 @@ class PyUIApp:
                 if pyui_event is not None:
                     self.handle_event(pyui_event)
             self.update_dirty_widgets()
+            self.remove_dead_frames()
             self.add_deferred_frames()
             clock.tick(60)
+
+    def remove_dead_frames(self):
+        # remove the frame. This means we need to update the dirty frames
+        pass
 
     def add_deferred_frames(self):
         if len(self.deferred_frames) == 0:

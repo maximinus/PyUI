@@ -69,7 +69,7 @@ class Menu(Border):
     def cancel_menu(self, event):
         # this means there was a click, but not on our widget. It could have been any mouse click
         # we just need to close this modal frame
-        print('Closing menu')
+        app.remove_frame(self)
 
     def mouse_move(self, event):
         # called when we get a mouse move

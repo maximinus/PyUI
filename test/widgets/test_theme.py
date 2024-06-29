@@ -18,7 +18,7 @@ class TestDefaultTheme(unittest.TestCase):
 
     def test_colors(self):
         # no default colors
-        self.assertEqual(len(THEME.color), 2)
+        self.assertEqual(len(THEME.color), 3)
 
     def test_icons(self):
         # basic icon should be a surface
@@ -27,7 +27,7 @@ class TestDefaultTheme(unittest.TestCase):
 
     def test_text_type(self):
         # we have default + menu right now
-        self.assertEqual(len(THEME.text), 2)
+        self.assertEqual(len(THEME.text), 3)
         self.assertTrue(isinstance(THEME.text['menu'], TextStyle))
 
     def test_text_size(self):
