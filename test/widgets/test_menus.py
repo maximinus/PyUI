@@ -3,9 +3,9 @@ import unittest
 
 from pyui.events.events import MouseMove
 from pyui.setup import init
-from pyui.base import Position, Margin, TextStyle
+from pyui.base import Position, Size
 from pyui.theme import THEME
-from pyui.widgets import MenuItem, Menu
+from pyui.widgets import MenuItem, Menu, MenuBar, Frame
 
 
 class TestMenuItem(unittest.TestCase):
@@ -145,3 +145,10 @@ class TestMenuItemHeights(unittest.TestCase):
         _ = Menu(Position(0, 0), items=[item1, item2])
         # the min size height of both should be the same
         self.assertEqual(item1.min_size.height, item2.min_size.height)
+
+
+class TestMenuBarHBox(unittest.TestCase):
+    def test_expanded_size(self):
+        menubar = MenuBar()
+        menubar.add_menu('File', None)
+        window = Frame(Position(0, 0), size=Size(200, 200), widget=menubar)

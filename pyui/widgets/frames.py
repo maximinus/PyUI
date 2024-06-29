@@ -15,8 +15,10 @@ class Frame(Widget):
     # a frame is a container that holds a single widget, and is a fixed size
     # the size does NOT include the margin
     # a frame always needs a position
-    def __init__(self, pos, modal=False, size=None, widget=None, margin=None):
+    def __init__(self, pos=None, modal=False, size=None, widget=None, margin=None):
         super().__init__(margin=margin)
+        if pos is None:
+            pos = Position(0, 0)
         self.position = pos
         self.modal = modal
         if size is None:

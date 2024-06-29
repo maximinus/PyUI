@@ -1,8 +1,8 @@
 {
     "colors": {
-        "widget_background": [232, 232, 232],
+        "widget_background": [240, 240, 240],
         "menu_background": [160, 160, 160],
-        "menubar_background": [160, 160, 160]
+        "menubar_background": [200, 200, 200]
     },
     "icons": {
         "open": "open"

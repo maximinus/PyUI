@@ -3,7 +3,7 @@ import pygame
 
 from pyui.setup import init, get_clock, DEFAULT_SIZE
 from pyui.theme import THEME
-from pyui.events.events import PyUiEvent
+from pyui.events.events import PyUiEvent, is_mouse_click
 
 BACKGROUND_COLOR = (140, 140, 140)
 
@@ -19,9 +19,10 @@ BACKGROUND_COLOR = (140, 140, 140)
 
 
 class Callback:
-    def __init__(self, callback, event_type):
+    def __init__(self, callback, event_type, widget):
         self.callback = callback
         self.event_type = event_type
+        self.widget = widget
 
 
 class FrameEvents:
@@ -66,13 +67,23 @@ class PyUIApp:
         self.display = init(size=window_size)
         self.frame_events = []
         self.dirty_widgets = []
+        self.looping = False
+        self.deferred_frames = []
 
     def push_frame(self, frame):
-        # when push and pop are done like this, so we can iterate from newest to oldest
+        # push and pop are done like this to iterate from newest to oldest
+        if not self.looping:
+            self.add_frame(frame)
+        else:
+            # we cannot add a frame during a loop, it must be after
+            self.deferred_frames.append(frame)
+
+    def add_frame(self, frame):
         callbacks = get_ordered_callbacks(frame)
         self.frame_events.insert(0, FrameEvents(frame, callbacks))
 
     def pop_frame(self):
+        # TODO: shouldn't destroy a frame during a loop either
         if len(self.frame_events) > 0:
             self.frame_events.pop(0)
 
@@ -80,6 +91,7 @@ class PyUIApp:
         self.display.fill(THEME.color['widget_background'])
         self.draw_all_frames()
         clock = get_clock()
+        self.looping = True
         while True:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -89,7 +101,18 @@ class PyUIApp:
                 if pyui_event is not None:
                     self.handle_event(pyui_event)
             self.update_dirty_widgets()
+            self.add_deferred_frames()
             clock.tick(60)
+
+    def add_deferred_frames(self):
+        if len(self.deferred_frames) == 0:
+            return
+        for frame in self.deferred_frames:
+            # add the frame, and draw it
+            self.add_frame(frame)
+            self.frame_events[0].frame.render(self.display, None, DEFAULT_SIZE)
+        pygame.display.flip()
+        self.deferred_frames = []
 
     def draw_all_frames(self):
         for frame in self.frame_events:
@@ -98,8 +121,18 @@ class PyUIApp:
 
     def handle_event(self, event):
         # cycle through the frames
+        # do it this way in case something adds a handler in an event
         for frame in self.frame_events:
-            for handler in frame.get_handlers(event.type):
+            for handler in [y for y in frame.get_handlers(event.type)]:
+                # if it is a mouse click, we need to validate the widgets render_rect against this clock position
+                if is_mouse_click(event):
+                    if handler.widget.render_rect is None:
+                        # not yet rendered, so cannot get a click, ignore this one
+                        continue
+                    # ensure the click was in the widget
+                    if not handler.widget.render_rect.collidepoint(event.xpos, event.ypos):
+                        # didn't click this widget, so ignore
+                        continue
                 if handler.callback(event):
                     # event has been dealt with
                     return
@@ -111,6 +144,9 @@ class PyUIApp:
 
     def update_dirty_widgets(self):
         # go through all dirty rects and sort by frame (we draw from back to front)
+        if len(self.dirty_widgets) == 0:
+            # nothing to update
+            return
         frame_rects = {}
         for widget in self.dirty_widgets:
             parent = widget.get_root()

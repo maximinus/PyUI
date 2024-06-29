@@ -1,4 +1,4 @@
-from pyui.base import get_asset, Size, Margin, Expand, Align
+from pyui.base import get_asset, Size, Margin, Expand, Align, Position
 from pyui.theme import THEME
 from pyui.widget_base import Widget
 from pyui.widgets import Border, VBox, HBox, TextLabel, Image, Spacer
@@ -49,12 +49,14 @@ def set_item_heights(items):
 
 
 class Menu(Border):
-    def __init__(self, pos, items=None):
+    def __init__(self, pos=None, items=None):
         box = VBox(margin=Margin(6, 6, 6, 6))
         if items is not None:
             for item in set_item_heights(items):
                 box.add_widget(item)
         # menus are modal by default
+        if pos is None:
+            pos = Position(0, 0)
         super().__init__(pos, widget=box, modal=True)
         self.connect(Event.MouseMove, self.mouse_move)
 
@@ -86,16 +88,37 @@ class MenuHeader(TextLabel):
     def __init__(self, text, menu):
         super().__init__(text, THEME.text['menu_header'], margin=Margin(6, 6, 4, 4), align=Align.CENTER)
         self.connect(Event.MouseLeftClickDown, self.clicked)
+        assert isinstance(menu, Menu)
         self.menu = menu
+        self.menu_showing = False
+
+    def get_menu_position(self):
+        height_offset = self.min_size.height
+        return Position(self.render_rect.x, height_offset)
 
     def clicked(self, event):
-        print('I was clicked!')
+        # we don't really need the event
+        # we place a menu below us
+        if self.menu_showing:
+            return
+        self.menu.position = self.get_menu_position()
+        app.push_frame(self.menu)
+        return True
 
 
 class MenuBar(HBox):
     def __init__(self):
         super().__init__(expand=Expand.HORIZONTAL)
         self.background = THEME.color['menubar_background']
+        # to make the widget as big as possible, we put a spacer at the end with expand on
+        self.add_widget(Spacer(Size(0, 0), expand=Expand.HORIZONTAL))
 
     def add_menu(self, text, menu):
-        self.add_widget(MenuHeader(text, menu))
+        header_widget = MenuHeader(text, menu)
+        header_widget.parent = self
+        # we need to add the menu not at the end, but one before it
+        # that way the spacer keeps to the right
+        self.widgets.insert(len(self.widgets) - 1, header_widget)
+        self.size = Size(0, 0)
+        for widget in self.widgets:
+            self.size += widget.min_size

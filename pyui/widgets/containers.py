@@ -3,6 +3,12 @@ import pygame.draw
 from pyui.base import Expand, Size, Position
 from pyui.widget_base import Widget
 
+# Containers: Widgets that hold other widgets
+#   A Box container sorts widgets horizontally or vertically
+#   Containers have no defined size, but they have a minimum size
+#   Frames are like containers but only hold 1 widget, and have a defined size
+#   a widget has a min_size, but rarely has a size
+
 
 class Box(Widget):
     def __init__(self, widgets=None, horizontal=True, margin=None, expand=None, align=None, fill=None, background=None):
@@ -20,7 +26,7 @@ class Box(Widget):
     def add_widget(self, widget):
         widget.parent = self
         self.widgets.append(widget)
-        # a box has to account for the child widgets, so we don't use size
+        # a box has to account for the child widgets
         self.size = Size(0, 0)
         for widget in self.widgets:
             self.size += widget.min_size
@@ -31,7 +37,7 @@ class Box(Widget):
 
     @property
     def expand(self):
-        # whether a box will expand or not depends on it's children
+        # whether a box will expand or not depends on its children
         x_expand = False
         y_expand = False
         for widget in self.widgets:
@@ -138,6 +144,7 @@ class HBox(Box):
         return final_widths
 
     def render(self, surface, pos, available_size=None):
+        # no widgets or size is not set, don't render
         if available_size is None or len(self.widgets) == 0:
             return
         available_size = available_size.subtract_margin(self.margin)

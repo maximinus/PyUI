@@ -80,3 +80,8 @@ class MouseRightClickUp(PyUiEvent):
     def __init__(self, event):
         self.xpos = event.pos[0]
         self.ypos = event.pos[1]
+
+
+def is_mouse_click(event):
+    return event.type in [Event.MouseLeftClickDown, Event.MouseRightClickDown,
+                          Event.MouseLeftClickUp, Event.MouseRightClickUp]
