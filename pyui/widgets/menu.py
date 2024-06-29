@@ -55,13 +55,21 @@ class Menu(Border):
             for item in set_item_heights(items):
                 box.add_widget(item)
         # menus are modal by default
+        self.modal = True
         if pos is None:
             pos = Position(0, 0)
         super().__init__(pos, widget=box, modal=True)
         self.connect(Event.MouseMove, self.mouse_move)
+        # we also need to "cancel" the menu. This is done by clicking the main menu outside the box
+        self.connect(Event.ClickOutside, self.cancel_menu)
 
     def add_menu_item(self, menu_item):
         self.widget.add_widget(menu_item)
+
+    def cancel_menu(self, event):
+        # this means there was a click, but not on our widget. It could have been any mouse click
+        # we just need to close this modal frame
+        print('Closing menu')
 
     def mouse_move(self, event):
         # called when we get a mouse move
@@ -93,7 +101,8 @@ class MenuHeader(TextLabel):
         self.menu_showing = False
 
     def get_menu_position(self):
-        height_offset = self.min_size.height
+        # TODO: Put this into the theme properties
+        height_offset = self.min_size.height + 2
         return Position(self.render_rect.x, height_offset)
 
     def clicked(self, event):

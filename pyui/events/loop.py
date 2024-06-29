@@ -3,7 +3,7 @@ import pygame
 
 from pyui.setup import init, get_clock, DEFAULT_SIZE
 from pyui.theme import THEME
-from pyui.events.events import PyUiEvent, is_mouse_click
+from pyui.events.events import PyUiEvent, is_mouse_click, Event
 
 BACKGROUND_COLOR = (140, 140, 140)
 
@@ -34,11 +34,15 @@ class FrameEvents:
         else:
             self.callbacks = callbacks
 
-    def get_handlers(self, event_type):
+    def get_filtered_callbacks(self, event_type):
         # go through list in reverse
+        # we are looking for events that catch these events
         all_callbacks = []
         for callback in reversed(self.callbacks):
             if callback.event_type == event_type:
+                all_callbacks.append(callback)
+            # another possibility is the check for a "noclick" event type
+            if is_mouse_click(event_type) and callback.event_type == Event.ClickOutside:
                 all_callbacks.append(callback)
         return all_callbacks
 
@@ -123,19 +127,24 @@ class PyUIApp:
         # cycle through the frames
         # do it this way in case something adds a handler in an event
         for frame in self.frame_events:
-            for handler in [y for y in frame.get_handlers(event.type)]:
+            for callback in [y for y in frame.get_filtered_callbacks(event.type)]:
                 # if it is a mouse click, we need to validate the widgets render_rect against this clock position
-                if is_mouse_click(event):
-                    if handler.widget.render_rect is None:
+                if is_mouse_click(event.type):
+                    if callback.widget.render_rect is None:
                         # not yet rendered, so cannot get a click, ignore this one
                         continue
+                    # some widgets need to know if a click was NOT made in their widget
                     # ensure the click was in the widget
-                    if not handler.widget.render_rect.collidepoint(event.xpos, event.ypos):
-                        # didn't click this widget, so ignore
-                        continue
-                if handler.callback(event):
+                    if not callback.widget.render_rect.collidepoint(event.xpos, event.ypos):
+                        # didn't click this widget, so maybe ignore
+                        if callback.event_type != Event.ClickOutside:
+                            continue
+                if callback.callback(event):
                     # event has been dealt with
                     return
+            if frame.frame.modal:
+                # ignore all other frames past this one
+                return
 
     def set_dirty(self, widget):
         # store a widget that needs to be updated

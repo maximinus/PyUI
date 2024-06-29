@@ -12,5 +12,5 @@ class TestFrameEvents(unittest.TestCase):
     def test_frame_matches_event(self):
         frame = FrameEvents(1)
         frame.callbacks.append(Callback(1, Event.MouseLeftClickDown))
-        handlers = frame.get_handlers(MouseLeftClickDown.type)
+        handlers = frame.get_filtered_callbacks(MouseLeftClickDown.type)
         self.assertEqual(len(handlers), 1)

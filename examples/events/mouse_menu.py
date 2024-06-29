@@ -13,9 +13,9 @@ def menu1():
 
 
 def menu2():
-    m1 = MenuItem('Cut')
-    m2 = MenuItem('Copy')
-    m3 = MenuItem('Paste')
+    m1 = MenuItem('Cut Text')
+    m2 = MenuItem('Copy Text')
+    m3 = MenuItem('Paste Text')
     return Menu(items=[m1, m2, m3])
 
 

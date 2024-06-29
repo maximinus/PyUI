@@ -15,6 +15,7 @@ class Event(Enum):
     MouseRightClickDown = auto()
     MouseLeftClickUp = auto()
     MouseRightClickUp = auto()
+    ClickOutside = auto()
 
 
 class PyUiEvent:
@@ -82,6 +83,13 @@ class MouseRightClickUp(PyUiEvent):
         self.ypos = event.pos[1]
 
 
-def is_mouse_click(event):
-    return event.type in [Event.MouseLeftClickDown, Event.MouseRightClickDown,
-                          Event.MouseLeftClickUp, Event.MouseRightClickUp]
+class ClickOutside(PyUiEvent):
+    type = Event.ClickOutside
+
+    def __init__(self, event):
+        self.xpos = event.pos[0]
+        self.ypos = event.pos[1]
+
+
+def is_mouse_click(event_type):
+    return event_type in [Event.MouseLeftClickDown, Event.MouseRightClickDown]
