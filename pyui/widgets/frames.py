@@ -134,8 +134,11 @@ class Border(Root):
         # draw the middle
         x += self.corner.width
         y += self.corner.height
-        pygame.draw.rect(surface, self.background, (x, y, render_size.width, render_size.height))
-        self.widget.render(self.texture, Position(0, 0), render_size)
+
+        pygame.draw.rect(self.texture, self.background, (x, y, render_size.width, render_size.height))
+        # TODO: Fix this +2. It is to do with overlap on the 9-patch; we need to define a better 9-patch object
+        border_size = self.corner.width + (self.middle.width // 2) - 2
+        self.widget.render(self.texture, Position(border_size, border_size), render_size)
         self.render_rect = pygame.Rect(x, y, render_size.width, render_size.height)
         # finally, blit to screen
         surface.blit(self.texture, (self.position.x, self.position.y))
@@ -145,3 +148,4 @@ class Border(Root):
         border_size = self.corner.width * 2 + self.middle.width
         texture_size = self.size + Size(border_size, border_size)
         new_texture = pygame.Surface((texture_size.width, texture_size.height), pygame.SRCALPHA)
+        return new_texture
