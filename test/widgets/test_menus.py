@@ -71,6 +71,27 @@ class TestSimpleCollision(unittest.TestCase):
         self.assertFalse(render_rect.collidepoint(0, 0))
 
 
+class TestSimpleOverlap(unittest.TestCase):
+    def test_overlap(self):
+        rect1 = pygame.Rect(0, 0, 100, 100)
+        rect2 = pygame.Rect(50, 50, 100, 100)
+        self.assertTrue(rect1.colliderect(rect2))
+
+    def test_overlap_area(self):
+        rect1 = pygame.Rect(0, 0, 100, 100)
+        rect2 = pygame.Rect(50, 50, 100, 100)
+        collide_area = rect1.clip(rect2)
+        self.assertEqual(collide_area.x, 50)
+        self.assertEqual(collide_area.y, 50)
+        self.assertEqual(collide_area.width, 50)
+        self.assertEqual(collide_area.height, 50)
+
+    def test_no_overlap(self):
+        rect1 = pygame.Rect(0, 0, 100, 100)
+        rect2 = pygame.Rect(150, 150, 100, 100)
+        self.assertFalse(rect1.colliderect(rect2))
+
+
 class FakeMoveEvent:
     def __init__(self, pos):
         self.pos = pos

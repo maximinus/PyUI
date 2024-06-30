@@ -175,6 +175,7 @@ class PyUIApp:
             # nothing to update
             return
         frame_rects = {}
+        # sort all the dirty rects by sorting them into the frames they come from
         for widget in self.dirty_widgets:
             parent = widget.get_root()
             if parent in frame_rects:
@@ -182,14 +183,22 @@ class PyUIApp:
             else:
                 frame_rects[parent] = [widget]
         # loop through frames looking for a match
+        dirty_areas = []
         for frame_event in reversed(self.frame_events):
             if frame_event.frame in frame_rects:
                 # update all the widgets that are dirty in this frame
+                dirty_areas = []
                 for widget in frame_rects[frame_event.frame]:
-                    widget.update(self.display)
-            # TODO: Since we render from the back to the front, a widget may overwrite a frame in front
-            # because of this, we need a routine that checks for overlaps and then redraws any
-            # parts of the frames that are in front of the one that was updated
+                    dirty_areas.append(widget.update(self.display))
+        # TODO: Since we render from the back to the front, a widget may overwrite a frame in front
+        # because of this, we need a routine that checks for overlaps and then redraws any
+        # parts of the frames that are in front of the one that was updated
+
+        # we now have a set of dirty areas that need to be drawn to the screen
+        # we now go through the frames in reverse order, and get them to update to the screen the dirty areas
+        for frame_event in reversed(self.frame_events):
+            frame_event.frame.update_dirty_rects(self.display, dirty_areas)
+
         pygame.display.flip()
         # finally, clear all list or dirty widgets
         self.dirty_widgets = []

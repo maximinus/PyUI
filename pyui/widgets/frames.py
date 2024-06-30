@@ -58,6 +58,13 @@ class Root(Widget):
     def draw(self, surface):
         self.render(surface, self.position, available_size=self.size)
 
+    def update_dirty_rects(self, surface, dirty_rects):
+        # for each dirty rect, if our render_rect overlaps this rect, then update that part of the screen
+        for dirty_rect in dirty_rects:
+            if self.render_rect.colliderect(dirty_rect):
+                # compute the size difference
+                pass
+
 
 class Frame(Root):
     # a frame is a container that holds a single widget, and is a fixed size
@@ -139,7 +146,7 @@ class Border(Root):
         # TODO: Fix this +2. It is to do with overlap on the 9-patch; we need to define a better 9-patch object
         border_size = self.corner.width + (self.middle.width // 2) - 2
         self.widget.render(self.texture, Position(border_size, border_size), render_size)
-        self.render_rect = pygame.Rect(x, y, render_size.width, render_size.height)
+        self.render_rect = pygame.Rect(self.position.x, self.position.y, render_size.width, render_size.height)
         # finally, blit to screen
         surface.blit(self.texture, (self.position.x, self.position.y))
 

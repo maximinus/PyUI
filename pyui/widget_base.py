@@ -42,8 +42,16 @@ class Widget:
         # try and draw yourself based on the previous render_rect
         if self.render_rect is None:
             return
-        self.render(surface, Position(self.render_rect.x, self.render_rect.y),
+        root_widget = self.get_root()
+        # we need to grab the base texture and draw on that
+        self.render(root_widget.texture, Position(self.render_rect.x, self.render_rect.y),
                     Size(self.render_rect.width, self.render_rect.height))
+        # return the area of the screen that needs updating
+        dirty_area = self.render_rect.copy()
+        # adjust for the position of the widget
+        dirty_area.x += root_widget.position.x
+        dirty_area.y += root_widget.position.y
+        return dirty_area
 
     def get_root(self):
         if self.parent is None:
