@@ -32,6 +32,11 @@ class Root(Widget):
                 widget.parent = self
         else:
             self.size = size
+        self.texture = self.get_texture()
+
+    def get_texture(self):
+        new_surface = pygame.Surface((self.size.width, self.size.height), pygame.SRCALPHA)
+        return new_surface
 
     @property
     def children(self):
@@ -44,9 +49,11 @@ class Root(Widget):
     def update_widget(self, widget):
         self.widget = widget
         self.size = widget.min_size()
+        self.texture = self.get_texture()
 
     def update_size(self, new_size):
         self.size = new_size
+        self.texture = self.get_texture()
 
     def draw(self, surface):
         self.render(surface, self.position, available_size=self.size)
@@ -59,8 +66,11 @@ class Frame(Root):
     def render(self, surface, _, available_size=None):
         if self.widget is None:
             return
-        self.widget.render(surface, self.position, self.size)
+        self.texture.fill(self.background)
+        self.widget.render(self.texture, Position(0, 0), self.size)
         self.render_rect = self.widget.render_rect
+        # now render to the screen
+        surface.blit(self.texture, self.position)
 
 
 class Border(Root):
@@ -71,29 +81,30 @@ class Border(Root):
         # the border size will depend on the size of the nine-patch
         # the widget render will occur at the corner of the child widget
         # any margin will be ignored
-        super().__init__(pos, modal=modal, background=background, widget=widget)
         self.image = get_asset('nine_patch/frame.png')
         self.corner = Size(8, 8)
         self.middle = Size(4, 8)
+        super().__init__(pos, modal=modal, background=background, widget=widget)
 
     def render(self, surface, _, available_size=None):
-        # draw the top left
-        x = self.position.x - self.corner.width
-        y = self.position.y - self.corner.height
-
+        x = 0
+        y = 0
         # the size of the area the widgets need
         render_size = self.min_size
 
-        surface.blit(self.image, (x, y), (0, 0, self.corner.width, self.corner.height))
+        # draw the top left
+        self.texture.blit(self.image, (x, y), (0, 0, self.corner.width, self.corner.height))
         # top right
-        surface.blit(self.image, (x + render_size.width + self.corner.width, y),
-                     (self.corner.width + self.middle.width, 0, self.corner.width, self.corner.height))
+        self.texture.blit(self.image, (x + render_size.width + self.corner.width, y),
+                          (self.corner.width + self.middle.width, 0, self.corner.width, self.corner.height))
         # bottom left
-        surface.blit(self.image, (x, y + self.corner.height + render_size.height),
-                     (0, self.corner.height + self.middle.width, self.corner.width, self.corner.height))
+        self.texture.blit(self.image, (x, y + self.corner.height + render_size.height),
+                          (0, self.corner.height + self.middle.width, self.corner.width, self.corner.height))
         # bottom right
-        surface.blit(self.image, (x + render_size.width + self.corner.width, y + self.corner.height + render_size.height),
-                     (self.corner.width + self.middle.width, self.corner.height + self.middle.width, self.corner.height, self.corner.width))
+        self.texture.blit(self.image,
+                          (x + render_size.width + self.corner.width, y + self.corner.height + render_size.height),
+                          (self.corner.width + self.middle.width, self.corner.height + self.middle.width,
+                           self.corner.height, self.corner.width))
 
         # draw the borders by using pygame.transform.smoothscale to create a new image and blitting that
         side_ypos = y + self.corner.height
@@ -101,28 +112,36 @@ class Border(Root):
         left_unscaled = pygame.Surface((self.middle.height, self.middle.width), pygame.SRCALPHA)
         left_unscaled.blit(self.image, (0, 0), (0, self.corner.height, self.middle.height, self.middle.width))
         left_side = pygame.transform.scale(left_unscaled, (self.middle.height, render_size.height))
-        surface.blit(left_side, (x, side_ypos))
+        self.texture.blit(left_side, (x, side_ypos))
 
         right_unscaled = pygame.Surface((self.middle.height, self.middle.width), pygame.SRCALPHA)
         right_unscaled.blit(self.image, (0, 0),
                             (self.corner.width + self.middle.width, self.corner.height, self.middle.height, self.middle.width))
         right_side = pygame.transform.scale(right_unscaled, (self.middle.height, render_size.height))
-        surface.blit(right_side, (x + self.corner.width + render_size.width, side_ypos))
+        self.texture.blit(right_side, (x + self.corner.width + render_size.width, side_ypos))
 
         # then top and bottom
         top_unscaled = pygame.Surface((self.middle.width, self.middle.height), pygame.SRCALPHA)
         top_unscaled.blit(self.image, (0, 0), (self.corner.width, 0, self.middle.width, self.middle.height))
         top_side = pygame.transform.scale(top_unscaled, (render_size.width, self.middle.height))
-        surface.blit(top_side, (x + self.corner.width, y))
+        self.texture.blit(top_side, (x + self.corner.width, y))
 
         bottom_unscaled = pygame.Surface((self.middle.width, self.middle.height), pygame.SRCALPHA)
         bottom_unscaled.blit(self.image, (0, 0), (self.corner.width, self.corner.height + self.middle.width, self.middle.width, self.middle.height))
         bottom_side = pygame.transform.scale(bottom_unscaled, (render_size.width, self.middle.height))
-        surface.blit(bottom_side, (x + self.corner.width, y + self.corner.height + render_size.height))
+        self.texture.blit(bottom_side, (x + self.corner.width, y + self.corner.height + render_size.height))
 
         # draw the middle
         x += self.corner.width
         y += self.corner.height
         pygame.draw.rect(surface, self.background, (x, y, render_size.width, render_size.height))
-        self.widget.render(surface, Position(x, y), render_size)
+        self.widget.render(self.texture, Position(0, 0), render_size)
         self.render_rect = pygame.Rect(x, y, render_size.width, render_size.height)
+        # finally, blit to screen
+        surface.blit(self.texture, (self.position.x, self.position.y))
+
+    def get_texture(self):
+        # the texture size has to include the vorder margin
+        border_size = self.corner.width * 2 + self.middle.width
+        texture_size = self.size + Size(border_size, border_size)
+        new_texture = pygame.Surface((texture_size.width, texture_size.height), pygame.SRCALPHA)

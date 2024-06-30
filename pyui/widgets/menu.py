@@ -55,9 +55,6 @@ class Menu(Border):
             for item in set_item_heights(items):
                 box.add_widget(item)
         # menus are modal by default
-        self.modal = True
-        if pos is None:
-            pos = Position(0, 0)
         super().__init__(pos, widget=box, modal=True)
         self.connect(Event.MouseMove, self.mouse_move)
         # we also need to "cancel" the menu. This is done by clicking the main menu outside the box
