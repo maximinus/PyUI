@@ -3,7 +3,7 @@ import pygame
 
 from pyui.setup import init, get_clock, DEFAULT_SIZE
 from pyui.theme import THEME
-from pyui.events.events import PyUiEvent, is_mouse_click, Event
+from pyui.events.events import PyUiEvent, is_mouse_click, Event, adjust_mouse_coords
 
 BACKGROUND_COLOR = (140, 140, 140)
 
@@ -146,6 +146,8 @@ class PyUIApp:
         # do it this way in case something adds a handler in an event
         for frame in self.frame_events:
             for callback in [y for y in frame.get_filtered_callbacks(event.type)]:
+                # if any kind of mouse event, then we need to offset the coords by the frames position
+                event = adjust_mouse_coords(frame.frame.position, event)
                 # if it is a mouse click, we need to validate the widgets render_rect against this clock position
                 if is_mouse_click(event.type):
                     if callback.widget.render_rect is None:

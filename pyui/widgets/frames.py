@@ -62,8 +62,13 @@ class Root(Widget):
         # for each dirty rect, if our render_rect overlaps this rect, then update that part of the screen
         for dirty_rect in dirty_rects:
             if self.render_rect.colliderect(dirty_rect):
-                # compute the size difference
-                pass
+                # compute the clip area
+                area_to_update = self.render_rect.clip(dirty_rect)
+                # now blit from our texture to this screen
+                source_area = area_to_update.copy()
+                source_area.x -= self.position.x
+                source_area.y -= self.position.y
+                surface.blit(self.texture, (area_to_update.x, area_to_update.y), source_area)
 
 
 class Frame(Root):

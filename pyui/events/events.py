@@ -9,13 +9,13 @@ MOUSE_BUTTON_RIGHT = 3
 
 class Event(Enum):
     # an event is something that a widget will ask for a callback for
-    EventNull = auto()
-    MouseMove = auto()
-    MouseLeftClickDown = auto()
-    MouseRightClickDown = auto()
-    MouseLeftClickUp = auto()
-    MouseRightClickUp = auto()
-    ClickOutside = auto()
+    EventNull = -1
+    MouseMove = 0
+    MouseLeftClickDown = 1
+    MouseRightClickDown = 2
+    MouseLeftClickUp = 3
+    MouseRightClickUp = 4
+    ClickOutside = 5
 
 
 class PyUiEvent:
@@ -89,6 +89,13 @@ class ClickOutside(PyUiEvent):
     def __init__(self, event):
         self.xpos = event.pos[0]
         self.ypos = event.pos[1]
+
+
+def adjust_mouse_coords(position, event):
+    if 0 <= event.type.value <= Event.ClickOutside.value:
+        event.xpos -= position.x
+        event.ypos -= position.y
+    return event
 
 
 def is_mouse_click(event_type):

@@ -15,7 +15,7 @@ class MenuItem(Widget):
             self.widget.add_widget(icon)
         else:
             self.widget.add_widget(Spacer(size=Size(22, 20)))
-        self.widget.add_widget(TextLabel(text, style=style))
+        self.widget.add_widget(TextLabel(text, style=style, margin=Margin(0, 8, 0, 0)))
         self.size = self.widget.min_size
         self.highlighted = False
 
