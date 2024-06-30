@@ -105,7 +105,6 @@ class PyUIApp:
         self.dead_frames.append(frame)
 
     def event_loop(self):
-        self.display.fill(THEME.color['widget_background'])
         self.draw_all_frames()
         clock = get_clock()
         self.looping = True
@@ -117,14 +116,25 @@ class PyUIApp:
                 pyui_event = PyUiEvent.event(event)
                 if pyui_event is not None:
                     self.handle_event(pyui_event)
-            self.update_dirty_widgets()
-            self.remove_dead_frames()
+            if not self.remove_dead_frames():
+                # if a frame is deleted, all frames are rendered anyway
+                self.update_dirty_widgets()
+            else:
+                self.dirty_widgets = []
             self.add_deferred_frames()
             clock.tick(60)
 
     def remove_dead_frames(self):
         # remove the frame. This means we need to update the dirty frames
-        pass
+        if len(self.dead_frames) == 0:
+            return
+        kept_frames = []
+        for frame_event in self.frame_events:
+            if frame_event.frame not in self.dead_frames:
+                kept_frames.append(frame_event)
+        self.frame_events = kept_frames
+        self.dead_frames = []
+        self.draw_all_frames()
 
     def add_deferred_frames(self):
         if len(self.deferred_frames) == 0:
@@ -137,6 +147,7 @@ class PyUIApp:
         self.deferred_frames = []
 
     def draw_all_frames(self):
+        self.display.fill(THEME.color['widget_background'])
         for frame in self.frame_events:
             frame.frame.render(self.display, None, DEFAULT_SIZE)
         pygame.display.flip()
