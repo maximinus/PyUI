@@ -99,6 +99,10 @@ class Border(Root):
         super().__init__(pos, modal=modal, background=background, widget=widget)
 
     def render(self, surface, _, available_size=None):
+        # on a full render of a border, we need to clear the texture as we blit alpha over it
+        # if we just re-blit, we get the alphas blending together
+        # as we are root, this is pretty easy
+        self.texture = self.get_texture()
         x = 0
         y = 0
         # the size of the area the widgets need

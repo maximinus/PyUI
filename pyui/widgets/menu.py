@@ -98,8 +98,7 @@ class MenuHeader(TextLabel):
         self.menu_showing = False
 
     def get_menu_position(self):
-        # TODO: Put this into the theme properties
-        height_offset = self.min_size.height + 2
+        height_offset = self.min_size.height
         return Position(self.render_rect.x, height_offset)
 
     def clicked(self, event):
