@@ -7,12 +7,21 @@ from pyui.events.events import PyUiEvent, is_mouse_click, Event
 
 BACKGROUND_COLOR = (140, 140, 140)
 
-# When a widget is created, it can ask for events or not
-# When a SDL event happens, we first of all look at what widget is covering that screen
+# When a widget is created, it has a list of [event_type, callback] structures
+# When a SDL event happens, we first of all look at what frames are on the screen
 # In every PyUi app, each window consists of exactly one widget
 # We drill down that widget to ask if it needs this event
 # If it doesn't, we then drill UP to the widgets parent to see if it needs that event
-# A widget can block events from rising up the menu
+# A widget can block events from rising up the menu, but not down
+# Although it appears simple, there are issues:
+
+# We like clean code that states out intentions, so we use "Clicked" and also test against a widgets position
+# But then sometimes we want to catch the event "Not clicked" - an event that could be consumed by something else!
+# perhaps we can add the idea of FOCUS
+# this means a widget can have extra callbacks that are only used when it has focus
+# One of those callbacks is "not clicked here". Is that the only event we would want?
+# Only the widget with focus gets keyboard input???
+# 2 widgets can have focus, they would be sent the same messages
 
 # Things can send events, it's not just the SDL events that cause this
 # As a GUI, we only look at key presses and mouse clicks for now

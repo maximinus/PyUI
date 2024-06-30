@@ -11,16 +11,18 @@ from pyui.widget_base import Widget
 # this means that the positions for rendering must be realtive to the parent widget
 # this makes dirty rect drawing a lot easier
 
-class Frame(Widget):
-    # a frame is a container that holds a single widget, and is a fixed size
-    # the size does NOT include the margin
-    # a frame always needs a position
-    def __init__(self, pos=None, modal=False, size=None, widget=None, margin=None):
+class Root(Widget):
+    def __init__(self, pos=None, modal=False, size=None, widget=None, margin=None, background=None):
         super().__init__(margin=margin)
         if pos is None:
             pos = Position(0, 0)
         self.position = pos
         self.modal = modal
+        self.widget = widget
+        self.parent = None
+        if background is None:
+            background = THEME.color['widget_background']
+        self.background = background
         if size is None:
             # infer the size from the widget
             if widget is None:
@@ -30,52 +32,6 @@ class Frame(Widget):
                 widget.parent = self
         else:
             self.size = size
-        self.widget = widget
-        # null container, is parent
-        self.container = None
-
-    @property
-    def children(self):
-        return [self.widget]
-
-    @property
-    def min_size(self):
-        return self.size.add_margin(self.margin)
-
-    def render(self, surface, _, available_size=None):
-        if self.widget is None:
-            return
-        self.widget.render(surface, self.position, self.size)
-        self.render_rect = self.widget.render_rect
-
-    def draw(self, surface):
-        self.render(surface, self.position, available_size=self.size)
-
-
-class Border(Widget):
-    def __init__(self, pos, modal=False, background=None, widget=None):
-        # the border contains another widget, however the default will be to grab the default size of the widget
-        # there is a resize method if you want to change this
-        # the actual size of the Border will be the child widget min size + border size
-        # the border size will depend on the size of the nine-patch
-        # the widget render will occur at the corner of the child widget
-        # any margin will be ignored
-        super().__init__()
-        self.position = pos
-        self.modal = modal
-        self.image = get_asset('nine_patch/frame.png')
-        self.corner = Size(8, 8)
-        self.middle = Size(4, 8)
-        if background is None:
-            background = THEME.color['widget_background']
-        self.background = background
-        self.widget = widget
-        if widget is None:
-            self.size = Size(0, 0)
-        else:
-            self.size = widget.min_size
-            self.widget.parent = self
-        self.parent = None
 
     @property
     def children(self):
@@ -91,6 +47,34 @@ class Border(Widget):
 
     def update_size(self, new_size):
         self.size = new_size
+
+    def draw(self, surface):
+        self.render(surface, self.position, available_size=self.size)
+
+
+class Frame(Root):
+    # a frame is a container that holds a single widget, and is a fixed size
+    # the size does NOT include the margin
+    # a frame always needs a position
+    def render(self, surface, _, available_size=None):
+        if self.widget is None:
+            return
+        self.widget.render(surface, self.position, self.size)
+        self.render_rect = self.widget.render_rect
+
+
+class Border(Root):
+    def __init__(self, pos, modal=False, background=None, widget=None):
+        # the border contains another widget, however the default will be to grab the default size of the widget
+        # there is a resize method if you want to change this
+        # the actual size of the Border will be the child widget min size + border size
+        # the border size will depend on the size of the nine-patch
+        # the widget render will occur at the corner of the child widget
+        # any margin will be ignored
+        super().__init__(pos, modal=modal, background=background, widget=widget)
+        self.image = get_asset('nine_patch/frame.png')
+        self.corner = Size(8, 8)
+        self.middle = Size(4, 8)
 
     def render(self, surface, _, available_size=None):
         # draw the top left

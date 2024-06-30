@@ -19,8 +19,8 @@ Plan
 ----
 
 * Get a single menu displaying
-2: Connect that to a menubar
-3: Get the mouse working with a connection to the menu items
+* Connect that to a menubar
+* Get the mouse working with a connection to the menu items
 * Add actions to the system to handle callbacks
 5: Allow the window to be resized
 6: Add a text editor widget
@@ -37,21 +37,21 @@ Current Work and Latest:
 
 Seperate rendering so a widget will render itself at a given size (and none expanding will cache).
 When the size changes, the widget re-rendering will change
-Work the the SDL system to catch events, and have this as a loop.
-It should be:
-    Create a GUI that sets things up.
-    PyUI main loop.
-So we need a "window" list for frames and borders.
-Keep this in a stack.
-Now filter messages through that.
+* Work the the SDL system to catch events, and have this as a loop.
+* It should be:
+*    Create a GUI that sets things up.
+*    PyUI main loop.
+* So we need a "window" list for frames and borders.
+* Keep this in a stack.
+* Now filter messages through that.
 
-Ensure menuitems are highlighted by mouse-over
-Ensure menuitem selection function called when clicked
-Menu is attached to top menu
-Multi-menus, one at a time
+* Ensure menuitems are highlighted by mouse-over
+* Ensure menuitem selection function called when clicked
+* Menu is attached to top menu
+* Multi-menus, one at a time
 Window can be resized
-Menus look ok
-Basic text widget added.
+* Menus look ok
+* Basic text widget added.
 
 
 Phase 2
