@@ -70,7 +70,7 @@ class Frame(Root):
         self.widget.render(self.texture, Position(0, 0), self.size)
         self.render_rect = self.widget.render_rect
         # now render to the screen
-        surface.blit(self.texture, self.position)
+        surface.blit(self.texture, (self.position.x, self.position.y))
 
 
 class Border(Root):
