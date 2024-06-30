@@ -35,8 +35,8 @@ Plan
 
 Current Work and Latest:
 
-Seperate rendering so a widget will render itself at a given size (and none expanding will cache).
-When the size changes, the widget re-rendering will change
+* Seperate rendering so a widget will render itself at a given size (and none expanding will cache).
+* When the size changes, the widget re-rendering will change
 * Work the the SDL system to catch events, and have this as a loop.
 * It should be:
 *    Create a GUI that sets things up.
