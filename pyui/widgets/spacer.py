@@ -16,5 +16,8 @@ class Spacer(Widget):
     def min_size(self):
         return self.size
 
+    def draw(self, new_size=None):
+        pass
+
     def render(self, surface, pos, available_size=None):
         self.render_rect = pygame.Rect(pos.x, pos.y, self.size.width, self.size.height)

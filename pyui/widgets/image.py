@@ -16,13 +16,17 @@ class Image(Widget):
     def min_size(self):
         return self.size.add_margin(self.margin)
 
-    def render(self, surface, pos, available_size=None):
-        if self.draw_old_texture(surface, pos, available_size):
-            return
+    def draw(self, new_size=None):
         # images ignore the fill, they are always a fixed size
         self.texture = self.get_texture(self.min_size)
         if self.background is not None:
             self.texture.fill(self.background)
         self.texture.blit(self.image, (self.margin.left, self.margin.top))
+
+    def render(self, surface, pos, available_size=None):
+        if self.draw_old_texture(surface, pos, available_size):
+            return
+        self.draw(available_size)
         surface.blit(self.texture, (pos.x, pos.y))
-        self.render_rect = pygame.Rect(pos.x, pos.y, self.size.width, self.size.height)
+        render_size = self.min_size
+        self.render_rect = pygame.Rect(pos.x, pos.y, render_size.width, render_size.height)

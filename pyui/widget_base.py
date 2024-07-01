@@ -45,6 +45,15 @@ class Widget:
         # if the available size is None, then the default is to render at the minimum size
         self.render_rect = pygame.Rect(pos.x, pos.y, 0, 0)
 
+    def get_ideal_draw_size(self, new_size):
+        # calculate the size of the widget, either on the given size, or the last render, or the min size
+        if new_size is None:
+            if self.render_rect is None:
+                new_size = self.min_size
+            else:
+                new_size = Size(self.render_rect.width, self.render_rect.height)
+        return new_size
+
     def draw(self, new_size=None):
         # draw image based on previous render_rect, or on size given
         pass
