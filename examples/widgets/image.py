@@ -13,9 +13,14 @@ def screen1():
     return Border(Position(100, 100), widget=Image(texture, margin=Margin(20, 20, 20, 20)))
 
 
+def screen2():
+    texture = get_asset('images/dog.png')
+    return Border(Position(150, 150), widget=Image(texture, margin=Margin(60, 60, 60, 60)), background=(100, 100, 0))
+
+
 if __name__ == '__main__':
     display = init()
-    screens = [screen1()]
+    screens = [screen1(), screen2()]
     for single_screen in screens:
         display.fill(BACKGROUND_COLOR)
         single_screen.draw(display)

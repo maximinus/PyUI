@@ -21,6 +21,8 @@ class Image(Widget):
             return
         # images ignore the fill, they are always a fixed size
         self.texture = self.get_texture(self.min_size)
+        if self.background is not None:
+            self.texture.fill(self.background)
         self.texture.blit(self.image, (self.margin.left, self.margin.top))
         surface.blit(self.texture, (pos.x, pos.y))
         self.render_rect = pygame.Rect(pos.x, pos.y, self.size.width, self.size.height)
