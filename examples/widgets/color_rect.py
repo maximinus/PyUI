@@ -63,20 +63,37 @@ def screen6():
     # 3x1 array, but give a margin of differing sizes to each, center vertically
     m = Margin(20, 20, 20, 20)
     box = HBox(widgets=[ColorRect(Size(50, 50), Color.RED, align=Align.CENTER,
-                                  expand=Expand.HORIZONTAL, fill=Expand.HORIZONTAL, margin=m,
+                                  expand=Expand.BOTH, fill=Expand.HORIZONTAL, margin=m,
                                   background=(50, 50, 50)),
-                        ColorRect(Size(50, 50), Color.BLUE, align=Align.CENTER,
-                                  expand=Expand.HORIZONTAL, fill=Expand.HORIZONTAL, margin=m,
+                        ColorRect(Size(50, 50), Color.BLUE, align=Align.TOP,
+                                  expand=Expand.HORIZONTAL, fill=Expand.NONE, margin=m,
                                   background=(100, 100, 100)),
-                        ColorRect(Size(50, 50), Color.GREEN, align=Align.CENTER,
+                        ColorRect(Size(50, 50), Color.GREEN, align=Align.BOTTOM,
                                   expand=Expand.HORIZONTAL, fill=Expand.HORIZONTAL, margin=m,
+                                  background=(150, 150, 150))])
+    return box
+
+
+def screen7():
+    # like 5, but with differing background colors
+    # 3x1 array, but give a margin of differing sizes to each, center vertically
+    m = Margin(20, 20, 20, 20)
+    box = HBox(background=[0, 0, 50], align=Align.CENTER,
+               widgets=[ColorRect(Size(50, 50), Color.RED, align=Align.CENTER,
+                                  expand=Expand.NONE, fill=Expand.HORIZONTAL, margin=m,
+                                  background=(50, 50, 50)),
+                        ColorRect(Size(50, 50), Color.BLUE, align=Align.TOP,
+                                  expand=Expand.HORIZONTAL, fill=Expand.NONE, margin=m,
+                                  background=(100, 100, 100)),
+                        ColorRect(Size(50, 50), Color.GREEN, align=Align.BOTTOM,
+                                  expand=Expand.NONE, fill=Expand.HORIZONTAL, margin=m,
                                   background=(150, 150, 150))])
     return box
 
 
 if __name__ == '__main__':
     display = init()
-    screens = [screen5(), screen2(), screen3(), screen4(), screen5(), screen6()]
+    screens = [screen5(), screen2(), screen3(), screen4(), screen5(), screen6(), screen7()]
     for single_screen in screens:
         display.fill(BACKGROUND_COLOR)
         single_screen.render(display, Position(0, 0), DEFAULT_SIZE)
