@@ -10,8 +10,8 @@ BACKGROUND_COLOR = (80, 80, 80)
 
 def screen1():
     # we will have the following
-    # a border that holds a single hbox with 3 items: a colorrect, spacer and another colorrect
-    # the colorects have a small margin
+    # a border that holds a single hbox with 3 items: a color rect, spacer and another color rect
+    # the color rects have a small margin
     box = HBox(widgets=[ColorRect(Size(50, 50), Color.BLUE, margin=Margin(10, 10, 10, 10)),
                         Spacer(Size(200, 0)),
                         ColorRect(Size(50, 50), Color.BLUE, margin=Margin(10, 10, 10, 10))])

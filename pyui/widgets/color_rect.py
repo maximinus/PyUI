@@ -5,8 +5,8 @@ from pyui.widget_base import Widget
 
 
 class ColorRect(Widget):
-    def __init__(self, size, color, expand=None, margin=None, align=None, fill=Expand.NONE):
-        super().__init__(expand, margin, align, fill)
+    def __init__(self, size, color, **kwargs):
+        super().__init__(**kwargs)
         self.size = size
         self.color = color
 
@@ -16,20 +16,19 @@ class ColorRect(Widget):
 
     def render(self, surface, pos, available_size=None):
         # if we have a texture that currently matches the size, then simply render that
-        if self.texture is not None:
-            if available_size.width == self.texture.get_width() and available_size.height == self.texture.get_height():
-                surface.blit(self.texture, (pos.x, pos.y))
-                return
+        if self.draw_old_texture(surface, pos, available_size):
+            return
 
         if available_size is None:
             available_size = self.min_size
         self.texture = self.get_texture(Size(available_size.width, available_size.height))
-        x = 0
-        y = 0
+
+        if self.background is not None:
+            self.texture.fill(self.background)
 
         # only draw to the space we need to
-        x += self.margin.left
-        y += self.margin.top
+        x = self.margin.left
+        y = self.margin.top
         if self.expand.is_horizontal and self.fill.is_horizontal:
             # fill the space
             width = available_size.width - (self.margin.left + self.margin.right)

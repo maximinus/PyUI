@@ -14,10 +14,11 @@ from pyui.events.loop import Callback
 #  parent:      the parent widget, or None if the root
 # callbacks:    array of [event, callback] ro capture events
 # children:     returns an array of all children (no children - an empty array)
-# texture:      the texture drawn. Includes the mrgin
+# texture:      the texture drawn. Includes the margin
+# background:   a color that covers the whole of the rear of the image
 
 class Widget:
-    def __init__(self, expand=None, margin=None, align=None, fill=None):
+    def __init__(self, expand=None, margin=None, align=None, fill=None, background=None):
         self.expand = expand if expand is not None else Expand.NONE
         self.margin = margin if margin is not None else Margin()
         self.align = Align(align) if align is not None else Align(Align.CENTER)
@@ -26,6 +27,7 @@ class Widget:
         self.parent = None
         self.callbacks = []
         self.texture = None
+        self.background = background
 
     @property
     def min_size(self):
@@ -61,6 +63,8 @@ class Widget:
 
     def draw_old_texture(self, surface, pos, available_size):
         # blit to the parent widget if nothing has changed
+        if available_size is None:
+            return False
         if self.texture is not None:
             if available_size.width == self.texture.get_width() and available_size.height == self.texture.get_height():
                 surface.blit(self.texture, (pos.x, pos.y))
