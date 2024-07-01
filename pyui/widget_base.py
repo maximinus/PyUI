@@ -59,6 +59,14 @@ class Widget:
         new_surface = pygame.Surface((size.width, size.height), pygame.SRCALPHA)
         return new_surface
 
+    def draw_old_texture(self, surface, pos, available_size):
+        # blit to the parent widget if nothing has changed
+        if self.texture is not None:
+            if available_size.width == self.texture.get_width() and available_size.height == self.texture.get_height():
+                surface.blit(self.texture, (pos.x, pos.y))
+                return True
+        return False
+
     def get_root(self):
         if self.parent is None:
             return self

@@ -46,11 +46,11 @@ class Root(Widget):
     def update_widget(self, widget):
         self.widget = widget
         self.size = widget.min_size()
-        self.texture = self.get_texture()
+        self.texture = self.get_texture(self.size)
 
     def update_size(self, new_size):
         self.size = new_size
-        self.texture = self.get_texture()
+        self.texture = self.get_texture(self.size)
 
     def draw(self, surface):
         self.render(surface, self.position, available_size=self.size)
@@ -102,10 +102,6 @@ class Border(Root):
         super().__init__(pos, modal=modal, background=background, widget=widget)
 
     def render(self, surface, _, available_size=None):
-        # on a full render of a border, we need to clear the texture as we blit alpha over it
-        # if we just re-blit, we get the alphas blending together
-        # as we are root, this is pretty easy
-        self.texture = self.get_texture()
         x = 0
         y = 0
         # the size of the area the widgets need
@@ -162,9 +158,9 @@ class Border(Root):
         # finally, blit to screen
         surface.blit(self.texture, (self.position.x, self.position.y))
 
-    def get_texture(self):
-        # the texture size has to include the vorder margin
+    def get_texture(self, size):
+        # the texture size has to include the border margin
         border_size = self.corner.width * 2 + self.middle.width
-        texture_size = self.size + Size(border_size, border_size)
+        texture_size = size + Size(border_size, border_size)
         new_texture = pygame.Surface((texture_size.width, texture_size.height), pygame.SRCALPHA)
         return new_texture
