@@ -29,9 +29,20 @@ def screen3():
     return box
 
 
+def screen4():
+    # a vbox with 3 centered labels of different sizes and colors, and also background colors
+    box = VBox(widgets=[TextLabel('First label', THEME.text['default'], expand=Expand.BOTH,
+                                  align=Align.CENTER, background=(0, 50, 50)),
+                        TextLabel('Second label', THEME.text['default'], expand=Expand.BOTH,
+                                  align=Align.CENTER, background=(0, 100, 100)),
+                        TextLabel('Third label', THEME.text['default'], expand=Expand.BOTH,
+                                  align=Align.CENTER, background=(0, 150, 150))])
+    return box
+
+
 if __name__ == '__main__':
     display = init()
-    screens = [screen1(), screen2(), screen3()]
+    screens = [screen1(), screen2(), screen3(), screen4()]
     for single_screen in screens:
         display.fill(BACKGROUND_COLOR)
         single_screen.render(display, Position(0, 0), DEFAULT_SIZE)
