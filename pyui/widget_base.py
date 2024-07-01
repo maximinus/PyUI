@@ -17,6 +17,9 @@ from pyui.events.loop import Callback
 # texture:      the texture drawn. Includes the margin
 # background:   a color that covers the whole of the rear of the image
 
+# some functions:
+# render:       draw yourself to this new place
+
 class Widget:
     def __init__(self, expand=None, margin=None, align=None, fill=None, background=None):
         self.expand = expand if expand is not None else Expand.NONE
@@ -41,6 +44,10 @@ class Widget:
     def render(self, surface, pos, available_size=None):
         # if the available size is None, then the default is to render at the minimum size
         self.render_rect = pygame.Rect(pos.x, pos.y, 0, 0)
+
+    def draw(self, new_size=None):
+        # draw image based on previous render_rect, or on size given
+        pass
 
     def update(self, surface):
         # try and draw yourself based on the previous render_rect

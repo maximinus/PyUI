@@ -24,11 +24,18 @@ class MenuItem(Widget):
         return self.size.add_margin(self.margin)
 
     def render(self, surface, pos, available_size=None):
+        if self.draw_old_texture(surface, pos, available_size):
+            return
+
+        self.texture = self.get_texture(available_size)
+        if self.background is not None:
+            self.texture.fill(self.background)
+
         if self.highlighted:
-            self.widget.background = THEME.color['menu_background']
-        else:
-            self.widget.background = THEME.color['widget_background']
-        self.widget.render(surface, pos, available_size)
+            self.texture.fill(THEME.color['menu_background'])
+
+        self.widget.render(self.texture, (0, 0), available_size)
+        surface.render(self.texture, (pos.x, pos.y))
         self.render_rect = self.widget.render_rect
 
 
