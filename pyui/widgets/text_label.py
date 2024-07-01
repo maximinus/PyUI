@@ -21,16 +21,15 @@ class TextLabel(Widget):
     def min_size(self):
         return self.size.add_margin(self.margin)
 
-    def render(self, surface, pos, available_size=None):
-        # text labels ignore "fill" as they cannot naturally expand
-        if self.draw_old_texture(surface, pos, available_size):
-            return
-        x = pos.x
-        y = pos.y
-        if available_size is None:
-            available_size = self.min_size
+    def draw(self, new_size=None):
+        if new_size is None:
+            if self.render_rect is None:
+                new_size = self.min_size
+            else:
+                new_size = Size(self.render_rect.width, self.render_rect.height)
+        self.texture = self.get_texture(new_size)
 
-        self.texture = self.get_texture(available_size)
+        # text labels ignore "fill" as they cannot naturally expand
         if self.background is not None:
             self.texture.fill(self.background)
         x = self.margin.left
@@ -39,16 +38,22 @@ class TextLabel(Widget):
         horiz_align = self.align.horizontal()
         full_size = self.min_size
         if horiz_align == Align.CENTER:
-            x += (available_size.width - full_size.width) // 2
+            x += (new_size.width - full_size.width) // 2
         elif horiz_align == Align.RIGHT:
-            x += (available_size.width - full_size.width)
+            x += (new_size.width - full_size.width)
 
         vert_align = self.align.vertical()
         if vert_align == Align.CENTER:
-            y += (available_size.height - full_size.height) // 2
+            y += (new_size.height - full_size.height) // 2
         elif vert_align == Align.BOTTOM:
-            y += (available_size.height - full_size.height)
+            y += (new_size.height - full_size.height)
 
         self.texture.blit(self.image, (x, y))
+
+    def render(self, surface, pos, available_size=None):
+        if self.draw_old_texture(surface, pos, available_size):
+            return
+
+        self.draw(available_size)
         surface.blit(self.texture, (pos.x, pos.y))
-        self.render_rect = pygame.Rect(pos.x, pos.y, full_size.width, full_size.height)
+        self.render_rect = pygame.Rect(pos.x, pos.y, self.texture.get_width(), self.texture.get_height())
