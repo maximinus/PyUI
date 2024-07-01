@@ -95,6 +95,8 @@ class MenuHeader(TextLabel):
         self.connect(Event.MouseLeftClickDown, self.clicked)
         assert isinstance(menu, Menu)
         self.menu = menu
+        # we want a callback on this frame - we need to know when it is closed
+        #self.menu.connect(Event.FrameClosed, self.menu_closed)
         self.menu_showing = False
 
     def get_menu_position(self):
@@ -103,12 +105,19 @@ class MenuHeader(TextLabel):
 
     def clicked(self, event):
         # we don't really need the event
+        # we update our highlight
+        self.background = THEME.color['menu_header_highlight']
+        app.set_dirty(self)
         # we place a menu below us
         if self.menu_showing:
             return
         self.menu.position = self.get_menu_position()
         app.push_frame(self.menu)
         return True
+
+    def menu_closed(self, event):
+        self.background = None
+        app.set_dirty(self)
 
 
 class MenuBar(HBox):

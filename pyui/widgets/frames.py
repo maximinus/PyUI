@@ -19,6 +19,8 @@ class Root(Widget):
         self.position = pos
         self.modal = modal
         self.widget = widget
+        if self.widget is not None:
+            self.widget.parent = self
         self.parent = None
         if background is None:
             background = THEME.color['widget_background']
@@ -29,7 +31,6 @@ class Root(Widget):
                 self.size = Size(0, 0)
             else:
                 self.size = widget.min_size
-                widget.parent = self
         else:
             self.size = size
         self.texture = self.get_texture()

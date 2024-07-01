@@ -166,3 +166,21 @@ class TestMenuItemHeights(unittest.TestCase):
         _ = Menu(Position(0, 0), items=[item1, item2])
         # the min size height of both should be the same
         self.assertEqual(item1.min_size.height, item2.min_size.height)
+
+
+class TestMenuBarParent(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        init()
+
+    @classmethod
+    def tearDownClass(cls):
+        pygame.quit()
+
+    def test_parent_is_frame(self):
+        item = MenuItem('Hello')
+        menu = Menu(items=[item])
+        menubar = MenuBar()
+        menubar.add_menu('File', menu)
+        window = Frame(size=Size(800, 800), widget=menubar)
+        self.assertEqual(window, menubar.get_root())

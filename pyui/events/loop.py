@@ -28,10 +28,15 @@ BACKGROUND_COLOR = (140, 140, 140)
 
 
 class Callback:
-    def __init__(self, callback, event_type, widget):
+    def __init__(self, callback, event_type, widget, data=None):
         self.callback = callback
         self.event_type = event_type
         self.widget = widget
+        # data is custom per event, although not used for SDL events
+        self.data = data
+
+    def __repr__(self):
+        return f'Callback: {self.callback}, {self.widget}, {self.data}'
 
 
 class FrameEvents:

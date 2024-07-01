@@ -16,6 +16,7 @@ class Event(Enum):
     MouseLeftClickUp = 3
     MouseRightClickUp = 4
     ClickOutside = 5
+    FrameClosed = 6
 
 
 class PyUiEvent:
@@ -39,6 +40,13 @@ class PyUiEvent:
                     return MouseRightClickUp(event)
             case _:
                 pass
+
+
+class FrameClosed(PyUiEvent):
+    type = Event.FrameClosed
+
+    def __init__(self, event, frame):
+        self.frame = frame
 
 
 class MouseMove(PyUiEvent):

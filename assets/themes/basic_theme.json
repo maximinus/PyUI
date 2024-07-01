@@ -2,7 +2,8 @@
     "colors": {
         "widget_background": [240, 240, 240],
         "menu_background": [160, 160, 160],
-        "menubar_background": [200, 200, 200]
+        "menubar_background": [200, 200, 200],
+        "menu_header_highlight": [101, 147, 207]
     },
     "icons": {
         "open": "open"

@@ -6,10 +6,11 @@ from pyui.theme import THEME
 
 
 class TextLabel(Widget):
-    def __init__(self, text, style=None, expand=None, margin=None, align=None, fill=None):
+    def __init__(self, text, style=None, background=None, expand=None, margin=None, align=None, fill=None):
         super().__init__(expand, margin, align, fill)
         self.text = text
         self.style = style
+        self.background = background
         if style is None:
             self.style = THEME.text['menu']
         self.font = pygame.font.Font(self.style.font, self.style.size)
@@ -26,6 +27,10 @@ class TextLabel(Widget):
         y = pos.y
         if available_size is None:
             available_size = self.min_size
+
+        if self.background is not None:
+            pygame.draw.rect(surface, self.background, pygame.Rect(x, y, available_size.width, available_size.height))
+
         x += self.margin.left
         y += self.margin.top
 
@@ -43,5 +48,4 @@ class TextLabel(Widget):
             y += (available_size.height - full_size.height)
 
         surface.blit(self.image, (x, y))
-        self.render_rect = pygame.Rect(pos.x + self.margin.left, pos.y + self.margin.top,
-                                       full_size.width, full_size.height)
+        self.render_rect = pygame.Rect(pos.x, pos.y, full_size.width, full_size.height)

@@ -58,5 +58,5 @@ class Widget:
             return self
         return self.parent.get_root()
 
-    def connect(self, event_type, callback):
-        self.callbacks.append(Callback(callback, event_type, self))
+    def connect(self, event_type, callback, data=None):
+        self.callbacks.append(Callback(callback, event_type, self, data))
