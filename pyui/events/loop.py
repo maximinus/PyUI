@@ -3,7 +3,7 @@ import pygame
 
 from pyui.setup import init, get_clock, DEFAULT_SIZE
 from pyui.theme import THEME
-from pyui.events.events import PyUiEvent, is_mouse_click, Event, adjust_mouse_coords
+from pyui.events.events import PyUiEvent, is_mouse_click, Event, adjust_mouse_coords, FrameClosed
 
 BACKGROUND_COLOR = (140, 140, 140)
 
@@ -24,7 +24,17 @@ BACKGROUND_COLOR = (140, 140, 140)
 # 2 widgets can have focus, they would be sent the same messages
 
 # Things can send events, it's not just the SDL events that cause this
+# When things are done, we also raise an event
 # As a GUI, we only look at key presses and mouse clicks for now
+
+
+class CallbackData:
+    def __init__(self, event, data):
+        self.event = event
+        self.data = data
+
+    def __repr__(self):
+        return f'CallbackData: {self.event}, {self.data}'
 
 
 class Callback:
@@ -36,7 +46,7 @@ class Callback:
         self.data = data
 
     def __repr__(self):
-        return f'Callback: {self.callback}, {self.widget}, {self.data}'
+        return f'Callback: {self.event_type}, {self.callback}'
 
 
 class FrameEvents:
@@ -83,11 +93,14 @@ def get_ordered_callbacks(frame):
 class PyUIApp:
     def __init__(self, window_size=None):
         self.display = init(size=window_size)
-        self.frame_events = []
+        self.window_data = []
         self.dirty_widgets = []
         self.looping = False
         self.deferred_frames = []
         self.dead_frames = []
+        # things that happened this screen frame
+        # these are acted on in the next frame
+        self.frame_events = []
 
     def push_frame(self, frame):
         # push and pop are done like this to iterate from newest to oldest
@@ -99,12 +112,12 @@ class PyUIApp:
 
     def add_frame(self, frame):
         callbacks = get_ordered_callbacks(frame)
-        self.frame_events.insert(0, FrameEvents(frame, callbacks))
+        self.window_data.insert(0, FrameEvents(frame, callbacks))
 
     def pop_frame(self):
         # TODO: shouldn't destroy a frame during a loop either
-        if len(self.frame_events) > 0:
-            self.frame_events.pop(0)
+        if len(self.window_data) > 0:
+            self.window_data.pop(0)
 
     def remove_frame(self, frame):
         self.dead_frames.append(frame)
@@ -114,17 +127,24 @@ class PyUIApp:
         clock = get_clock()
         self.looping = True
         while True:
+            # convert all pygame events into our events
+            pyui_events = []
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
                     sys.exit(True)
                 pyui_event = PyUiEvent.event(event)
                 if pyui_event is not None:
-                    self.handle_event(pyui_event)
+                    pyui_events.append(pyui_event)
+
+            pyui_events.extend(self.frame_events)
+            self.frame_events = []
+            for single_event in pyui_events:
+                self.handle_event(single_event)
             if not self.remove_dead_frames():
-                # if a frame is deleted, all frames are rendered anyway
                 self.update_dirty_widgets()
             else:
+                # if a frame is deleted, all frames are rendered anyway
                 self.dirty_widgets = []
             self.add_deferred_frames()
             clock.tick(60)
@@ -134,10 +154,13 @@ class PyUIApp:
         if len(self.dead_frames) == 0:
             return
         kept_frames = []
-        for frame_event in self.frame_events:
-            if frame_event.frame not in self.dead_frames:
-                kept_frames.append(frame_event)
-        self.frame_events = kept_frames
+        for window in self.window_data:
+            if window.frame not in self.dead_frames:
+                kept_frames.append(window)
+            else:
+                # this frame will be deleted, so create a new event
+                self.frame_events.append(FrameClosed(frame=window.frame))
+        self.window_data = kept_frames
         self.dead_frames = []
         self.draw_all_frames()
 
@@ -147,20 +170,20 @@ class PyUIApp:
         for frame in self.deferred_frames:
             # add the frame, and draw it
             self.add_frame(frame)
-            self.frame_events[0].frame.render(self.display, None, DEFAULT_SIZE)
+            self.window_data[0].frame.render(self.display, None, DEFAULT_SIZE)
         pygame.display.flip()
         self.deferred_frames = []
 
     def draw_all_frames(self):
         self.display.fill(THEME.color['widget_background'])
-        for frame in self.frame_events:
+        for frame in self.window_data:
             frame.frame.render(self.display, None, DEFAULT_SIZE)
         pygame.display.flip()
 
     def handle_event(self, event):
         # cycle through the frames
         # do it this way in case something adds a handler in an event
-        for frame in self.frame_events:
+        for frame in self.window_data:
             for callback in [y for y in frame.get_filtered_callbacks(event.type)]:
                 # if any kind of mouse event, then we need to offset the coords by the frames position
                 event = adjust_mouse_coords(frame.frame.position, event)
@@ -175,7 +198,7 @@ class PyUIApp:
                         # didn't click this widget, so maybe ignore
                         if callback.event_type != Event.ClickOutside:
                             continue
-                if callback.callback(event):
+                if callback.callback(CallbackData(event, callback.data)):
                     # event has been dealt with
                     return
             if frame.frame.modal:
@@ -202,7 +225,7 @@ class PyUIApp:
                 frame_rects[parent] = [widget]
         # loop through frames looking for a match
         dirty_areas = []
-        for frame_event in reversed(self.frame_events):
+        for frame_event in reversed(self.window_data):
             if frame_event.frame in frame_rects:
                 # update all the widgets that are dirty in this frame
                 dirty_areas = []
@@ -211,7 +234,7 @@ class PyUIApp:
 
         # we now have a set of dirty areas that need to be drawn to the screen
         # we now go through the frames in reverse order, and get them to update to the screen the dirty areas
-        for frame_event in reversed(self.frame_events):
+        for frame_event in reversed(self.window_data):
             frame_event.frame.update_dirty_rects(self.display, dirty_areas)
 
         pygame.display.flip()

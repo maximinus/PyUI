@@ -11,7 +11,7 @@ class TestPyUiApp(unittest.TestCase):
         self.app = PyUIApp(window_size=Size(100, 100))
 
     def test_no_frames(self):
-        self.assertEqual(len(self.app.frame_events), 0)
+        self.assertEqual(len(self.app.window_data), 0)
 
     def test_no_dirty_rects(self):
         self.assertEqual(len(self.app.dirty_widgets), 0)
@@ -19,9 +19,9 @@ class TestPyUiApp(unittest.TestCase):
     def test_frame_added_and_removed(self):
         test_frame = Frame(Position(0, 0), Size(100, 100))
         self.app.push_frame(test_frame)
-        self.assertEqual(len(self.app.frame_events), 1)
+        self.assertEqual(len(self.app.window_data), 1)
         self.app.pop_frame()
-        self.assertEqual(len(self.app.frame_events), 0)
+        self.assertEqual(len(self.app.window_data), 0)
 
     def test_frame_order_reversed(self):
         # the first frame in the list should be the last added
@@ -29,11 +29,11 @@ class TestPyUiApp(unittest.TestCase):
         frame2 = Frame(Position(0, 0), Size(100, 100))
         self.app.push_frame(frame1)
         self.app.push_frame(frame2)
-        self.assertEqual(self.app.frame_events[0].frame, frame2)
+        self.assertEqual(self.app.window_data[0].frame, frame2)
         self.app.pop_frame()
-        self.assertEqual(self.app.frame_events[0].frame, frame1)
+        self.assertEqual(self.app.window_data[0].frame, frame1)
         self.app.pop_frame()
-        self.assertEqual(len(self.app.frame_events), 0)
+        self.assertEqual(len(self.app.window_data), 0)
 
     @patch.object(ColorRect, 'update')
     def test_dirty_rect_updated(self, mock_update):

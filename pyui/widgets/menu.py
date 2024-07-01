@@ -63,17 +63,17 @@ class Menu(Border):
     def add_menu_item(self, menu_item):
         self.widget.add_widget(menu_item)
 
-    def cancel_menu(self, event):
+    def cancel_menu(self, data):
         # this means there was a click, but not on our widget. It could have been any mouse click
         # we just need to close this modal frame
         app.remove_frame(self)
 
-    def mouse_move(self, event):
+    def mouse_move(self, data):
         # called when we get a mouse move
         # return True to "consume", i.e., stop the event being sent anywhere else
         # we need to check if we are in or out of any vbox widgets
         for widget in self.widget.widgets:
-            if widget.render_rect.collidepoint(event.xpos, event.ypos):
+            if widget.render_rect.collidepoint(data.event.xpos, data.event.ypos):
                 # yes, we are over
                 if widget.highlighted:
                     # nothing changed
@@ -96,7 +96,7 @@ class MenuHeader(TextLabel):
         assert isinstance(menu, Menu)
         self.menu = menu
         # we want a callback on this frame - we need to know when it is closed
-        #self.menu.connect(Event.FrameClosed, self.menu_closed)
+        self.connect(Event.FrameClosed, self.menu_closed)
         self.menu_showing = False
 
     def get_menu_position(self):
@@ -104,20 +104,22 @@ class MenuHeader(TextLabel):
         return Position(self.render_rect.x, height_offset)
 
     def clicked(self, event):
+        if self.menu_showing:
+            # we are already open, ignore the click
+            return
         # we don't really need the event
         # we update our highlight
         self.background = THEME.color['menu_header_highlight']
         app.set_dirty(self)
         # we place a menu below us
-        if self.menu_showing:
-            return
         self.menu.position = self.get_menu_position()
         app.push_frame(self.menu)
         return True
 
     def menu_closed(self, event):
-        self.background = None
-        app.set_dirty(self)
+        if event.event.frame == self.menu:
+            self.background = None
+            app.set_dirty(self)
 
 
 class MenuBar(HBox):

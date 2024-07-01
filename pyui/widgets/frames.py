@@ -33,11 +33,7 @@ class Root(Widget):
                 self.size = widget.min_size
         else:
             self.size = size
-        self.texture = self.get_texture()
-
-    def get_texture(self):
-        new_surface = pygame.Surface((self.size.width, self.size.height), pygame.SRCALPHA)
-        return new_surface
+        self.texture = self.get_texture(self.size)
 
     @property
     def children(self):
@@ -60,6 +56,12 @@ class Root(Widget):
         self.render(surface, self.position, available_size=self.size)
 
     def update_dirty_rects(self, surface, dirty_rects):
+        # TODO: This is going to need more work
+        # Every widget will need to keep a copy of it's local render, and then we just draw all of those widgets
+        # This ensure that everything renders correctly
+        # Also, the root widget will need to apply it's background color at the start of this
+        # When a widget says it is dirty, it should redraw itself to it's old render_rect settings
+
         # for each dirty rect, if our render_rect overlaps this rect, then update that part of the screen
         for dirty_rect in dirty_rects:
             if self.render_rect.colliderect(dirty_rect):

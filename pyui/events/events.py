@@ -45,7 +45,7 @@ class PyUiEvent:
 class FrameClosed(PyUiEvent):
     type = Event.FrameClosed
 
-    def __init__(self, event, frame):
+    def __init__(self, frame):
         self.frame = frame
 
 

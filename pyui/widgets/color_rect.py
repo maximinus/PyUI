@@ -15,10 +15,18 @@ class ColorRect(Widget):
         return self.size.add_margin(self.margin)
 
     def render(self, surface, pos, available_size=None):
-        x = pos.x
-        y = pos.y
+        # if we have a texture that currently matches the size, then simply render that
+        if self.texture is not None:
+            if available_size.width == self.texture.get_width() and available_size.height == self.texture.get_height():
+                surface.blit(self.texture, (pos.x, pos.y))
+                return
+
         if available_size is None:
             available_size = self.min_size
+        self.texture = self.get_texture(Size(available_size.width, available_size.height))
+        x = 0
+        y = 0
+
         # only draw to the space we need to
         x += self.margin.left
         y += self.margin.top
@@ -47,5 +55,6 @@ class ColorRect(Widget):
             elif vert_align == Align.BOTTOM:
                 y += (available_size.height - height_plus_margin)
 
-        pygame.draw.rect(surface, self.color, (x, y, width, height))
+        pygame.draw.rect(self.texture, self.color, (x, y, width, height))
+        surface.blit(self.texture, (pos.x, pos.y))
         self.render_rect = pygame.Rect(x, y, width, height)

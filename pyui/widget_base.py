@@ -14,6 +14,7 @@ from pyui.events.loop import Callback
 #  parent:      the parent widget, or None if the root
 # callbacks:    array of [event, callback] ro capture events
 # children:     returns an array of all children (no children - an empty array)
+# texture:      the texture drawn. Includes the mrgin
 
 class Widget:
     def __init__(self, expand=None, margin=None, align=None, fill=None):
@@ -24,6 +25,7 @@ class Widget:
         self.render_rect = None
         self.parent = None
         self.callbacks = []
+        self.texture = None
 
     @property
     def min_size(self):
@@ -52,6 +54,10 @@ class Widget:
         dirty_area.x += root_widget.position.x
         dirty_area.y += root_widget.position.y
         return dirty_area
+
+    def get_texture(self, size):
+        new_surface = pygame.Surface((size.width, size.height), pygame.SRCALPHA)
+        return new_surface
 
     def get_root(self):
         if self.parent is None:
