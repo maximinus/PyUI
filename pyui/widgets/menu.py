@@ -31,13 +31,13 @@ class MenuItem(Widget):
             self.texture.fill(THEME.color['menu_background'])
         elif self.background is not None:
             self.texture.fill(self.background)
-        self.widget.render(self.texture, (0, 0), new_size)
+        self.widget.render(self.texture, Position(0, 0), new_size)
 
     def render(self, surface, pos, available_size=None):
         if self.draw_old_texture(surface, pos, available_size):
             return
         self.draw(available_size)
-        surface.render(self.texture, (pos.x, pos.y))
+        surface.blit(self.texture, (pos.x, pos.y))
         self.render_rect = self.widget.render_rect
 
 
