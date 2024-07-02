@@ -2,6 +2,7 @@ import pygame
 import unittest
 
 from pyui.events.events import MouseMove
+from pyui.events.loop import CallbackData
 from pyui.setup import init
 from pyui.base import Position, Size
 from pyui.theme import THEME
@@ -119,21 +120,21 @@ class TestHighlightDetection(unittest.TestCase):
 
     def test_highlight_added_after_move(self):
         event = MouseMove(FakeMoveEvent([150, 150]))
-        self.menu.mouse_move(event)
+        self.menu.mouse_move(CallbackData(event, None))
         self.assertTrue(self.menuitem.highlighted)
         self.menuitem.highlighted = False
 
     def test_highlighted_false_after_missed_move(self):
         event = MouseMove(FakeMoveEvent([0, 0]))
-        self.menu.mouse_move(event)
+        self.menu.mouse_move(CallbackData(event, None))
         self.assertFalse(self.menuitem.highlighted)
 
     def test_highlighted_false_after_over_and_not_over(self):
         first_event = MouseMove(FakeMoveEvent([150, 150]))
         second_event = MouseMove(FakeMoveEvent([0, 0]))
-        self.menu.mouse_move(first_event)
+        self.menu.mouse_move(CallbackData(first_event, None))
         self.assertTrue(self.menuitem.highlighted)
-        self.menu.mouse_move(second_event)
+        self.menu.mouse_move(CallbackData(second_event, None))
         self.assertFalse(self.menuitem.highlighted)
 
 

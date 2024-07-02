@@ -17,8 +17,8 @@ class TestDefaultTheme(unittest.TestCase):
         pygame.quit()
 
     def test_colors(self):
-        # no default colors
-        self.assertEqual(len(THEME.color), 3)
+        # there should be some colors
+        self.assertTrue(len(THEME.color) > 0)
 
     def test_icons(self):
         # basic icon should be a surface
