@@ -23,18 +23,20 @@ class MenuItem(Widget):
     def min_size(self):
         return self.size.add_margin(self.margin)
 
-    def render(self, surface, pos, available_size=None):
-        if self.draw_old_texture(surface, pos, available_size):
-            return
-
-        self.texture = self.get_texture(available_size)
-        if self.background is not None:
-            self.texture.fill(self.background)
+    def draw(self, new_size=None):
+        new_size = self.get_ideal_draw_size(new_size)
+        self.texture = self.get_texture(new_size)
 
         if self.highlighted:
             self.texture.fill(THEME.color['menu_background'])
+        elif self.background is not None:
+            self.texture.fill(self.background)
+        self.widget.render(self.texture, (0, 0), new_size)
 
-        self.widget.render(self.texture, (0, 0), available_size)
+    def render(self, surface, pos, available_size=None):
+        if self.draw_old_texture(surface, pos, available_size):
+            return
+        self.draw(available_size)
         surface.render(self.texture, (pos.x, pos.y))
         self.render_rect = self.widget.render_rect
 
