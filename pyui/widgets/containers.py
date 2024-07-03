@@ -32,6 +32,10 @@ class Box(Widget):
             self.size += widget.min_size
 
     @property
+    def container(self):
+        return True
+
+    @property
     def children(self):
         return self.widgets
 

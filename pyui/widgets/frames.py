@@ -42,6 +42,10 @@ class Root(Widget):
         height = self.margin.top + self.margin.bottom
 
     @property
+    def container(self):
+        return True
+
+    @property
     def children(self):
         return [self.widget]
 
@@ -76,23 +80,26 @@ class Root(Widget):
         self.render_rect = pygame.Rect(self.position.x, self.position.y, full_size.width, full_size.height)
 
     def update_dirty_rects(self, surface, dirty_rects):
-        # TODO: This is going to need more work
-        # Every widget will need to keep a copy of it's local render, and then we just draw all of those widgets
-        # This ensure that everything renders correctly
-        # Also, the root widget will need to apply it's background color at the start of this
-        # When a widget says it is dirty, it should redraw itself to it's old render_rect settings
+        # When a widget says it is dirty, it should redraw itself to its old render_rect settings
+        # this means that all widgets have updated themselves at this point in the code
 
-        # for each dirty rect, if our render_rect overlaps this rect, then update that part of the screen
+        # to do this, we need to iterate through all the widgets and get them to update
+        # this means that children widgets will need to also have this function
+        # the widgets must be drawn from the closest to the furthest, so we draw the widgets as we see
+        # them, followed by their children
         for dirty_rect in dirty_rects:
-            if self.render_rect.colliderect(dirty_rect):
-                # compute the clip area
-                area_to_update = self.render_rect.clip(dirty_rect)
-                # now blit from our texture to this screen
-                source_area = area_to_update.copy()
-                source_area.x -= self.position.x
-                source_area.y -= self.position.y
-                surface.blit(self.texture, (area_to_update.x, area_to_update.y), source_area)
-
+            # either it's in this frame or not
+            if not self.render_rect.colliderect(dirty_rect):
+                # nothing to do with us
+                return
+            overlap_area = self.render_rect.clip(dirty_rect)
+            # if our widget is a container, drill down
+            if self.widget.container:
+                self.widget.update_dirty_rect(overlap_area)
+            # and then just copy from this texture to our texture
+            self.texture.blit(self.widget.texture, (overlap_area.x, overlap_area.y), overlap_area)
+            # render that new area to the screen
+            surface.blit(self.texture, (overlap_area.x, overlap_area.y), overlap_area)
 
 class Frame(Root):
     # a frame is a container that holds a single widget, and is a fixed size

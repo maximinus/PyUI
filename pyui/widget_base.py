@@ -16,6 +16,7 @@ from pyui.events.loop import Callback
 # children:     returns an array of all children (no children - an empty array)
 # texture:      the texture drawn. Includes the margin
 # background:   a color that covers the whole of the rear of the image
+# container:    A property that is True if this widget is a container for other widgets
 
 # some functions:
 # render:       draw yourself to this new place
@@ -40,6 +41,10 @@ class Widget:
     @property
     def children(self):
         return []
+
+    @property
+    def container(self):
+        return False
 
     def render(self, surface, pos, available_size=None):
         # if the available size is None, then the default is to render at the minimum size
@@ -79,6 +84,23 @@ class Widget:
         dirty_area.x += root_widget.position.x
         dirty_area.y += root_widget.position.y
         return dirty_area
+
+    def update_dirty_rect(self, dirty_rect):
+        # either it's in this widget or not
+        if not self.render_rect.colliderect(dirty_rect):
+            # nothing to do with us
+            return
+        overlap_area = self.render_rect.clip(dirty_rect)
+        # so now we check with all of our children:
+        for child in self.children:
+            # if this widget has children, then it should render its own children
+            if child.container:
+                child.update_dirty_rect(overlap_area)
+                self.texture.blit(child.texture, (overlap_area.x, overlap_area.y), overlap_area)
+            elif child.render_rect.colliderect(overlap_area):
+                # we need to copy this new area over our texture
+                child_overlap = child.render_rect.clip(overlap_area)
+                self.texture.blit(child.texture, (child_overlap.x, child_overlap.y), child_overlap)
 
     def get_texture(self, size):
         new_surface = pygame.Surface((size.width, size.height), pygame.SRCALPHA)

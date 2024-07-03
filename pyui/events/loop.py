@@ -207,7 +207,7 @@ class PyUIApp:
 
     def set_dirty(self, widget):
         # store a widget that needs to be updated
-        # the widget should know what to do to update itself
+        # the widget should have already updated itself by this point
         self.dirty_widgets.append(widget)
 
     def update_dirty_widgets(self):
