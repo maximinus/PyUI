@@ -1,8 +1,9 @@
 import pygame
-from unittest.mock import patch, call
+from unittest.mock import patch
 
 from pyui.base import Color, Size, Position
 from pyui.widgets import ColorRect, Frame, HBox
+
 from test.sdl_test import SDLTest
 
 
@@ -10,6 +11,20 @@ class TestSanityCheck(SDLTest):
     def test_simple(self):
         # confirm simple SDL test works
         self.assertTrue(True)
+
+
+class FakeTexture:
+    def __init___(self):
+        self.sdl_surface = None
+        self.pos = None
+        self.area = None
+        self.called = False
+
+    def blit(self, surface, pos, area):
+        self.sdl_surface = surface
+        self.pos = pos
+        self.area = area
+        self.called = True
 
 
 class TestSimpleDirty(SDLTest):
@@ -55,3 +70,22 @@ class TestSimpleDirty(SDLTest):
             frame.update_dirty_rects(self.__class__.display, [dirty_rect])
             mm1.assert_not_called()
             mm2.assert_called()
+
+
+class TestAreaRendered(SDLTest):
+    # test particular areas are rendered
+    def test_simple_render_area(self):
+        # I say that an area with a color rect inside is dirty
+        # we see a render from the color to the parent frame
+        color_rect = ColorRect(size=Size(50, 50), color=Color.RED)
+        frame = Frame(Position(0, 0), widget=color_rect)
+        # frame needs to be drawn
+        frame.render(self.__class__.display, None)
+        frame.texture = FakeTexture()
+        # area inside the frame and the color_rect
+        dirty_rect = pygame.Rect(10, 10, 10, 10)
+        frame.update_dirty_rects(FakeTexture(), [dirty_rect])
+        self.assertTrue(frame.texture.called)
+        self.assertEqual(frame.texture.sdl_surface, frame.widget.texture)
+        self.assertEqual(frame.texture.pos, (10, 10))
+        self.assertEqual(frame.texture.area, pygame.Rect(10, 10, 10, 10))
