@@ -57,4 +57,5 @@ class ColorRect(Widget):
             return
         self.draw(available_size)
         surface.blit(self.texture, (pos.x, pos.y))
-        self.render_rect = pygame.Rect(pos.x, pos.y, available_size.width, available_size.height)
+        self.render_rect = pygame.Rect(pos.x, pos.y,
+                                       self.texture.get_width(), self.texture.get_height())
