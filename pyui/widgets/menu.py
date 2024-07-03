@@ -89,12 +89,14 @@ class Menu(Border):
                     return True
                 # update the new rect
                 widget.highlighted = True
+                self.draw()
                 app.set_dirty(widget)
                 # don't return early, we still to check the other widgets
             else:
                 # we are not over the menu item
                 if widget.highlighted:
                     widget.highlighted = False
+                    self.draw()
                     app.set_dirty(widget)
 
 
@@ -133,8 +135,7 @@ class MenuHeader(TextLabel):
 
 class MenuBar(HBox):
     def __init__(self):
-        super().__init__(expand=Expand.HORIZONTAL)
-        self.background = THEME.color['menubar_background']
+        super().__init__(expand=Expand.HORIZONTAL, background=THEME.color['menubar_background'])
         # to make the widget as big as possible, we put a spacer at the end with expand on
         self.add_widget(Spacer(Size(0, 0), expand=Expand.HORIZONTAL))
 

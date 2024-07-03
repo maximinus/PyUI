@@ -177,7 +177,7 @@ class PyUIApp:
     def draw_all_frames(self):
         self.display.fill(THEME.color['widget_background'])
         for frame in self.window_data:
-            frame.frame.render(self.display, None, DEFAULT_SIZE)
+            frame.frame.render(self.display, None)
         pygame.display.flip()
 
     def handle_event(self, event):

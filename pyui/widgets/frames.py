@@ -52,8 +52,21 @@ class Root(Widget):
         self.size = new_size
         self.texture = self.get_texture(self.size)
 
-    def draw(self, surface):
-        self.render(surface, self.position, available_size=self.size)
+    def draw(self, new_size=None):
+        # frame sizes are fixed
+        self.texture = self.get_texture(self.size)
+        if self.background is not None:
+            self.texture.fill(self.background)
+        widget_space = self.size.subtract_margin(self.margin)
+        self.widget.render(self.texture, Position(self.margin.left, self.margin.right), widget_space)
+
+    def render(self, surface, _, available_size=None):
+        if self.draw_old_texture(surface, self.position, available_size):
+            return
+        self.draw()
+        surface.blit(self.texture, (self.position.x, self.position.y))
+        full_size = self.min_size
+        self.render_rect = pygame.Rect(self.position.x, self.position.y, full_size.width, full_size.height)
 
     def update_dirty_rects(self, surface, dirty_rects):
         # TODO: This is going to need more work

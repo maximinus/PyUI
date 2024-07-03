@@ -52,6 +52,13 @@ class Widget:
                 new_size = self.min_size
             else:
                 new_size = Size(self.render_rect.width, self.render_rect.height)
+        else:
+            ideal_size = self.min_size
+            if self.fill.is_horizontal or self.expand.is_horizontal:
+                ideal_size.width = new_size.width
+            if self.fill.is_vertical or self.expand.is_vertical:
+                ideal_size.height = new_size.height
+            new_size = ideal_size
         return new_size
 
     def draw(self, new_size=None):

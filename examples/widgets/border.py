@@ -11,8 +11,7 @@ if __name__ == '__main__':
 
     test_border = Border(Position(100, 100),
                          widget=ColorRect(Size(100, 100), Color.BLUE, margin=Margin(32, 32, 32, 32)))
-    test_border.draw(display)
-
+    test_border.render(display, None)
     pygame.display.flip()
     await_keypress()
     pygame.quit()

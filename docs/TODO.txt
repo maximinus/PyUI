@@ -36,7 +36,6 @@ Plan
 Current Work and Latest:
 
 HBox should use align properly
-All widgets have their own texture + background
 Tests for render size and texture sizes in widget tests
 Menu callbacks work
 Add a simple messagebox

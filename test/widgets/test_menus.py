@@ -185,3 +185,14 @@ class TestMenuBarParent(unittest.TestCase):
         menubar.add_menu('File', menu)
         window = Frame(size=Size(800, 800), widget=menubar)
         self.assertEqual(window, menubar.get_root())
+
+
+class TestMenubarSize(unittest.TestCase):
+    def test_width(self):
+        item = MenuItem('Hello')
+        menu = Menu(items=[item])
+        menubar = MenuBar()
+        menubar.add_menu('File', menu)
+        window = Frame(size=Size(800, 800), widget=menubar)
+        window.draw()
+        self.assertEqual(menubar.render_rect.width, 800)
