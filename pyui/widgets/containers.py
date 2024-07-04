@@ -259,6 +259,7 @@ class VBox(Box):
     def render(self, surface, pos, screen_pos, available_size=None):
         if self.draw_old_texture(surface, pos, available_size):
             return
+
         self.draw_container(screen_pos, available_size)
         surface.blit(self.texture, (pos.x, pos.y))
         self.render_rect = pygame.Rect(screen_pos.x, screen_pos.y, self.texture.get_width(), self.texture.get_height())

@@ -73,7 +73,7 @@ class Root(Widget):
         # so here, for example, we are telling the widget to render to the given position,
         # which is an offset into our texture: we also need to tell it where that is on screen
         screen_pos = Position(self.position.x + self.margin.left, self.position.y + self.margin.top)
-        self.widget.render(self.texture, Position(self.margin.left, self.margin.right), widget_space, screen_pos)
+        self.widget.render(self.texture, Position(self.margin.left, self.margin.right), screen_pos, widget_space)
 
     def render(self, surface, _1, _2, available_size=None):
         if self.draw_old_texture(surface, self.position, available_size):
