@@ -70,11 +70,10 @@ class Root(Widget):
             self.texture.fill(self.background)
         widget_space = self.size.subtract_margin(self.margin)
         # when we draw, we need to tell the next widget where it is relative to us
-        # so here, for example, we are telling the widget to render to the the given position,
+        # so here, for example, we are telling the widget to render to the given position,
         # which is an offset into our texture: we also need to tell it where that is on screen
         screen_pos = Position(self.position.x + self.margin.left, self.position.y + self.margin.top)
         self.widget.render(self.texture, Position(self.margin.left, self.margin.right), widget_space, screen_pos)
-
 
     def render(self, surface, _1, _2, available_size=None):
         if self.draw_old_texture(surface, self.position, available_size):
@@ -114,7 +113,7 @@ class Frame(Root):
     # the size does NOT include the margin; this means that if you set a frame to be 100x100 and it has a margin,
     # then the margin will decrease the effective size of the widget
     # a frame always needs a position
-    def render(self, surface, _, available_size=None):
+    def render(self, surface, _1, _2, available_size=None):
         # the available size should be ignored with a frame; it is not sent from the top level,
         # and the size is fixed anyway
         self.texture = self.get_texture(self.size)
@@ -124,7 +123,7 @@ class Frame(Root):
         size_with_margin = self.size.subtract_margin(self.margin)
         # the effective render size is the size of the frame minus it's margin
         if self.widget is not None:
-            self.widget.render(self.texture, Position(self.margin.left, self.margin.top), size_with_margin)
+            self.widget.render(self.texture, Position(self.margin.left, self.margin.top), self.position, size_with_margin)
         # now render to the screen
         surface.blit(self.texture, (self.position.x, self.position.y))
         self.render_rect = pygame.Rect(self.position.x, self.position.y,

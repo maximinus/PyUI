@@ -160,7 +160,7 @@ class TestMenuBarHighlight(SDLTest):
         menubar.add_menu('Test', menu1)
         menubar.add_menu('Menu', menu2)
         window = Frame(size=Size(800, 600), widget=menubar)
-        window.render(self.__class__.display, None)
+        window.render(self.__class__.display, None, None)
         header = menubar.widgets[0]
         with patch.object(header, 'get_texture') as mock_fill:
             fake_tex = FakeTexture()
@@ -180,7 +180,7 @@ class TestMenuBarHighlight(SDLTest):
         menubar.add_menu('Test', menu1)
         menubar.add_menu('Menu', menu2)
         window = Frame(size=Size(800, 600), widget=menubar)
-        window.render(self.__class__.display, None)
+        window.render(self.__class__.display, None, None)
         self.assertIsNotNone(window.render_rect)
         app.push_frame(window)
         # we want to see that the display is updated with the new dirty_rect
@@ -202,7 +202,7 @@ class TestMenuBarHighlight(SDLTest):
         menubar.add_menu('Test', menu1)
         menubar.add_menu('Menu', menu2)
         window = Frame(size=Size(800, 600), widget=menubar)
-        window.render(self.__class__.display, None)
+        window.render(self.__class__.display, None, None)
         self.assertIsNotNone(window.render_rect)
         app.push_frame(window)
         # we want to see that the display is updated with the new dirty_rect
@@ -227,7 +227,7 @@ class TestMenuBarHighlight(SDLTest):
         menubar.add_menu('Test', menu1)
         menubar.add_menu('Menu', menu2)
         window = Frame(size=Size(800, 600), widget=menubar)
-        window.render(self.__class__.display, None)
+        window.render(self.__class__.display, None, None)
         app.push_frame(window)
         # we want to see that the display is updated with the new dirty_rect
         header = menubar.widgets[0]
@@ -255,7 +255,7 @@ class TestMenuRenderRects(SDLTest):
         menubar.add_menu('Test', menu1)
         menubar.add_menu('Menu', menu2)
         window = Frame(size=Size(800, 600), widget=menubar)
-        window.render(self.__class__.display, None)
+        window.render(self.__class__.display, None, None)
         self.assertEqual(menubar.widgets[0].render_rect.x, 0)
         self.assertEqual(menubar.widgets[0].render_rect.y, 0)
 
@@ -267,6 +267,6 @@ class TestMenuRenderRects(SDLTest):
         menubar.add_menu('Test', menu1)
         menubar.add_menu('Menu', menu2)
         window = Frame(size=Size(800, 600), widget=menubar)
-        window.render(self.__class__.display, None)
+        window.render(self.__class__.display, None, None)
         self.assertTrue(menubar.widgets[1].render_rect.x > 0)
         self.assertEqual(menubar.widgets[1].render_rect.y, 0)

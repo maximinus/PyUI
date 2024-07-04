@@ -48,14 +48,14 @@ class TestSimpleBorder(SDLTest):
 class TestFrameChildrenRenderRect(SDLTest):
     def test_child_location_at_origin(self):
         border = Frame(Position(0, 0), widget=ColorRect(Size(20, 20), Color.RED))
-        border.render(self.__class__.display, None)
+        border.render(self.__class__.display, None, None)
         color_area = border.widget.render_rect
         self.assertEqual(color_area.x, 0)
         self.assertEqual(color_area.y, 0)
 
     def test_child_location_at_offset(self):
         border = Frame(Position(50, 60), widget=ColorRect(Size(20, 20), Color.RED))
-        border.render(self.__class__.display, None)
+        border.render(self.__class__.display, None, None)
         color_area = border.widget.render_rect
         self.assertEqual(color_area.x, 50)
         self.assertEqual(color_area.y, 60)
