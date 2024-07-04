@@ -23,6 +23,7 @@ if __name__ == '__main__':
     screens = [screen1(), screen2()]
     for single_screen in screens:
         display.fill(BACKGROUND_COLOR)
+        single_screen.render(display, Position(0, 0), Position(0, 0), None)
         single_screen.draw(display)
         pygame.display.flip()
         await_keypress()
