@@ -102,6 +102,15 @@ class PyUIApp:
         # these are acted on in the next frame
         self.frame_events = []
 
+    def reset(self):
+        # used in tests and debugging
+        self.window_data = []
+        self.dirty_widgets = []
+        self.looping = False
+        self.deferred_frames = []
+        self.dead_frames = []
+        self.frame_events = []
+
     def push_frame(self, frame):
         # push and pop are done like this to iterate from newest to oldest
         if not self.looping:
@@ -238,7 +247,7 @@ class PyUIApp:
             frame_event.frame.update_dirty_rects(self.display, dirty_areas)
 
         pygame.display.flip()
-        # finally, clear all list or dirty widgets
+        # finally, clear all dirty widgets
         self.dirty_widgets = []
 
 

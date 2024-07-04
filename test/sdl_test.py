@@ -12,7 +12,7 @@ class FakeEvent:
 
 
 class FakeTexture:
-    def __init___(self):
+    def __init__(self):
         self.sdl_surface = None
         self.pos = None
         self.area = None
@@ -24,7 +24,7 @@ class FakeTexture:
         self.sdl_surface = surface
         self.pos = pos
         self.area = area
-        self.called = True
+        self.blit_called = True
 
     def fill(self, color):
         self.fill_color = color

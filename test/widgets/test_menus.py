@@ -5,7 +5,7 @@ import unittest
 from test.sdl_test import SDLTest, FakeEvent, FakeTexture
 
 from pyui.events.events import MouseMove
-from pyui.events.loop import CallbackData
+from pyui.events.loop import CallbackData, app
 from pyui.base import Position, Size
 from pyui.theme import THEME
 from pyui.widgets import MenuItem, Menu, MenuBar, Frame
@@ -150,6 +150,9 @@ class TestMenuBarParent(SDLTest):
 
 
 class TestMenuBarHighlight(SDLTest):
+    def setUp(self):
+        app.reset()
+
     def test_heading_is_highlighted(self):
         menu1 = Menu(items=[MenuItem('Hello')])
         menu2 = Menu(items=[MenuItem('Goodbye')])
@@ -168,3 +171,70 @@ class TestMenuBarHighlight(SDLTest):
             self.assertEqual(header.background, THEME.color['menu_header_highlight'])
             mock_fill.assert_called()
             self.assertEqual(header.background, fake_tex.fill_color)
+
+    def test_menubar_updated(self):
+        # we should see a draw after updating
+        menu1 = Menu(items=[MenuItem('Hello')])
+        menu2 = Menu(items=[MenuItem('Goodbye')])
+        menubar = MenuBar()
+        menubar.add_menu('Test', menu1)
+        menubar.add_menu('Menu', menu2)
+        window = Frame(size=Size(800, 600), widget=menubar)
+        window.render(self.__class__.display, None)
+        self.assertIsNotNone(window.render_rect)
+        app.push_frame(window)
+        # we want to see that the display is updated with the new dirty_rect
+        header = menubar.widgets[0]
+        # put in loop mode, else frame is added instantly and causes test to fail
+        app.looping = True
+        header.clicked(FakeEvent(xpos=10, ypos=10))
+        self.assertEqual(len(app.dirty_widgets), 1)
+        app.display = FakeTexture()
+        app.update_dirty_widgets()
+        self.assertTrue(app.display.blit_called)
+        self.assertEqual(app.display.sdl_surface, window.texture)
+
+    def test_header_rendered_to_window(self):
+        # we should see a draw FROM the widget after updating
+        menu1 = Menu(items=[MenuItem('Hello')])
+        menu2 = Menu(items=[MenuItem('Goodbye')])
+        menubar = MenuBar()
+        menubar.add_menu('Test', menu1)
+        menubar.add_menu('Menu', menu2)
+        window = Frame(size=Size(800, 600), widget=menubar)
+        window.render(self.__class__.display, None)
+        self.assertIsNotNone(window.render_rect)
+        app.push_frame(window)
+        # we want to see that the display is updated with the new dirty_rect
+        header = menubar.widgets[0]
+        # put in loop mode, else frame is added instantly and causes test to fail
+        app.looping = True
+        header.clicked(FakeEvent(xpos=10, ypos=10))
+        menubar.texture = FakeTexture()
+        app.display = FakeTexture()
+        window.texture = FakeTexture()
+        app.update_dirty_widgets()
+        self.assertTrue(window.texture.blit_called)
+        # the call will be from the menubar
+        self.assertEqual(window.texture.sdl_surface, menubar.texture)
+        self.assertEqual(menubar.texture.sdl_surface, header.texture)
+
+    def test_final_surface_correct_color(self):
+        # after the click, the app display should contain a pixel at (1,1) of the expected color
+        menu1 = Menu(items=[MenuItem('Hello')])
+        menu2 = Menu(items=[MenuItem('Goodbye')])
+        menubar = MenuBar()
+        menubar.add_menu('Test', menu1)
+        menubar.add_menu('Menu', menu2)
+        window = Frame(size=Size(800, 600), widget=menubar)
+        window.render(self.__class__.display, None)
+        app.push_frame(window)
+        # we want to see that the display is updated with the new dirty_rect
+        header = menubar.widgets[0]
+        # put in loop mode, else frame is added instantly and causes test to fail
+        app.looping = True
+        header.clicked(FakeEvent(xpos=10, ypos=10))
+        app.update_dirty_widgets()
+        # grab the pixel at (1,1) and test the color; [:3] removes the alpha
+        pixel = app.display.get_at((1, 1))[:3]
+        self.assertEqual(list(pixel), THEME.color['menu_header_highlight'])
