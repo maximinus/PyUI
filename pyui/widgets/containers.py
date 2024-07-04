@@ -147,7 +147,7 @@ class HBox(Box):
                 final_widths.append(Size(widget.min_size.width, height))
         return final_widths
 
-    def draw(self, new_size=None):
+    def draw_container(self, screen_pos, new_size=None):
         new_size = self.get_ideal_draw_size(new_size)
         self.texture = self.get_texture(new_size)
         if self.background is not None:
@@ -161,19 +161,20 @@ class HBox(Box):
         x = self.margin.left
         y = self.margin.top
         all_sizes = self.calculate_sizes(total_size)
-        self.render_rect = pygame.Rect(x, y, new_size.width, new_size.height)
 
         for widget, widget_size in zip(self.widgets, all_sizes):
-            widget.render(self.texture, Position(x, y), widget_size)
+            # this needs the screen position added, we must do it now because this could another Box
+            widget.render(self.texture, Position(x, y), screen_pos + Position(x, y), widget_size)
             # no need to add the margin because it is computed in the widget size
             x += widget_size.width
 
-    def render(self, surface, pos, available_size=None):
+    def render(self, surface, pos, screen_pos, available_size=None):
         if self.draw_old_texture(surface, pos, available_size):
             return
 
-        self.draw(available_size)
+        self.draw_container(screen_pos, available_size)
         surface.blit(self.texture, (pos.x, pos.y))
+        self.render_rect = pygame.Rect(screen_pos.x, screen_pos.y, self.texture.get_width(), self.texture.get_height())
 
 
 class VBox(Box):
@@ -236,7 +237,7 @@ class VBox(Box):
                 final_heights.append(Size(width, widget.min_size.height))
         return final_heights
 
-    def draw(self, new_size=None):
+    def draw_container(self, screen_pos, new_size=None):
         new_size = self.get_ideal_draw_size(new_size)
         self.texture = self.get_texture(new_size)
         if self.background is not None:
@@ -249,16 +250,16 @@ class VBox(Box):
         x = self.margin.left
         y = self.margin.top
         all_sizes = self.calculate_sizes(total_size)
-        self.render_rect = pygame.Rect(x, y, new_size.width, new_size.height)
 
         for widget, widget_size in zip(self.widgets, all_sizes):
-            widget.render(self.texture, Position(x, y), widget_size)
+            widget.render(self.texture, Position(x, y), screen_pos + Position(x, y), widget_size)
             # no need to add the margin because it is computed in the widget size
             y += widget_size.height
 
-    def render(self, surface, pos, available_size=None):
+    def render(self, surface, pos, screen_pos, available_size=None):
         if self.draw_old_texture(surface, pos, available_size):
             return
 
-        self.draw(available_size)
+        self.draw_container(screen_pos, available_size)
         surface.blit(self.texture, (pos.x, pos.y))
+        self.render_rect = pygame.Rect(screen_pos.x, screen_pos.y, self.texture.get_width(), self.texture.get_height())

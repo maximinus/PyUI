@@ -69,14 +69,20 @@ class Root(Widget):
         if self.background is not None:
             self.texture.fill(self.background)
         widget_space = self.size.subtract_margin(self.margin)
-        self.widget.render(self.texture, Position(self.margin.left, self.margin.right), widget_space)
+        # when we draw, we need to tell the next widget where it is relative to us
+        # so here, for example, we are telling the widget to render to the the given position,
+        # which is an offset into our texture: we also need to tell it where that is on screen
+        screen_pos = Position(self.position.x + self.margin.left, self.position.y + self.margin.top)
+        self.widget.render(self.texture, Position(self.margin.left, self.margin.right), widget_space, screen_pos)
 
-    def render(self, surface, _, available_size=None):
+
+    def render(self, surface, _1, _2, available_size=None):
         if self.draw_old_texture(surface, self.position, available_size):
             return
         self.draw()
         surface.blit(self.texture, (self.position.x, self.position.y))
         full_size = self.min_size
+        # the position is our position
         self.render_rect = pygame.Rect(self.position.x, self.position.y, full_size.width, full_size.height)
 
     def update_dirty_rects(self, surface, dirty_rects):
@@ -87,6 +93,7 @@ class Root(Widget):
         # this means that children widgets will need to also have this function
         # the widgets must be drawn from the closest to the furthest, so we draw the widgets as we see
         # them, followed by their children
+
         for dirty_rect in dirty_rects:
             # either it's in this frame or not
             if not self.render_rect.colliderect(dirty_rect):

@@ -1,3 +1,5 @@
+import pygame
+
 from pyui.base import get_asset, Size, Margin, Expand, Align, Position
 from pyui.theme import THEME
 from pyui.widget_base import Widget
@@ -31,14 +33,14 @@ class MenuItem(Widget):
             self.texture.fill(THEME.color['menu_background'])
         elif self.background is not None:
             self.texture.fill(self.background)
-        self.widget.render(self.texture, Position(0, 0), new_size)
+        self.widget.draw(new_size)
 
-    def render(self, surface, pos, available_size=None):
+    def render(self, surface, pos, screen_pos, available_size=None):
         if self.draw_old_texture(surface, pos, available_size):
             return
         self.draw(available_size)
         surface.blit(self.texture, (pos.x, pos.y))
-        self.render_rect = self.widget.render_rect
+        self.render_rect = pygame.Rect(screen_pos.x, screen_pos.y, self.texture.get_width(), self.texture.get_height())
 
 
 def set_item_heights(items):

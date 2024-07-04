@@ -51,11 +51,11 @@ class ColorRect(Widget):
 
         pygame.draw.rect(self.texture, self.color, (x, y, width, height))
 
-    def render(self, surface, pos, available_size=None):
+    def render(self, surface, pos, screen_pos, available_size=None):
         # if we have a texture that currently matches the size, then simply render that
         if self.draw_old_texture(surface, pos, available_size):
             return
         self.draw(available_size)
         surface.blit(self.texture, (pos.x, pos.y))
-        self.render_rect = pygame.Rect(pos.x, pos.y,
+        self.render_rect = pygame.Rect(screen_pos.x, screen_pos.y,
                                        self.texture.get_width(), self.texture.get_height())

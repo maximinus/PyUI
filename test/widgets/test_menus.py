@@ -236,5 +236,37 @@ class TestMenuBarHighlight(SDLTest):
         header.clicked(FakeEvent(xpos=10, ypos=10))
         app.update_dirty_widgets()
         # grab the pixel at (1,1) and test the color; [:3] removes the alpha
-        pixel = app.display.get_at((1, 1))[:3]
-        self.assertEqual(list(pixel), THEME.color['menu_header_highlight'])
+        pixel = list(app.display.get_at((1, 1))[:3])
+        expected_color = THEME.color['menu_header_highlight']
+        self.assertEqual(pixel, expected_color)
+        # this should also be the case on the all the children
+        menubar_pixel = list(menubar.texture.get_at((1, 1))[:3])
+        header_pixel = list(menubar.widgets[0].texture.get_at((1, 1))[:3])
+        self.assertEqual(menubar_pixel, expected_color)
+        self.assertEqual(header_pixel, expected_color)
+
+
+class TestMenuRenderRects(SDLTest):
+    def test_render_rect_widget_0(self):
+        # we should see a draw FROM the widget after updating
+        menu1 = Menu(items=[MenuItem('Hello')])
+        menu2 = Menu(items=[MenuItem('Goodbye')])
+        menubar = MenuBar()
+        menubar.add_menu('Test', menu1)
+        menubar.add_menu('Menu', menu2)
+        window = Frame(size=Size(800, 600), widget=menubar)
+        window.render(self.__class__.display, None)
+        self.assertEqual(menubar.widgets[0].render_rect.x, 0)
+        self.assertEqual(menubar.widgets[0].render_rect.y, 0)
+
+    def test_render_rect_widget_1(self):
+        # we should see a draw FROM the widget after updating
+        menu1 = Menu(items=[MenuItem('Hello')])
+        menu2 = Menu(items=[MenuItem('Goodbye')])
+        menubar = MenuBar()
+        menubar.add_menu('Test', menu1)
+        menubar.add_menu('Menu', menu2)
+        window = Frame(size=Size(800, 600), widget=menubar)
+        window.render(self.__class__.display, None)
+        self.assertTrue(menubar.widgets[1].render_rect.x > 0)
+        self.assertEqual(menubar.widgets[1].render_rect.y, 0)

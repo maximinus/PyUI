@@ -11,6 +11,7 @@ from pyui.events.loop import Callback
 #  min_size:    the smallest size the widget could be, with its margin
 #  align:       if there is more size than the min size, and we are not filling, where should we align the widget?
 #  render_rect: the rectangular area of the last blit we made to draw the widget
+#               This area should be: (screen_x, screen_y, width, height)
 #  parent:      the parent widget, or None if the root
 # callbacks:    array of [event, callback] ro capture events
 # children:     returns an array of all children (no children - an empty array)
@@ -46,8 +47,10 @@ class Widget:
     def container(self):
         return False
 
-    def render(self, surface, pos, available_size=None):
+    def render(self, surface, pos, screen_pos, available_size=None):
         # if the available size is None, then the default is to render at the minimum size
+        # in normal use, the position is relative to the parent widget
+        # this can be obtained with self.parent.render_rect.x|y
         self.render_rect = pygame.Rect(pos.x, pos.y, 0, 0)
 
     def get_ideal_draw_size(self, new_size):
@@ -94,11 +97,12 @@ class Widget:
         # so now we check with all of our children:
         for child in self.children:
             # if this widget has children, then it should render its own children
+            # Note: The various overlap areas will be the overlap on the SCREEN; however, we need to copy from
+            # the WIDGET. To do this, modify the final overlap by the widgets render_rect x and y positions??
             if child.container:
                 child.update_dirty_rect(overlap_area)
                 self.texture.blit(child.texture, (overlap_area.x, overlap_area.y), overlap_area)
             elif child.render_rect.colliderect(overlap_area):
-                # we need to copy this new area over our texture
                 child_overlap = child.render_rect.clip(overlap_area)
                 self.texture.blit(child.texture, (child_overlap.x, child_overlap.y), child_overlap)
 

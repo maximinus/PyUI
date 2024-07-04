@@ -1,9 +1,8 @@
-import pygame
 import unittest
 
-from pyui.setup import init
 from pyui.base import Margin, Color, Size, Position
 from pyui.widgets import Frame, ColorRect, Border
+from test.sdl_test import SDLTest
 
 
 class TestSimpleFrame(unittest.TestCase):
@@ -34,15 +33,7 @@ class TestSimpleFrame(unittest.TestCase):
         self.assertEqual(size.height, 50)
 
 
-class TestSimpleBorder(unittest.TestCase):
-    @classmethod
-    def setUpClass(cls):
-        init()
-
-    @classmethod
-    def tearDownClass(cls):
-        pygame.quit()
-
+class TestSimpleBorder(SDLTest):
     def test_no_widgets_size(self):
         border = Border(Position(0, 0))
         self.assertEqual(border.size.width, 0)
@@ -52,3 +43,19 @@ class TestSimpleBorder(unittest.TestCase):
         min_size = border.min_size
         self.assertEqual(min_size.width, 20)
         self.assertEqual(min_size.height, 20)
+
+
+class TestFrameChildrenRenderRect(SDLTest):
+    def test_child_location_at_origin(self):
+        border = Frame(Position(0, 0), widget=ColorRect(Size(20, 20), Color.RED))
+        border.render(self.__class__.display, None)
+        color_area = border.widget.render_rect
+        self.assertEqual(color_area.x, 0)
+        self.assertEqual(color_area.y, 0)
+
+    def test_child_location_at_offset(self):
+        border = Frame(Position(50, 60), widget=ColorRect(Size(20, 20), Color.RED))
+        border.render(self.__class__.display, None)
+        color_area = border.widget.render_rect
+        self.assertEqual(color_area.x, 50)
+        self.assertEqual(color_area.y, 60)

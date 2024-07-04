@@ -19,5 +19,5 @@ class Spacer(Widget):
     def draw(self, new_size=None):
         pass
 
-    def render(self, surface, pos, available_size=None):
-        self.render_rect = pygame.Rect(pos.x, pos.y, self.size.width, self.size.height)
+    def render(self, surface, pos, screen_pos, available_size=None):
+        self.render_rect = pygame.Rect(screen_pos.x, screen_pos.y, self.size.width, self.size.height)
