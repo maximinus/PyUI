@@ -143,7 +143,7 @@ class Border(Root):
         self.middle = Size(4, 8)
         super().__init__(pos, modal=modal, background=background, widget=widget)
 
-    def render(self, surface, _, available_size=None):
+    def render(self, surface, _1, _2, available_size=None):
         if self.draw_old_texture(surface, self.position, available_size):
             return
 
@@ -203,7 +203,8 @@ class Border(Root):
         # TODO: Fix this +2. It is to do with overlap on the 9-patch; we need to define a better 9-patch object
         border_size = self.corner.width + (self.middle.width // 2) - 2
         if self.widget is not None:
-            self.widget.render(self.texture, Position(border_size, border_size), render_size)
+            screen_position = Position(self.position.x + self.margin.left, self.position.y + self.margin.top)
+            self.widget.render(self.texture, Position(border_size, border_size), screen_position, render_size)
         self.render_rect = pygame.Rect(self.position.x, self.position.y, render_size.width, render_size.height)
         # finally, blit to screen
         surface.blit(self.texture, (self.position.x, self.position.y))

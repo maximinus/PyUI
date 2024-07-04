@@ -252,7 +252,8 @@ class VBox(Box):
         all_sizes = self.calculate_sizes(total_size)
 
         for widget, widget_size in zip(self.widgets, all_sizes):
-            widget.render(self.texture, Position(x, y), screen_pos + Position(x, y), widget_size)
+            screen_coords = screen_pos + Position(x, y)
+            widget.render(self.texture, Position(x, y), screen_coords, widget_size)
             # no need to add the margin because it is computed in the widget size
             y += widget_size.height
 
