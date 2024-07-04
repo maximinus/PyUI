@@ -101,6 +101,7 @@ class Root(Widget):
             # render that new area to the screen
             surface.blit(self.texture, (overlap_area.x, overlap_area.y), overlap_area)
 
+
 class Frame(Root):
     # a frame is a container that holds a single widget, and is a fixed size
     # the size does NOT include the margin; this means that if you set a frame to be 100x100 and it has a margin,

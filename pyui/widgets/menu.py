@@ -121,6 +121,7 @@ class MenuHeader(TextLabel):
         # we don't really need the event
         # we update our highlight
         self.background = THEME.color['menu_header_highlight']
+        self.draw(None)
         app.set_dirty(self)
         # we place a menu below us
         self.menu.position = self.get_menu_position()

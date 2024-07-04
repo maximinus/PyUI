@@ -1,23 +1,17 @@
+from unittest.mock import patch
+
 import pygame
 import unittest
+from test.sdl_test import SDLTest, FakeEvent, FakeTexture
 
 from pyui.events.events import MouseMove
 from pyui.events.loop import CallbackData
-from pyui.setup import init
 from pyui.base import Position, Size
 from pyui.theme import THEME
 from pyui.widgets import MenuItem, Menu, MenuBar, Frame
 
 
-class TestMenuItem(unittest.TestCase):
-    @classmethod
-    def setUpClass(cls):
-        init()
-
-    @classmethod
-    def tearDownClass(cls):
-        pygame.quit()
-
+class TestMenuItem(SDLTest):
     def test_has_width(self):
         menu = MenuItem('Test')
         min_size = menu.min_size
@@ -32,15 +26,7 @@ class TestMenuItem(unittest.TestCase):
         self.assertEqual(m1_size.height, m2_size.height)
 
 
-class TestMenu(unittest.TestCase):
-    @classmethod
-    def setUpClass(cls):
-        init()
-
-    @classmethod
-    def tearDownClass(cls):
-        pygame.quit()
-
+class TestMenu(SDLTest):
     def test_equal_heights(self):
         menu1 = MenuItem('Hello')
         menu2 = MenuItem('World')
@@ -99,15 +85,7 @@ class FakeMoveEvent:
         self.rel = [0, 0]
 
 
-class TestHighlightDetection(unittest.TestCase):
-    @classmethod
-    def setUpClass(cls):
-        init()
-
-    @classmethod
-    def tearDownClass(cls):
-        pygame.quit()
-
+class TestHighlightDetection(SDLTest):
     def setUp(self):
         # we need pygame setup else the font is not there
         self.menuitem = MenuItem('Test')
@@ -138,15 +116,7 @@ class TestHighlightDetection(unittest.TestCase):
         self.assertFalse(self.menuitem.highlighted)
 
 
-class TestMenuItemHeights(unittest.TestCase):
-    @classmethod
-    def setUpClass(cls):
-        init()
-
-    @classmethod
-    def tearDownClass(cls):
-        pygame.quit()
-
+class TestMenuItemHeights(SDLTest):
     def test_default_margin_is_zero(self):
         item = MenuItem('Hello')
         self.assertEqual(item.margin.top, 0)
@@ -169,15 +139,7 @@ class TestMenuItemHeights(unittest.TestCase):
         self.assertEqual(item1.min_size.height, item2.min_size.height)
 
 
-class TestMenuBarParent(unittest.TestCase):
-    @classmethod
-    def setUpClass(cls):
-        init()
-
-    @classmethod
-    def tearDownClass(cls):
-        pygame.quit()
-
+class TestMenuBarParent(SDLTest):
     def test_parent_is_frame(self):
         item = MenuItem('Hello')
         menu = Menu(items=[item])
@@ -185,3 +147,24 @@ class TestMenuBarParent(unittest.TestCase):
         menubar.add_menu('File', menu)
         window = Frame(size=Size(800, 800), widget=menubar)
         self.assertEqual(window, menubar.get_root())
+
+
+class TestMenuBarHighlight(SDLTest):
+    def test_heading_is_highlighted(self):
+        menu1 = Menu(items=[MenuItem('Hello')])
+        menu2 = Menu(items=[MenuItem('Goodbye')])
+        menubar = MenuBar()
+        menubar.add_menu('Test', menu1)
+        menubar.add_menu('Menu', menu2)
+        window = Frame(size=Size(800, 600), widget=menubar)
+        window.render(self.__class__.display, None)
+        header = menubar.widgets[0]
+        with patch.object(header, 'get_texture') as mock_fill:
+            fake_tex = FakeTexture()
+            mock_fill.return_value = fake_tex
+            # click the menu
+            header.clicked(FakeEvent(xpos=10, ypos=10))
+            # the background of the menubar should have changed
+            self.assertEqual(header.background, THEME.color['menu_header_highlight'])
+            mock_fill.assert_called()
+            self.assertEqual(header.background, fake_tex.fill_color)
