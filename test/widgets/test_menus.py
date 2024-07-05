@@ -160,7 +160,7 @@ class TestMenuBarHighlight(SDLTest):
         menubar.add_menu('Test', menu1)
         menubar.add_menu('Menu', menu2)
         window = Frame(size=Size(800, 600), widget=menubar)
-        window.render(self.__class__.display, None, None)
+        window.render()
         header = menubar.widgets[0]
         with patch.object(header, 'get_texture') as mock_fill:
             fake_tex = FakeTexture()
@@ -180,8 +180,7 @@ class TestMenuBarHighlight(SDLTest):
         menubar.add_menu('Test', menu1)
         menubar.add_menu('Menu', menu2)
         window = Frame(size=Size(800, 600), widget=menubar)
-        window.render(self.__class__.display, None, None)
-        self.assertIsNotNone(window.render_rect)
+        window.render()
         app.push_frame(window)
         # we want to see that the display is updated with the new dirty_rect
         header = menubar.widgets[0]
@@ -202,8 +201,7 @@ class TestMenuBarHighlight(SDLTest):
         menubar.add_menu('Test', menu1)
         menubar.add_menu('Menu', menu2)
         window = Frame(size=Size(800, 600), widget=menubar)
-        window.render(self.__class__.display, None, None)
-        self.assertIsNotNone(window.render_rect)
+        window.render()
         app.push_frame(window)
         # we want to see that the display is updated with the new dirty_rect
         header = menubar.widgets[0]
@@ -227,7 +225,7 @@ class TestMenuBarHighlight(SDLTest):
         menubar.add_menu('Test', menu1)
         menubar.add_menu('Menu', menu2)
         window = Frame(size=Size(800, 600), widget=menubar)
-        window.render(self.__class__.display, None, None)
+        window.render()
         app.push_frame(window)
         # we want to see that the display is updated with the new dirty_rect
         header = menubar.widgets[0]
@@ -244,29 +242,3 @@ class TestMenuBarHighlight(SDLTest):
         header_pixel = list(menubar.widgets[0].texture.get_at((1, 1))[:3])
         self.assertEqual(menubar_pixel, expected_color)
         self.assertEqual(header_pixel, expected_color)
-
-
-class TestMenuRenderRects(SDLTest):
-    def test_render_rect_widget_0(self):
-        # we should see a draw FROM the widget after updating
-        menu1 = Menu(items=[MenuItem('Hello')])
-        menu2 = Menu(items=[MenuItem('Goodbye')])
-        menubar = MenuBar()
-        menubar.add_menu('Test', menu1)
-        menubar.add_menu('Menu', menu2)
-        window = Frame(size=Size(800, 600), widget=menubar)
-        window.render(self.__class__.display, None, None)
-        self.assertEqual(menubar.widgets[0].render_rect.x, 0)
-        self.assertEqual(menubar.widgets[0].render_rect.y, 0)
-
-    def test_render_rect_widget_1(self):
-        # we should see a draw FROM the widget after updating
-        menu1 = Menu(items=[MenuItem('Hello')])
-        menu2 = Menu(items=[MenuItem('Goodbye')])
-        menubar = MenuBar()
-        menubar.add_menu('Test', menu1)
-        menubar.add_menu('Menu', menu2)
-        window = Frame(size=Size(800, 600), widget=menubar)
-        window.render(self.__class__.display, None, None)
-        self.assertTrue(menubar.widgets[1].render_rect.x > 0)
-        self.assertEqual(menubar.widgets[1].render_rect.y, 0)

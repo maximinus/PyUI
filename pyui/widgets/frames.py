@@ -91,7 +91,7 @@ class Frame(Root):
     # the size does NOT include the margin; this means that if you set a frame to be 100x100 and it has a margin,
     # then the margin will decrease the effective size of the widget
     # a frame always needs a position
-    def render(self, available_size):
+    def render(self, available_size=None):
         # the available size should be ignored with a frame; it is not sent from the top level,
         # and the size is fixed anyway
         self.texture = self.get_texture(self.current_size)
@@ -101,7 +101,7 @@ class Frame(Root):
         size_with_margin = self.current_size.subtract_margin(self.margin)
         # the effective render size is the size of the frame minus it's margin
         if self.widget is not None:
-            self.widget.render(self.texture, Position(self.margin.left, self.margin.top), self.position, size_with_margin)
+            self.widget.render(size_with_margin)
             self.texture.blit(self.widget.texture, (self.margin.left, self.margin.top))
 
 

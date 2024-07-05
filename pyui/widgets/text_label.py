@@ -21,8 +21,7 @@ class TextLabel(Widget):
     def min_size(self):
         return self.size.add_margin(self.margin)
 
-    def draw(self, new_size=None):
-        new_size = self.get_ideal_draw_size(new_size)
+    def draw(self, new_size):
         self.texture = self.get_texture(new_size)
 
         # text labels ignore "fill" as they cannot naturally expand
@@ -45,11 +44,9 @@ class TextLabel(Widget):
             y += (new_size.height - full_size.height)
 
         self.texture.blit(self.image, (x, y))
+        self.current_size = new_size
 
-    def render(self, surface, pos, screen_pos, available_size=None):
-        if self.draw_old_texture(surface, pos, available_size):
+    def render(self, available_size):
+        if available_size == self.current_size:
             return
-
         self.draw(available_size)
-        surface.blit(self.texture, (pos.x, pos.y))
-        self.render_rect = pygame.Rect(screen_pos.x, screen_pos.y, self.texture.get_width(), self.texture.get_height())

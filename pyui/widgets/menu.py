@@ -11,7 +11,7 @@ from pyui.events.events import Event
 class MenuItem(Widget):
     def __init__(self, text, icon_name=None, style=None):
         super().__init__()
-        self.widget = HBox(fill=Expand.HORIZONTAL)
+        self.widget = HBox()
         if icon_name is not None:
             icon = Image(get_asset(f'icons/{icon_name}.png'), margin=Margin(2, 6, 2, 2))
             self.widget.add_widget(icon)
@@ -25,8 +25,7 @@ class MenuItem(Widget):
     def min_size(self):
         return self.size.add_margin(self.margin)
 
-    def draw(self, new_size=None):
-        new_size = self.get_ideal_draw_size(new_size)
+    def draw(self, new_size):
         self.texture = self.get_texture(new_size)
 
         if self.highlighted:
@@ -34,13 +33,13 @@ class MenuItem(Widget):
         elif self.background is not None:
             self.texture.fill(self.background)
         self.widget.draw(new_size)
+        # render widget to me
+        self.texture.blit(self.widget.texture, (self.margin.left, self.margin.top))
 
-    def render(self, surface, pos, screen_pos, available_size=None):
-        if self.draw_old_texture(surface, pos, available_size):
+    def render(self, available_size):
+        if available_size == self.current_size:
             return
         self.draw(available_size)
-        surface.blit(self.texture, (pos.x, pos.y))
-        self.render_rect = pygame.Rect(screen_pos.x, screen_pos.y, self.texture.get_width(), self.texture.get_height())
 
 
 def set_item_heights(items):
