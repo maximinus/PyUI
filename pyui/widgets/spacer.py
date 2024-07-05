@@ -1,5 +1,6 @@
 import pygame
 
+from pyui.base import Size
 from pyui.widget_base import Widget
 
 
@@ -11,6 +12,7 @@ class Spacer(Widget):
         self.size = size
         # we never draw this widget
         self.redraw = False
+        self.current_size = Size(0, 0)
 
     @property
     def min_size(self):
@@ -19,5 +21,6 @@ class Spacer(Widget):
     def draw(self, new_size=None):
         pass
 
-    def render(self, surface, pos, screen_pos, available_size=None):
-        self.render_rect = pygame.Rect(screen_pos.x, screen_pos.y, self.size.width, self.size.height)
+    def render(self, available_size):
+        if self.texture is None:
+            self.texture = self.get_texture(Size(0, 0))

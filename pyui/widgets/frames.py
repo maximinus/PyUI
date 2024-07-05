@@ -12,7 +12,7 @@ from pyui.widget_base import Widget
 # it is an error to ask for a margin that is larger than the root size
 
 class Root(Widget):
-    def __init__(self, pos=None, modal=False, size=None, widget=None, margin=None, background=None):
+    def __init__(self, size, pos=None, modal=False, widget=None, margin=None, background=None):
         super().__init__(margin=margin)
         if pos is None:
             pos = Position(0, 0)
@@ -25,21 +25,8 @@ class Root(Widget):
         if background is None:
             background = THEME.color['widget_background']
         self.background = background
-        if size is None:
-            # infer the size from the widget
-            if widget is None:
-                self.size = Size(0, 0).add_margin(self.margin)
-            else:
-                self.size = widget.min_size
-                self.size = self.size.add_margin(self.margin)
-        else:
-            self.size = size
-        self.verify_margins()
+        self.current_size = size
         self.texture = None
-
-    def verify_margins(self):
-        width = self.margin.left + self.margin.right
-        height = self.margin.top + self.margin.bottom
 
     @property
     def container(self):
@@ -54,35 +41,26 @@ class Root(Widget):
         # because the size includes the margin, as this is a fixed widget size
         return self.size
 
-    def update_widget(self, widget):
-        self.widget = widget
-        self.size = widget.min_size()
-        self.texture = self.get_texture(self.size)
-
     def update_size(self, new_size):
-        self.size = new_size
-        self.texture = self.get_texture(self.size)
+        self.current_size = new_size
+        self.draw(new_size)
 
-    def draw(self, new_size=None):
+    def draw(self, new_size):
         # frame sizes are fixed
-        self.texture = self.get_texture(self.size)
+        self.texture = self.get_texture(self.current_size)
         if self.background is not None:
             self.texture.fill(self.background)
-        widget_space = self.size.subtract_margin(self.margin)
+        widget_space = self.current_size.subtract_margin(self.margin)
         # when we draw, we need to tell the next widget where it is relative to us
         # so here, for example, we are telling the widget to render to the given position,
         # which is an offset into our texture: we also need to tell it where that is on screen
         screen_pos = Position(self.position.x + self.margin.left, self.position.y + self.margin.top)
         self.widget.render(self.texture, Position(self.margin.left, self.margin.right), screen_pos, widget_space)
 
-    def render(self, surface, _1, _2, available_size=None):
-        if self.draw_old_texture(surface, self.position, available_size):
-            return
-        self.draw()
-        surface.blit(self.texture, (self.position.x, self.position.y))
-        full_size = self.min_size
-        # the position is our position
-        self.render_rect = pygame.Rect(self.position.x, self.position.y, full_size.width, full_size.height)
+    def render(self, available_size):
+        # available size is ignored here, we always fit the current size
+        if self.texture is not None:
+            self.draw(self.current_size)
 
     def update_dirty_rects(self, surface, dirty_rects):
         # When a widget says it is dirty, it should redraw itself to its old render_rect settings
@@ -113,21 +91,18 @@ class Frame(Root):
     # the size does NOT include the margin; this means that if you set a frame to be 100x100 and it has a margin,
     # then the margin will decrease the effective size of the widget
     # a frame always needs a position
-    def render(self, surface, _1, _2, available_size=None):
+    def render(self, available_size):
         # the available size should be ignored with a frame; it is not sent from the top level,
         # and the size is fixed anyway
-        self.texture = self.get_texture(self.size)
+        self.texture = self.get_texture(self.current_size)
         if self.background is not None:
             self.texture.fill(self.background)
 
-        size_with_margin = self.size.subtract_margin(self.margin)
+        size_with_margin = self.current_size.subtract_margin(self.margin)
         # the effective render size is the size of the frame minus it's margin
         if self.widget is not None:
             self.widget.render(self.texture, Position(self.margin.left, self.margin.top), self.position, size_with_margin)
-        # now render to the screen
-        surface.blit(self.texture, (self.position.x, self.position.y))
-        self.render_rect = pygame.Rect(self.position.x, self.position.y,
-                                       self.texture.get_width(), self.texture.get_height())
+            self.texture.blit(self.widget.texture, (self.margin.left, self.margin.top))
 
 
 class Border(Root):
@@ -143,13 +118,13 @@ class Border(Root):
         self.middle = Size(4, 8)
         super().__init__(pos, modal=modal, background=background, widget=widget)
 
-    def render(self, surface, _1, _2, available_size=None):
-        if self.draw_old_texture(surface, self.position, available_size):
+    def render(self, available_size):
+        if available_size == self.current_size:
             return
 
         # in this case the size of the widget does NOT include the border, as it surrounds the widget
         # so the texture size must also include this
-        self.texture = self.get_texture(self.size)
+        self.texture = self.get_texture(self.current_size)
 
         x = 0
         y = 0
@@ -199,15 +174,13 @@ class Border(Root):
         x += self.corner.width
         y += self.corner.height
 
-        pygame.draw.rect(self.texture, self.background, (x, y, render_size.width, render_size.height))
+        if self.background is not None:
+            pygame.draw.rect(self.texture, self.background, (x, y, render_size.width, render_size.height))
         # TODO: Fix this +2. It is to do with overlap on the 9-patch; we need to define a better 9-patch object
         border_size = self.corner.width + (self.middle.width // 2) - 2
         if self.widget is not None:
-            screen_position = Position(self.position.x + self.margin.left, self.position.y + self.margin.top)
-            self.widget.render(self.texture, Position(border_size, border_size), screen_position, render_size)
-        self.render_rect = pygame.Rect(self.position.x, self.position.y, render_size.width, render_size.height)
-        # finally, blit to screen
-        surface.blit(self.texture, (self.position.x, self.position.y))
+            self.widget.render(render_size)
+            self.texture.blit(self.widget.texture, (x, y))
 
     def get_texture(self, size):
         # the texture size has to include the border margin

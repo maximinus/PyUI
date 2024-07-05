@@ -14,9 +14,9 @@ class ColorRect(Widget):
     def min_size(self):
         return self.size.add_margin(self.margin)
 
-    def draw(self, new_size=None):
-        new_size = self.get_ideal_draw_size(new_size)
+    def draw(self, new_size):
         self.texture = self.get_texture(new_size)
+        self.current_size = new_size
 
         if self.background is not None:
             self.texture.fill(self.background)
@@ -24,7 +24,7 @@ class ColorRect(Widget):
         # only draw to the space we need to
         x = self.margin.left
         y = self.margin.top
-        if self.expand.is_horizontal and self.fill.is_horizontal:
+        if self.expand.is_horizontal:
             # fill the space
             width = new_size.width - (self.margin.left + self.margin.right)
         else:
@@ -37,7 +37,7 @@ class ColorRect(Widget):
                 x += (new_size.width - width_plus_margin) // 2
             elif horiz_align == Align.RIGHT:
                 x += (new_size.width - width_plus_margin)
-        if self.expand.is_vertical and self.fill.is_vertical:
+        if self.expand.is_vertical:
             height = new_size.height - (self.margin.top - self.margin.bottom)
         else:
             height = self.size.height
@@ -51,11 +51,8 @@ class ColorRect(Widget):
 
         pygame.draw.rect(self.texture, self.color, (x, y, width, height))
 
-    def render(self, surface, pos, screen_pos, available_size=None):
-        # if we have a texture that currently matches the size, then simply render that
-        if self.draw_old_texture(surface, pos, available_size):
+    def render(self, available_size):
+        # if we have a texture that currently matches the size, do nothing
+        if available_size == self.current_size:
             return
         self.draw(available_size)
-        surface.blit(self.texture, (pos.x, pos.y))
-        self.render_rect = pygame.Rect(screen_pos.x, screen_pos.y,
-                                       self.texture.get_width(), self.texture.get_height())

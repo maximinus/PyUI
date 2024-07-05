@@ -22,11 +22,9 @@ class Image(Widget):
         if self.background is not None:
             self.texture.fill(self.background)
         self.texture.blit(self.image, (self.margin.left, self.margin.top))
+        self.current_size = new_size
 
-    def render(self, surface, pos, screen_pos, available_size=None):
-        if self.draw_old_texture(surface, pos, available_size):
+    def render(self, available_size):
+        if available_size == self.current_size:
             return
         self.draw(available_size)
-        surface.blit(self.texture, (pos.x, pos.y))
-        render_size = self.min_size
-        self.render_rect = pygame.Rect(screen_pos.x, screen_pos.y, render_size.width, render_size.height)
