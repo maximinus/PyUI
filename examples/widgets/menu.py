@@ -51,7 +51,7 @@ if __name__ == '__main__':
     screens = [screen1(), screen2(), screen3(), screen4(), screen5()]
     for single_screen in screens:
         display.fill(BACKGROUND_COLOR)
-        single_screen.draw(display)
+        single_screen.render(display, Position(0, 0), Position(0, 0), None)
         pygame.display.flip()
         await_keypress()
     pygame.quit()
