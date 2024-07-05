@@ -1,6 +1,6 @@
 import pygame
 
-from pyui.base import Size
+from pyui.base import Size, Position
 from pyui.widget_base import Widget
 
 
@@ -21,6 +21,7 @@ class Spacer(Widget):
     def draw(self, new_size=None):
         pass
 
-    def render(self, available_size):
+    def render(self, available_size, offset=Position(0, 0)):
+        self.frame_offset = offset
         if self.texture is None:
             self.texture = self.get_texture(Size(0, 0))

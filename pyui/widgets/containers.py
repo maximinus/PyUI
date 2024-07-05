@@ -153,11 +153,6 @@ class HBox(Box):
             # no need to add the margin because it is computed in the widget size
             x += widget_size.width
 
-    def render(self, available_size):
-        if available_size == self.current_size:
-            return
-        self.draw(available_size)
-
 
 class VBox(Box):
     def __init__(self, widgets=None, background=None, **kwargs):
@@ -238,8 +233,3 @@ class VBox(Box):
             self.texture.blit(widget.texture, (x, y))
             # no need to add the margin because it is computed in the widget size
             y += widget_size.height
-
-    def render(self, available_size):
-        if available_size == self.current_size:
-            return
-        self.draw(available_size)

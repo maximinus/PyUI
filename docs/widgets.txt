@@ -68,6 +68,10 @@ Now we cycle through all the containers. If a container has this rect it simply 
 We do this from the tips to the root, so finally the frame is updated.
 The main loop knows where the frames are, so it can do the same to the display.
 
+It helps things enormously to contain the widget offset from its root frame
+This way when a widget has to inform the app it is dirty, we do not need to recurse through the widgets
+Thus when rendering, we pass an offset. This is generally (0, 0), or the margin offset.
+
 
 Thoughts on spacing
 ===================

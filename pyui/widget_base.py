@@ -30,6 +30,7 @@ class Widget:
         self.texture = None
         self.background = background
         self.current_size = Size(-1, -1)
+        self.frame_offset = Position(0, 0)
 
     @property
     def min_size(self):
@@ -40,9 +41,10 @@ class Widget:
     def container(self):
         return False
 
-    def render(self, available_size):
+    def render(self, available_size, offset=Position(0, 0)):
         if available_size == self.current_size:
             return
+        self.frame_offset = offset
         self.draw(available_size)
 
     def draw(self, new_size):

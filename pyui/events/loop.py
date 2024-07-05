@@ -78,8 +78,9 @@ def get_ordered_callbacks(frame):
     def depth_first_search(widget):
         if widget is None:
             return
-        for child in widget.children:
-            depth_first_search(child)
+        if widget.container:
+            for child in widget.children:
+                depth_first_search(child)
         all_widgets.append(widget)
 
     # iterate over list and return all callbacks
@@ -239,7 +240,9 @@ class PyUIApp:
             if frame_event.frame in frame_rects:
                 # get the render rects of the dirty widgets here
                 for widget in frame_rects[frame_event.frame]:
-                    dirty_areas.append(widget.render_rect)
+                    # TODO: How do we know what or where to render?
+                    #dirty_areas.append(widget.render_rect)
+                    dirty_areas.append(pygame.Rect(0, 0, 0, 0))
 
         # we now have a set of dirty areas that need to be drawn to the screen
         # we now go through the frames in reverse order, and get them to update to the screen the dirty areas

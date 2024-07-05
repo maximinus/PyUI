@@ -1,6 +1,6 @@
 import pygame
 
-from pyui.base import Size, Align
+from pyui.base import Size, Align, Position
 from pyui.widget_base import Widget
 from pyui.theme import THEME
 
@@ -15,11 +15,11 @@ class TextLabel(Widget):
             self.style = THEME.text['menu']
         self.font = pygame.font.Font(self.style.font, self.style.size)
         self.image = self.font.render(text, True, self.style.color)
-        self.size = Size(self.image.get_width(), self.image.get_height())
+        self.text_size = Size(self.image.get_width(), self.image.get_height())
 
     @property
     def min_size(self):
-        return self.size.add_margin(self.margin)
+        return self.text_size.add_margin(self.margin)
 
     def draw(self, new_size):
         self.texture = self.get_texture(new_size)
@@ -45,8 +45,3 @@ class TextLabel(Widget):
 
         self.texture.blit(self.image, (x, y))
         self.current_size = new_size
-
-    def render(self, available_size):
-        if available_size == self.current_size:
-            return
-        self.draw(available_size)

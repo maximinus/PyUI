@@ -90,7 +90,7 @@ class Menu(Border):
                     return True
                 # update the new rect
                 widget.highlighted = True
-                self.draw()
+                self.draw(self.current_size)
                 app.set_dirty(widget)
                 # don't return early, we still to check the other widgets
             else:
@@ -112,8 +112,8 @@ class MenuHeader(TextLabel):
         self.menu_showing = False
 
     def get_menu_position(self):
-        height_offset = self.min_size.height
-        return Position(self.render_rect.x, height_offset)
+        # TODO: Fix this
+        return Position(50, 50)
 
     def clicked(self, event):
         if self.menu_showing:
@@ -122,7 +122,7 @@ class MenuHeader(TextLabel):
         # we don't really need the event
         # we update our highlight
         self.background = THEME.color['menu_header_highlight']
-        self.draw(None)
+        self.draw(self.current_size)
         app.set_dirty(self)
         # we place a menu below us
         self.menu.position = self.get_menu_position()

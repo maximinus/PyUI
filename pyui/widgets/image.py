@@ -1,6 +1,6 @@
 import pygame
 
-from pyui.base import Expand, Size, Align
+from pyui.base import Expand, Size, Align, Position
 from pyui.widget_base import Widget
 
 
@@ -23,8 +23,3 @@ class Image(Widget):
             self.texture.fill(self.background)
         self.texture.blit(self.image, (self.margin.left, self.margin.top))
         self.current_size = new_size
-
-    def render(self, available_size):
-        if available_size == self.current_size:
-            return
-        self.draw(available_size)

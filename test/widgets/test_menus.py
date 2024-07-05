@@ -132,7 +132,7 @@ class TestMenuItemHeights(SDLTest):
         # use 2 different text styles, but the final heights should be equal
         style = THEME.text['default']
         item1 = MenuItem('Hello', style=style)
-        style.size = 40
+        style.text_size = 40
         item2 = MenuItem('Hello', style=style)
         _ = Menu(Position(0, 0), items=[item1, item2])
         # the min size height of both should be the same

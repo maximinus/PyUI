@@ -1,6 +1,6 @@
 import pygame
 
-from pyui.base import Size, Expand, Align
+from pyui.base import Size, Expand, Align, Position
 from pyui.widget_base import Widget
 
 
@@ -50,9 +50,3 @@ class ColorRect(Widget):
                 y += (new_size.height - height_plus_margin)
 
         pygame.draw.rect(self.texture, self.color, (x, y, width, height))
-
-    def render(self, available_size):
-        # if we have a texture that currently matches the size, do nothing
-        if available_size == self.current_size:
-            return
-        self.draw(available_size)

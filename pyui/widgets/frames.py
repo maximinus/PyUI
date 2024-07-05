@@ -38,8 +38,8 @@ class Root(Widget):
 
     @property
     def min_size(self):
-        # because the size includes the margin, as this is a fixed widget size
-        return self.size
+        # the size includes the margin, as this is a fixed widget size
+        return self.current_size
 
     def update_size(self, new_size):
         self.current_size = new_size
@@ -55,9 +55,9 @@ class Root(Widget):
         # so here, for example, we are telling the widget to render to the given position,
         # which is an offset into our texture: we also need to tell it where that is on screen
         screen_pos = Position(self.position.x + self.margin.left, self.position.y + self.margin.top)
-        self.widget.render(self.texture, Position(self.margin.left, self.margin.right), screen_pos, widget_space)
+        self.widget.render(widget_space, Position(self.margin.left, self.margin.top))
 
-    def render(self, available_size):
+    def render(self, available_size, offset=Position(0, 0)):
         # available size is ignored here, we always fit the current size
         if self.texture is not None:
             self.draw(self.current_size)
@@ -91,7 +91,7 @@ class Frame(Root):
     # the size does NOT include the margin; this means that if you set a frame to be 100x100 and it has a margin,
     # then the margin will decrease the effective size of the widget
     # a frame always needs a position
-    def render(self, available_size=None):
+    def render(self, available_size=None, offset=Position(0, 0)):
         # the available size should be ignored with a frame; it is not sent from the top level,
         # and the size is fixed anyway
         self.texture = self.get_texture(self.current_size)
@@ -101,7 +101,8 @@ class Frame(Root):
         size_with_margin = self.current_size.subtract_margin(self.margin)
         # the effective render size is the size of the frame minus it's margin
         if self.widget is not None:
-            self.widget.render(size_with_margin)
+            # since this is the root frame, the offset is just the margin
+            self.widget.render(size_with_margin, Position(self.margin.left, self.margin.top))
             self.texture.blit(self.widget.texture, (self.margin.left, self.margin.top))
 
 
@@ -117,11 +118,11 @@ class Border(Root):
         self.corner = Size(8, 8)
         self.middle = Size(4, 8)
         super().__init__(pos, modal=modal, background=background, widget=widget)
+        # where we draw this widget is adjusted by the border
+        # TODO: we should change so the size is adjusted so that it is a widget with an inside widget
+        # and the size we automatically adjust
 
-    def render(self, available_size):
-        if available_size == self.current_size:
-            return
-
+    def draw(self, new_size):
         # in this case the size of the widget does NOT include the border, as it surrounds the widget
         # so the texture size must also include this
         self.texture = self.get_texture(self.current_size)
@@ -179,7 +180,7 @@ class Border(Root):
         # TODO: Fix this +2. It is to do with overlap on the 9-patch; we need to define a better 9-patch object
         border_size = self.corner.width + (self.middle.width // 2) - 2
         if self.widget is not None:
-            self.widget.render(render_size)
+            self.widget.render(render_size, Position(self.margin.left, self.margin.top))
             self.texture.blit(self.widget.texture, (x, y))
 
     def get_texture(self, size):
