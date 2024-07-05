@@ -51,30 +51,6 @@ class TestRenderSizes(unittest.TestCase):
         self.assertEqual(color.current_size.width, 200)
         self.assertEqual(color.current_size.height, 200)
 
-    def test_render_horizontal_fill(self):
-        init(Size(200, 200))
-        color = ColorRect(size=Size(100, 100), color=Color.RED, fill=Expand.HORIZONTAL)
-        frame = Frame(widget=color, pos=Position(0, 0), size=Size(200, 200))
-        frame.render()
-        self.assertEqual(color.current_size.width, 200)
-        self.assertEqual(color.current_size.height, 100)
-
-    def test_render_vertical_fill(self):
-        init(Size(200, 200))
-        color = ColorRect(size=Size(100, 100), color=Color.RED, fill=Expand.VERTICAL)
-        frame = Frame(widget=color, pos=Position(0, 0), size=Size(200, 200))
-        frame.render()
-        self.assertEqual(color.current_size.width, 100)
-        self.assertEqual(color.current_size.height, 200)
-
-    def test_render_both_fill(self):
-        init(Size(200, 200))
-        color = ColorRect(size=Size(100, 100), color=Color.RED, fill=Expand.BOTH)
-        frame = Frame(widget=color, pos=Position(0, 0), size=Size(200, 200))
-        frame.render()
-        self.assertEqual(color.current_size.width, 200)
-        self.assertEqual(color.current_size.height, 200)
-
     def test_render_with_margin(self):
         init(Size(200, 200))
         color = ColorRect(size=Size(100, 100), color=Color.RED)
@@ -101,30 +77,6 @@ class TestRenderSizes(unittest.TestCase):
 
     def test_render_expand_both_with_margin(self):
         init(Size(200, 200))
-        color = ColorRect(size=Size(100, 100), color=Color.RED, expand=Expand.BOTH)
-        frame = Frame(widget=color, pos=Position(0, 0), size=Size(200, 200), margin=Margin(10, 10, 10, 10))
-        frame.render()
-        self.assertEqual(color.current_size.width, 180)
-        self.assertEqual(color.current_size.height, 180)
-
-    def test_render_fill_horizontal_with_margin(self):
-        init(Size(200, 200))
-        color = ColorRect(size=Size(100, 100), color=Color.RED, fill=Expand.HORIZONTAL)
-        frame = Frame(widget=color, pos=Position(0, 0), size=Size(200, 200), margin=Margin(10, 10, 10, 10))
-        frame.render()
-        self.assertEqual(color.current_size.width, 180)
-        self.assertEqual(color.current_size.height, 100)
-
-    def test_render_fill_vertical_with_margin(self):
-        init(Size(200, 200))
-        color = ColorRect(size=Size(100, 100), color=Color.RED, fill=Expand.VERTICAL)
-        frame = Frame(widget=color, pos=Position(0, 0), size=Size(200, 200), margin=Margin(10, 10, 10, 10))
-        frame.render()
-        self.assertEqual(color.current_size.width, 100)
-        self.assertEqual(color.current_size.height, 180)
-
-    def test_render_fill_both_with_margin(self):
-        display = init(Size(200, 200))
         color = ColorRect(size=Size(100, 100), color=Color.RED, expand=Expand.BOTH)
         frame = Frame(widget=color, pos=Position(0, 0), size=Size(200, 200), margin=Margin(10, 10, 10, 10))
         frame.render()

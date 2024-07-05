@@ -15,9 +15,14 @@ class ColorRect(Widget):
         return self.size.add_margin(self.margin)
 
     def draw(self, new_size):
-        self.texture = self.get_texture(new_size)
-        self.current_size = new_size
+        # the new size is the size we got, it doesn't mean the size we asked for
+        self.current_size = self.min_size
+        if self.expand.is_horizontal:
+            self.current_size.width = max(self.current_size.width, new_size.width)
+        if self.expand.is_vertical:
+            self.current_size.height = max(self.current_size.height, new_size.height)
 
+        self.texture = self.get_texture(self.current_size)
         if self.background is not None:
             self.texture.fill(self.background)
 
