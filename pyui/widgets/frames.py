@@ -66,7 +66,7 @@ class Root(Widget):
 
     def render(self, available_size, offset=Position(0, 0)):
         # available size is ignored here, we always fit the current size
-        if self.texture is not None:
+        if self.texture is None:
             self.draw(self.current_size)
 
     def update_dirty_rects(self, surface, dirty_rects):
