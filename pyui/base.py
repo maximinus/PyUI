@@ -64,10 +64,18 @@ class Position:
         self.y = y
 
     def __repr__(self):
-        return f'Pos(x={self.x}, y={self.y})'
+        return f'Position(x={self.x}, y={self.y})'
 
     def __add__(self, other):
         return Position(self.x + other.x, self.y + other.y)
+
+    def __eq__(self, other):
+        if isinstance(other, Position):
+            return self.x == other.y and self.x == other.y
+        return False
+
+    def copy(self):
+        return Position(self.x, self.y)
 
 
 class Size:

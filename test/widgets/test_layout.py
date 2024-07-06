@@ -2,7 +2,7 @@ import pygame
 import unittest
 
 from pyui.setup import init
-from pyui.base import Color, Expand, Size, Margin, Align, Position
+from pyui.base import Color, Expand, Size, Margin, Align
 from pyui.widgets import HBox, VBox, ColorRect, Spacer, TextLabel, Border
 
 

@@ -145,13 +145,17 @@ class HBox(Box):
         y = self.margin.top
         all_sizes = self.calculate_sizes(total_size)
 
+        # at this point we have our own frame offset set
+        widget_offset = self.frame_offset + Position(x, y)
+
         for widget, widget_size in zip(self.widgets, all_sizes):
             # this needs the screen position added, we must do it now because this could another Box
-            widget.render(widget_size)
+            widget.render(widget_size, offset=widget_offset.copy())
             # now copy this texture over to this widget
             self.texture.blit(widget.texture, (x, y))
             # no need to add the margin because it is computed in the widget size
             x += widget_size.width
+            widget_offset.x += widget_size.width
 
 
 class VBox(Box):
@@ -228,8 +232,11 @@ class VBox(Box):
         y = self.margin.top
         all_sizes = self.calculate_sizes(total_size)
 
+        widget_offset = self.frame_offset + Position(x, y)
+
         for widget, widget_size in zip(self.widgets, all_sizes):
-            widget.render(widget_size)
+            widget.render(widget_size, offset=widget_offset.copy())
             self.texture.blit(widget.texture, (x, y))
             # no need to add the margin because it is computed in the widget size
             y += widget_size.height
+            widget_offset.y += widget_size.height

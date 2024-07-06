@@ -1,4 +1,3 @@
-import pygame
 import unittest
 
 from pyui.base import Margin
