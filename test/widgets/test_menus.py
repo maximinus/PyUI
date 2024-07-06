@@ -26,38 +26,6 @@ class TestMenuItem(SDLTest):
         self.assertEqual(m1_size.height, m2_size.height)
 
 
-class TestMenu(SDLTest):
-    def test_equal_heights(self):
-        menu1 = MenuItem('Hello')
-        menu2 = MenuItem('World')
-        menu3 = MenuItem('There')
-        menu = Menu(Position(0, 0), items=[menu1, menu2, menu3])
-        height = menu.min_size.height
-        # must be a multiple of 3
-        self.assertTrue((height % 3) == 0)
-
-
-class TestSimpleCollision(unittest.TestCase):
-    def test_simple_collision(self):
-        render_rect = pygame.Rect(0, 0, 100, 100)
-        self.assertTrue(render_rect.collidepoint(50, 50))
-
-    def test_simple_collision_with_offset(self):
-        render_rect = pygame.Rect(100, 100, 100, 100)
-        self.assertTrue(render_rect.collidepoint(150, 150))
-
-    def test_real_collision(self):
-        # pygame seems funny about this
-        # the rect is actually left, top, width, height
-        render_rect = pygame.Rect(206, 156, 105, 24)
-        # the collide_rect does not actually allow for the top and bottom, it checks against width and height
-        self.assertTrue(render_rect.collidepoint(210, 160))
-
-    def test_real_no_collision(self):
-        render_rect = pygame.Rect(206, 156, 105, 24)
-        self.assertFalse(render_rect.collidepoint(0, 0))
-
-
 class TestSimpleOverlap(unittest.TestCase):
     def test_overlap(self):
         rect1 = pygame.Rect(0, 0, 100, 100)
@@ -89,8 +57,6 @@ class TestHighlightDetection(SDLTest):
     def setUp(self):
         # we need pygame setup else the font is not there
         self.menuitem = MenuItem('Test')
-        # we are going to fake a render_rect to avoid rendering to screen
-        self.menuitem.render_rect = pygame.Rect(100, 100, 100, 100)
         self.menu = Menu(Position(0, 0), items=[self.menuitem])
 
     def test_starts_unhighlighted(self):

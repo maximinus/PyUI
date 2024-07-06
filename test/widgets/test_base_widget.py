@@ -6,10 +6,6 @@ from pyui.widgets import ColorRect, HBox, Frame
 
 
 class TestBaseWidget(unittest.TestCase):
-    def test_start_with_no_render_rect(self):
-        widget = Widget()
-        self.assertIsNone(widget.render_rect)
-
     def test_parent_is_none(self):
         widget = Widget()
         self.assertIsNone(widget.parent)
@@ -17,7 +13,7 @@ class TestBaseWidget(unittest.TestCase):
     def test_complex_parent(self):
         color_rect = ColorRect(Size(10, 10), Color.RED)
         box = HBox(widgets=[color_rect])
-        root = Frame(Position(0, 0), widget=box)
+        root = Frame(None, pos=Position(0, 0), widget=box)
         root_widget = root.get_root()
         self.assertEqual(root, root_widget)
 

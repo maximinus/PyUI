@@ -18,7 +18,7 @@ def screen2():
     box = HBox(widgets=[ColorRect(Size(50, 50), Color.BLUE),
                         TextLabel('Hello, World', margin=Margin(2, 0, 0, 0))],
                margin=Margin(4, 4, 4, 4))
-    return Border(Position(100, 100), widget=box)
+    return Border(None, Position(100, 100), widget=box)
 
 
 def screen3():
@@ -26,7 +26,7 @@ def screen3():
     box = HBox(widgets=[Image(get_asset('icons/open.png')),
                         TextLabel('Hello, World', margin=Margin(4, 0, 0, 0))],
                margin=Margin(4, 4, 4, 4))
-    return Border(Position(100, 100), widget=box)
+    return Border(None, Position(100, 100), widget=box)
 
 
 def screen4():

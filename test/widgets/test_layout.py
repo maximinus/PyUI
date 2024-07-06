@@ -72,12 +72,12 @@ class TestOldFailingExamples(unittest.TestCase):
         min_size = box.min_size
         self.assertEqual(min_size.height, 50)
         # if it's in a border, it will be bigger by twice the corner height
-        border = Border(Position(0, 0), widget=box)
+        border = Border(Size(100, 100), widget=box)
         min_size = border.min_size
-        # the border size is the size of the widget inside the border
-        self.assertEqual(min_size.height, 50)
+        # the border size is the size of it's defined size + margin
+        self.assertEqual(min_size.height, 100)
         # which should be equal to it's size
-        self.assertEqual(border.size.height, min_size.height)
+        self.assertEqual(border.current_size.height, min_size.height)
 
     def test_5(self):
         box = HBox(widgets=[ColorRect(Size(50, 50), Color.BLUE, margin=Margin(10, 10, 10, 10)),

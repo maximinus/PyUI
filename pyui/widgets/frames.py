@@ -25,7 +25,14 @@ class Root(Widget):
         if background is None:
             background = THEME.color['widget_background']
         self.background = background
-        self.current_size = size
+        # if size is None, then assume the min size of the widget, or (0,0) if no widget
+        if size is None:
+            if widget is None:
+                size = Size(0, 0)
+            else:
+                size = widget.min_size
+        # the size we have must have the margin added
+        self.current_size = size.add_margin(self.margin)
         self.texture = None
 
     @property
@@ -107,7 +114,7 @@ class Frame(Root):
 
 
 class Border(Root):
-    def __init__(self, pos, modal=False, background=None, widget=None):
+    def __init__(self, size, pos=None, modal=False, background=None, widget=None):
         # the border contains another widget, however the default will be to grab the default size of the widget
         # there is a resize method if you want to change this
         # the actual size of the Border will be the child widget min size + border size
@@ -117,7 +124,7 @@ class Border(Root):
         self.image = get_asset('nine_patch/frame.png')
         self.corner = Size(8, 8)
         self.middle = Size(4, 8)
-        super().__init__(pos, modal=modal, background=background, widget=widget)
+        super().__init__(size, pos=pos, modal=modal, background=background, widget=widget)
         # where we draw this widget is adjusted by the border
         # TODO: we should change so the size is adjusted so that it is a widget with an inside widget
         # and the size we automatically adjust

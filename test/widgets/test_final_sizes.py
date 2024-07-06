@@ -64,21 +64,22 @@ class TestRenderSizes(unittest.TestCase):
         color = ColorRect(size=Size(100, 100), color=Color.RED, expand=Expand.HORIZONTAL)
         frame = Frame(widget=color, pos=Position(0, 0), size=Size(200, 200), margin=Margin(10, 10, 10, 10))
         frame.render()
-        self.assertEqual(color.current_size.width, 180)
+        self.assertEqual(color.current_size.width, 200)
         self.assertEqual(color.current_size.height, 100)
 
     def test_render_expand_vertical_with_margin(self):
         init(Size(200, 200))
         color = ColorRect(size=Size(100, 100), color=Color.RED, expand=Expand.VERTICAL)
+        # the final size of the frame is the size passed + the margin
         frame = Frame(widget=color, pos=Position(0, 0), size=Size(200, 200), margin=Margin(10, 10, 10, 10))
         frame.render()
         self.assertEqual(color.current_size.width, 100)
-        self.assertEqual(color.current_size.height, 180)
+        self.assertEqual(color.current_size.height, 200)
 
     def test_render_expand_both_with_margin(self):
         init(Size(200, 200))
         color = ColorRect(size=Size(100, 100), color=Color.RED, expand=Expand.BOTH)
-        frame = Frame(widget=color, pos=Position(0, 0), size=Size(200, 200), margin=Margin(10, 10, 10, 10))
+        frame = Frame(Size(200, 200), widget=color, pos=Position(0, 0), margin=Margin(10, 10, 10, 10))
         frame.render()
-        self.assertEqual(color.current_size.width, 180)
-        self.assertEqual(color.current_size.height, 180)
+        self.assertEqual(color.current_size.width, 200)
+        self.assertEqual(color.current_size.height, 200)

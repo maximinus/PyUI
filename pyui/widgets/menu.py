@@ -65,7 +65,7 @@ class Menu(Border):
             for item in set_item_heights(items):
                 box.add_widget(item)
         # menus are modal by default
-        super().__init__(pos, widget=box, modal=True)
+        super().__init__(None, pos, widget=box, modal=True)
         self.connect(Event.MouseMove, self.mouse_move)
         # we also need to "cancel" the menu. This is done by clicking the main menu outside the box
         self.connect(Event.ClickOutside, self.cancel_menu)
@@ -97,7 +97,7 @@ class Menu(Border):
                 # we are not over the menu item
                 if widget.highlighted:
                     widget.highlighted = False
-                    self.draw()
+                    self.draw(self.current_size)
                     app.set_dirty(widget)
 
 

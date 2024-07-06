@@ -133,11 +133,3 @@ class TestHBoxHeights(unittest.TestCase):
         sizes = box.calculate_sizes(Size(200, 200))
         self.assertEqual(sizes[0].height, 200)
         self.assertEqual(sizes[1].height, 200)
-
-
-class TestExpandingHBox(unittest.TestCase):
-    box1 = HBox(expand=Expand.HORIZONTAL)
-    box2 = HBox(expand=Expand.NONE)
-    box1.add_widget(ColorRect(Size(10, 10), Color.RED))
-    box2.add_widget(ColorRect(Size(10, 10), Color.RED))
-    box3 = HBox(widgets=[box1, box2])

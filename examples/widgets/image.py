@@ -10,12 +10,12 @@ BACKGROUND_COLOR = (80, 80, 80)
 
 def screen1():
     texture = get_asset('images/dog.png')
-    return Border(Position(100, 100), widget=Image(texture, margin=Margin(20, 20, 20, 20)))
+    return Border(None, Position(100, 100), widget=Image(texture, margin=Margin(20, 20, 20, 20)))
 
 
 def screen2():
     texture = get_asset('images/dog.png')
-    return Border(Position(150, 150), widget=Image(texture, margin=Margin(60, 60, 60, 60)), background=(100, 100, 0))
+    return Border(None, Position(150, 150), widget=Image(texture, margin=Margin(60, 60, 60, 60)), background=(100, 100, 0))
 
 
 if __name__ == '__main__':

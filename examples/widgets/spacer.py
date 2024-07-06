@@ -15,7 +15,7 @@ def screen1():
     box = HBox(widgets=[ColorRect(Size(50, 50), Color.BLUE, margin=Margin(10, 10, 10, 10)),
                         Spacer(Size(200, 0)),
                         ColorRect(Size(50, 50), Color.BLUE, margin=Margin(10, 10, 10, 10))])
-    return Border(Position(100, 100), background=Color.BACKGROUND, widget=box)
+    return Border(None, Position(100, 100), background=Color.BACKGROUND, widget=box)
 
 
 if __name__ == '__main__':
