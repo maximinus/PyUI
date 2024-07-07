@@ -5,6 +5,9 @@ from pyui.widget_base import Widget
 
 
 class ColorRect(Widget):
+    # ColorRects are primarily a testing widget
+    # If ColorRects expand, then they fill the space with the colored rect
+
     def __init__(self, size, color, **kwargs):
         super().__init__(**kwargs)
         self.size = size
@@ -15,43 +18,25 @@ class ColorRect(Widget):
         return self.size.add_margin(self.margin)
 
     def draw(self, new_size):
-        # the new size is the size we got, it doesn't mean the size we asked for
-        self.current_size = self.min_size
-        if self.expand.is_horizontal:
-            self.current_size.width = max(self.current_size.width, new_size.width)
-        if self.expand.is_vertical:
-            self.current_size.height = max(self.current_size.height, new_size.height)
-
+        self.current_size = new_size
         self.texture = self.get_texture(self.current_size)
         if self.background is not None:
             self.texture.fill(self.background)
 
         # only draw to the space we need to
-        x = self.margin.left
-        y = self.margin.top
+        draw_pos = Position(self.margin.left, self.margin.top)
         if self.expand.is_horizontal:
             # fill the space
             width = new_size.width - (self.margin.left + self.margin.right)
         else:
             # the size does not include the width, but it will have been calculated in the min size
             width = self.size.width
-            width_plus_margin = width + self.margin.left + self.margin.right
-            # and align here as well, since we are not filling
-            horiz_align = self.align.horizontal()
-            if horiz_align == Align.CENTER:
-                x += (new_size.width - width_plus_margin) // 2
-            elif horiz_align == Align.RIGHT:
-                x += (new_size.width - width_plus_margin)
+
         if self.expand.is_vertical:
-            height = new_size.height - (self.margin.top - self.margin.bottom)
+            height = new_size.height - (self.margin.top + self.margin.bottom)
         else:
             height = self.size.height
-            height_plus_margin = height + self.margin.top + self.margin.bottom
-            # align here since we are not filling
-            vert_align = self.align.vertical()
-            if vert_align == Align.CENTER:
-                y += (new_size.height - height_plus_margin) // 2
-            elif vert_align == Align.BOTTOM:
-                y += (new_size.height - height_plus_margin)
 
-        pygame.draw.rect(self.texture, self.color, (x, y, width, height))
+        offset = self.get_align_offset(Size(width, height), new_size.subtract_margin(self.margin))
+        draw_pos += offset
+        pygame.draw.rect(self.texture, self.color, (draw_pos.x, draw_pos.y, width, height))

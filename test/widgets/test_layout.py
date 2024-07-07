@@ -1,9 +1,20 @@
-import pygame
 import unittest
 
-from pyui.setup import init
 from pyui.base import Color, Expand, Size, Margin, Align
 from pyui.widgets import HBox, VBox, ColorRect, Spacer, TextLabel, Border
+from test.sdl_test import SDLTest
+
+
+class TestSimpleLayouts(unittest.TestCase):
+    def test_single_colorrect(self):
+        r = ColorRect(Size(20, 20), Color.RED)
+        r.render(Size(50, 50))
+        self.assertEqual(r.current_size.width, 50)
+        self.assertEqual(r.current_size.height, 50)
+
+    def test_size_with_margin(self):
+        r = ColorRect(Size(20, 20), Color.RED, margin=Margin(10, 10, 10, 10))
+        self.assertEqual(r.min_size, Size(40, 40))
 
 
 class TestMixedBoxes(unittest.TestCase):
@@ -25,15 +36,7 @@ class TestMixedBoxes(unittest.TestCase):
         self.assertEqual(sizes[1].height, 10)
 
 
-class TestOldFailingExamples(unittest.TestCase):
-    @classmethod
-    def setUpClass(cls):
-        init()
-
-    @classmethod
-    def tearDownClass(cls):
-        pygame.quit()
-
+class TestOldFailingExamples(SDLTest):
     def test_1(self):
         # a single HBox filling all space, has 3 widgets: the middle does not fill vertically
         box = HBox(widgets=[ColorRect(Size(50, 50), Color.RED, expand=Expand.BOTH),

@@ -23,6 +23,11 @@
             "size":  18,
             "color": [50, 50, 50],
             "font": "Inconsolata"
+        },
+        "button_text": {
+            "size": 16,
+            "color": [20, 20, 20],
+            "font": 
         }
     },
     "nine_patch": {

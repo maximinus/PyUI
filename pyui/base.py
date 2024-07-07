@@ -138,3 +138,70 @@ class TextStyle:
     @classmethod
     def from_json_data(cls, data):
         return cls(data['font'], data['size'], data['color'])
+
+
+class NinePatch:
+    def __init__(self, name):
+        # 9 patch is stored in 2 files: the image and the data
+        data = get_asset(f'nine_patch/{name}.json')
+        self.top = data['top']
+        self.bottom = data['bottom']
+        self.left = data['left']
+        self.right = data['right']
+        self.size = Size(data['width'], data['height'])
+        self.image = get_asset(f'nine_patch/{name}.png')
+        self.background = data['background']
+
+    def get_margins(self):
+        return Margin(self.left, self.right, self.top, self.bottom)
+
+    def draw(self, new_size):
+        # draw the top left
+        x = 0
+        y = 0
+        image_size = new_size
+        texture = pygame.Surface((new_size.width, new_size.height), pygame.SRCALPHA)
+        pygame.draw.rect(texture, self.background, (1, 1, new_size.width - 2, new_size.height - 2))
+
+        # draw the corners
+        texture.blit(self.image, (x, y), (0, 0, self.left, self.top))
+        texture.blit(self.image, (image_size.width - self.right, 0),
+                     (self.size.width - self.right, 0, self.top, self.right))
+        texture.blit(self.image, (0, image_size.height - self.bottom),
+                     (0, self.size.height - self.bottom, self.left, self.bottom))
+        texture.blit(self.image, (image_size.width - self.right, image_size.height - self.bottom),
+                     (self.size.height - self.bottom, self.size.width - self.right, self.bottom, self.right))
+
+        # draw the borders by using pygame.transform.smoothscale to create a new image and blitting that
+
+        # 1: make an image of the required size
+        # 2: Cout out what you need
+        # 3: scale it up to the right size
+        # 4: blit to the texture
+        middle = Size(self.size.width - (self.left + self.right), self.size.height - (self.top + self.bottom))
+        center_size = Size(new_size.width - (self.left + self.right), new_size.height - (self.top + self.bottom))
+
+        left_unscaled = pygame.Surface((middle.width, middle.height), pygame.SRCALPHA)
+        left_unscaled.blit(self.image, (0, 0), (0, self.top, middle.width, middle.height))
+        left_side = pygame.transform.scale(left_unscaled, (middle.width, center_size.height))
+        texture.blit(left_side, (0, self.top))
+
+        right_unscaled = pygame.Surface((middle.width, middle.height), pygame.SRCALPHA)
+        right_unscaled.blit(self.image, (0, 0),
+                            (self.size.width - middle.width, self.top, middle.width, middle.height))
+        right_side = pygame.transform.scale(right_unscaled, (middle.width, center_size.height))
+        texture.blit(right_side, (new_size.width - middle.width, self.top))
+
+        # top and bottom
+        top_unscaled = pygame.Surface((middle.width, middle.height), pygame.SRCALPHA)
+        top_unscaled.blit(self.image, (0, 0), (self.left, 0, middle.width, middle.height))
+        top_side = pygame.transform.scale(top_unscaled, (center_size.width, middle.height))
+        texture.blit(top_side, (self.left, 0))
+
+        bottom_unscaled = pygame.Surface((middle.width, middle.height), pygame.SRCALPHA)
+        bottom_unscaled.blit(self.image, (0, 0),
+                             (self.left, self.size.height - 1, middle.width, middle.height))
+        bottom_side = pygame.transform.scale(bottom_unscaled, (center_size.width, middle.height))
+
+        texture.blit(bottom_side, (self.left, image_size.height - 1))
+        return texture

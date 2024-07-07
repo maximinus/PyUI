@@ -35,10 +35,12 @@ Plan
 
 Current Work and Latest:
 
-HBox should use align properly
-Tests for render size and texture sizes in widget tests
-Menu callbacks work
-Add a simple messagebox
+Clean up the base widget as according to the new spec
+Make a button widget that has mouse over and click images
+Render this example as the ColorRect code
+Update the other widgets to fall in line with this code
+Re-vist the mouse menu and use the same code to make that work
+Finish the mouse-menu
 
 
 Window can be resized

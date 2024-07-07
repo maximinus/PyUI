@@ -148,8 +148,19 @@ class HBox(Box):
         # at this point we have our own frame offset set
         widget_offset = self.frame_offset + Position(x, y)
 
+        # compute the total size we need and then align the result; which will also affect the frame offsets
+        max_height = max([x.height for x in all_sizes])
+        total_child_area = Size(sum([x.width for x in all_sizes]), max_height)
+
+        offset = self.get_align_offset(total_child_area, new_size.subtract_margin(self.margin))
+        widget_offset += offset
+
+        x += offset.x
+        y += offset.y
+
         for widget, widget_size in zip(self.widgets, all_sizes):
-            # this needs the screen position added, we must do it now because this could another Box
+            # this needs the screen position added, we must do it now because this could be another Box
+            widget_size.height = max_height
             widget.render(widget_size, offset=widget_offset.copy())
             # now copy this texture over to this widget
             self.texture.blit(widget.texture, (x, y))
@@ -202,11 +213,13 @@ class VBox(Box):
         # Set final values
         final_heights = []
         width = 0
-        if len(self.widgets) > 0:
-            width = max([x.min_size.width for x in self.widgets])
+        #if len(self.widgets) > 0:
+        #    width = max([x.min_size.width for x in self.widgets])
         for widget in self.widgets:
             if widget.expand.is_horizontal:
                 width = available_size.width
+            else:
+                width = widget.min_size.width
             if widget.expand.is_vertical:
                 # Distribute the remaining extra width one by one to ensure total width matches N
                 if extra_height > 0:

@@ -1,103 +1,71 @@
 Basics
 ======
 
-Widget sizes are important, usually fixed
+A widget is the base class of all GUI objects
 
-    A text widget renders text, and that's all. So its size depends on the text.
-    The same for a button. It's some extra space for the button image, but the size is text dependant.
-    Same for text entry boxes, menu drop downs and so on
-    If something is chaged
+Widgets only ever render to themselves, through a function render()
+    * Render has one argument, the size of the render. This is the space given to the widget.
+    * A widget may be allocated more space due to it's expand args, or because there is more space generally.
+    * When a widget is rendered to a size N, it will create a texture of that size, although it may not use all of it
+    * A widgets texture is always None until it is rendered.
+    * All widgets have a background color which is always drawn if it exists
+    * All widgets have a margin
+        * If you ask for a widget of a given size and also a margin, the min size is the widget size + margin size
+    * Widgets keep a record of the size of the last texture, so they do not need to redraw
+    * Widget also keeps an offset of its position compared to the root frame
+    * Every widget has a min_size(), which reports the minimum size of the widget.
+    * When we align a widget, like say a button, we don't want the button click to register against other items
+    * So we need to also remember an "action area" that records the area we respond to for mouse events
+        * In this way, the main loop only needs to check the action area for clicks
+        * The actual mouse area would be the frame position + widget frame offset + action area
 
-This does mean that the HEIGHT of anything with text requires that the every line of text is the same height.
-
-
-Boxes
-=====
-
-Now let's look at a box.
-
-The job of a box is to contain other widgets. A box itself may expand or not, as may the widgets.
-A box will be given a certain size to fit into. The logic is:
-
-When a widget is passed a given size, it can either expand or not.
-If it can expand:
-    The widget will return a size that is the maximum allocated
-Otherwise:
-    The widget will return a size that is equal to or smaller than the given size
-    If any widget is set to expand, then the size returned will be equal to the given size
-    A box can have a background.
-
-A widget has a main method render(), that draws the widget.
-
-A widget always renders to it's parents texture.
-The top widget is always a root widget, which has no parent and a fixed size.
-You can change the size of a root widget, on render the size is fixed and child widgets cannot expand beyond it.
-
-A frame and a container make choices about the allocation of space to their child widgets.
-Every widget has a min_size(), which reports the minimum size of the widget.
-This is calculated by working out the smallest area we can be drawn in, and then adding any margin we have.
-
-When a frame is rendered, it has a fixed size. It tells its child widget to render at this given size.
-This widget is usually some form of box, and this widget can share the space it has with it's child widgets.
-Child widgets that want to expand share any spare space (the size of the frame minus the combined min sizes).
-
-Widgets also have a "fill" option. A parent widget is free to split space between.
-
-When this aspace is allocated, a widget gets passed a size value, and a place to write it.
-It should draw its widget given the space, and then render that on its parent.
+Containers manage and contain other widgets
+    * A container has the property "container" set to true (other widgets are false)
+    * A container has a property "children" which returns all children
+    * A container has to distribute the space it is given to its child widgets
+    * Containers also have background colors, align, fill properties
+    * It makes no sense for a container to expand, this is set by its children
 
 
-Thoughts on rendering
-=====================
+Notes:
+    Really there are 2 types of containers
+        The container that fits over the whole screen is hard-fixed.
+        The one representing a floating window can and will change
+    But the main point is they always have a size.
+        Logically if you want a margin it will come out of the size
+        A container HBox will spread out the horizontal axis based on the children;
+            However it's height will be the whatever the max height of the child widgets are
+            We choose that when rendering all the widgets, we offer them all the space we have for them
+            This may be more than they need. In this case we use "align" and "fill" to decode what to do
+            What does "fill" mean? To say "you can use this space" is to delegate responsibilty.
+                What are we really saying to the widget, and what do we want?
+                Really, we are saying is "choose how to fill this space"
+                Well you could just align it
+            There's always a fixed size at the end, so having something expand is reasonable.
+            Because I work with rectangles, fill seems required. But really, what other widgets would know how to fill?
+                1   Button      - Can, but would look terrible
+                0   Label
+                0   Checkbox
+                0   Radio
+                0.5 Slider      - Only in 1 dimension, and almost by default
+                1.0 TextEdit    - But why would it not be expanding anyway?
+                0.0 Icons
+                0.0
+            Against this, we could have growing or non-growing rectangles - the point is, we can put this code
+                into the ColorRect code rather than have it in places where it makes no sense
+                After all, that's the point of OO right?
 
-Thw widget knows too much about it's parent.
-Don't pass parent information down, do it the opposite way:
-    A widget tells another widget to render itself. It does that it to its own texture.
-    Once they are rendered, the parent widget will draw them itself to it's texture.
-    This goes all the way to the frame, which still doesn't know the display.
-    A widget will keep the sizes of the widgets, maybe as offsets from the origin.
-    To test some collision, we start at the root frame and recurse through, updating the offset <-> screen
+            Margin means "draw some space around me"
+            Expand means "give me all the space you can, I know what to draw"
+            Align means "here's how I fit in that space"
+            On top of that, we have "Spacers"
+                These consume space and render nothing, enabling control over alignment.
 
-Thus, we ONLY need a simple "render" routine, and it simply needs a size.
-We don't need to keep that size anywhere.
+        Should we have a "minimum size", i.e. a defined value that it can never go below?
+            we can make this work by using it as the minimum render size
 
-When a widget changes, it will render again with the same size as the previous time.
-It wil then tell the main loop that a region is dirty.
-That region is an offset from its own texture (so likely the very same size)
-Now we cycle through all the containers. If a container has this rect it simply redraws that area to itself.
-We do this from the tips to the root, so finally the frame is updated.
-The main loop knows where the frames are, so it can do the same to the display.
-
-It helps things enormously to contain the widget offset from its root frame
-This way when a widget has to inform the app it is dirty, we do not need to recurse through the widgets
-Thus when rendering, we pass an offset. This is generally (0, 0), or the margin offset.
-
-
-Thoughts on spacing
-===================
-
-If an hbox has 300 width, how does it split that 3 ways?
-Given that, how it possible for a fill option to exist?
-
-For example, here is some current code:
-
-    ColorRect(Size(50, 50), Color.RED, align=Align.CENTER, expand=Expand.NONE, fill=Expand.HORIZONTAL, background=(50, 50, 50))
-
-So this widget is 50x50, so the box will just give it 50, right?
-So if the total length of widgets is less than the frame size, just draw them linearly.
-If the widgets have backgrounds there is a chance this is ugly; however anything could be made ugly.
-    The solution is a spacer widget, or expand a widget. Having a fill option overcomplicates
-
-Also, do we need to have children or not? I think a boolean "container" is a good idea can be a simple property
-Thus, all containers need to be a common class, a simple "Container" which is itself a seperate class
-A frame is a class that holds a single widget at a fixed side
-A border is a frame with a decorative border
-
-
-So we need to adapt:
-
-    Strip out current rendering code and switch to a simple model.
-    Remove the fill option.
-    Change the calculation method in boxes.
-    Remove render_rect, and passing the parent texture. Parents render from their children.
-
+Frames are top level widgets. They always contain one child.
+    * Frames are allocated a size, and a position.
+    * If the size is changed, then the widget must be redrawn
+    * If a frame has a margin, it must be taken from the actual size passed in
+    * So if you ask for a frame of Size N, the space for widgets will be N - margin

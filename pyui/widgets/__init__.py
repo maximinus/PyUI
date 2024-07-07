@@ -5,3 +5,4 @@ from .frames import Frame, Border
 from .image import Image
 from .spacer import Spacer
 from .menu import MenuItem, Menu, MenuBar
+from .buttons import Button
