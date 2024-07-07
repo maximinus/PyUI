@@ -25,9 +25,9 @@
             "font": "Inconsolata"
         },
         "button_text": {
-            "size": 16,
+            "size": 20,
             "color": [20, 20, 20],
-            "font": 
+            "font": "liberationserif"
         }
     },
     "nine_patch": {

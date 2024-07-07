@@ -32,7 +32,7 @@ class Root(Widget):
             else:
                 size = widget.min_size
         # the size we have must have the margin added
-        self.current_size = size.add_margin(self.margin)
+        self.current_size = size
         self.texture = None
 
     @property
