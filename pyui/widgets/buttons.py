@@ -2,6 +2,7 @@ import pygame
 
 from pyui.base import Size, get_asset
 from pyui.events.events import Event
+from pyui.events.loop import app
 from pyui.theme import THEME
 from pyui.widget_base import Widget
 from pyui.widgets import TextLabel
@@ -143,11 +144,15 @@ class Button(StackBox):
 
     def mouse_in(self, callback):
         self.widgets[0] = self.highlight_image
-        self.draw()
+        self.draw(self.current_size)
+        app.set_dirty(self)
+        print('mouse_inside')
 
     def mouse_out(self, callback):
         self.widgets[0] = self.normal_image
-        self.draw()
+        self.draw(self.current_size)
+        app.set_dirty(self)
+        print('mouse_outside')
 
     def button_clicked(self, callback):
         pass

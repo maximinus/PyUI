@@ -1,6 +1,7 @@
 import sys
 import pygame
 
+from pyui.base import Position
 from pyui.setup import init, get_clock, DEFAULT_SIZE
 from pyui.theme import THEME
 from pyui.events.events import PyUiEvent, is_mouse_click, Event, adjust_mouse_coords, FrameClosed
@@ -15,7 +16,7 @@ BACKGROUND_COLOR = (140, 140, 140)
 # A widget can block events from rising up the menu, but not down
 # Although it appears simple, there are issues:
 
-# We like clean code that states out intentions, so we use "Clicked" and also test against a widgets position
+# We like clean code that states our intentions, so we use "Clicked" and also test against a widgets position
 # But then sometimes we want to catch the event "Not clicked" - an event that could be consumed by something else!
 # perhaps we can add the idea of FOCUS
 # this means a widget can have extra callbacks that are only used when it has focus
@@ -58,15 +59,12 @@ class FrameEvents:
         else:
             self.callbacks = callbacks
 
-    def get_filtered_callbacks(self, event_type):
+    def get_filtered_callbacks(self, event_types):
         # go through list in reverse
         # we are looking for events that catch these events
         all_callbacks = []
         for callback in reversed(self.callbacks):
-            if callback.event_type == event_type:
-                all_callbacks.append(callback)
-            # another possibility is the check for a "noclick" event type
-            if is_mouse_click(event_type) and callback.event_type == Event.ClickOutside:
+            if callback.event_type in event_types:
                 all_callbacks.append(callback)
         return all_callbacks
 
@@ -102,6 +100,7 @@ class PyUIApp:
         # things that happened this screen frame
         # these are acted on in the next frame
         self.frame_events = []
+        self.widgets_overlapped = []
 
     def reset(self):
         # used in tests and debugging
@@ -147,6 +146,19 @@ class PyUIApp:
                 if pyui_event is not None:
                     pyui_events.append(pyui_event)
 
+            # we are only interested in the LAST mouse move event in every frame, so remove the rest
+            mouse_move_found = False
+            filtered_events = []
+            for event in reversed(pyui_events):
+                if event.type == Event.MouseMove:
+                    if not mouse_move_found:
+                        filtered_events.append(event)
+                        mouse_move_found = True
+                else:
+                    filtered_events.append(event)
+            filtered_events.reverse()
+            pyui_events = filtered_events
+
             pyui_events.extend(self.frame_events)
             self.frame_events = []
             for single_event in pyui_events:
@@ -186,15 +198,24 @@ class PyUIApp:
 
     def draw_all_frames(self):
         self.display.fill(THEME.color['widget_background'])
-        for frame in self.window_data:
-            frame.frame.render(self.display, None)
+        for window in self.window_data:
+            window.frame.render(self.display, None)
+            pos = window.frame.position
+            self.display.blit(window.frame.texture, (pos.x, pos.y))
         pygame.display.flip()
 
     def handle_event(self, event):
         # cycle through the frames
         # do it this way in case something adds a handler in an event
+
+        # some events are tied to mouse move events, so handle those differently
+        # per frame there could be multiple mouse move events. We don't care about any of those except the last one
+        if event.type == Event.MouseMove:
+            self.handle_mouse_move_event(event)
+            return
+
         for frame in self.window_data:
-            for callback in [y for y in frame.get_filtered_callbacks(event.type)]:
+            for callback in [y for y in frame.get_filtered_callbacks([event.type])]:
                 # if any kind of mouse event, then we need to offset the coords by the frames position
                 event = adjust_mouse_coords(frame.frame.position, event)
                 # if it is a mouse click, we need to validate the widgets render_rect against this clock position
@@ -215,42 +236,57 @@ class PyUIApp:
                 # ignore all other frames past this one
                 return
 
+    def handle_mouse_move_event(self, event):
+        # get the widgets looking for the events MouseIn, MouseOut, MouseMove
+        for window in self.window_data:
+            frame_pos = window.frame.position
+            callbacks = window.get_filtered_callbacks([Event.MouseIn, Event.MouseOut, Event.MouseMove])
+            # look for events looking for EventIn
+            callbacks_inside = []
+            callbacks_outside = []
+            # get mouse position after removing window offset
+            mouse_pos = Position(event.xpos - frame_pos.x, event.ypos - frame_pos.y)
+            for callback in callbacks:
+                # are we in this widget?
+                if callback.widget.mouse_rect.collidepoint((mouse_pos.x, mouse_pos.y)):
+                    # if the widget has been handled already, ignore
+                    if callback.widget not in self.widgets_overlapped:
+                        if callback.event_type == Event.MouseIn:
+                            callbacks_inside.append(callback)
+                else:
+                    if callback.event_type == Event.MouseOut:
+                        # only call if it is currently inside
+                        if callback.widget in self.widgets_overlapped:
+                            callbacks_outside.append(callback)
+
+            for callback in callbacks_outside:
+                if callback.widget in self.widgets_overlapped:
+                    # update the widget, we have moved outside
+                    callback.callback(CallbackData(event, callback.data))
+                    self.widgets_overlapped.remove(callback.widget)
+
+            for callback in callbacks_inside:
+                callback.callback(CallbackData(event, callback.data))
+                self.widgets_overlapped.append(callback.widget)
+
     def set_dirty(self, widget):
         # store a widget that needs to be updated
         # the widget should have already updated itself by this point
         self.dirty_widgets.append(widget)
 
     def update_dirty_widgets(self):
-        # go through all dirty rects and sort by frame (we draw from back to front)
-        if len(self.dirty_widgets) == 0:
-            # nothing to update
-            return
-
-        frame_rects = {}
-        # sort all the dirty rects by sorting them into the frames they come from
-        for widget in self.dirty_widgets:
-            parent = widget.get_root()
-            if parent in frame_rects:
-                frame_rects[parent].append(widget)
-            else:
-                frame_rects[parent] = [widget]
-        # loop through frames looking for a match
-        dirty_areas = []
-        for frame_event in self.window_data:
-            if frame_event.frame in frame_rects:
-                # get the render rects of the dirty widgets here
-                for widget in frame_rects[frame_event.frame]:
-                    # TODO: How do we know what or where to render?
-                    #dirty_areas.append(widget.render_rect)
-                    dirty_areas.append(pygame.Rect(0, 0, 0, 0))
-
-        # we now have a set of dirty areas that need to be drawn to the screen
-        # we now go through the frames in reverse order, and get them to update to the screen the dirty areas
-        for frame_event in reversed(self.window_data):
-            frame_event.frame.update_dirty_rects(self.display, dirty_areas)
-
-        pygame.display.flip()
-        # finally, clear all dirty widgets
+        # the widgets have redrawn themselves, but no re-sizing has been done
+        # we have the frame offset for each widget.
+        # What we do is update all frames and update that area of the frame
+        # first thing to do it calculate the screen rectangle to update
+        for window in self.window_data:
+            areas = []
+            for widget in self.dirty_widgets:
+                update = window.frame.update_dirty_widget(widget)
+                if update is not None:
+                    areas.append(update)
+            if len(areas) > 0:
+                print(areas)
         self.dirty_widgets = []
 
 

@@ -69,28 +69,32 @@ class Root(Widget):
         if self.texture is None:
             self.draw(self.current_size)
 
-    def update_dirty_rects(self, surface, dirty_rects):
-        # When a widget says it is dirty, it should redraw itself to its old render_rect settings
-        # this means that all widgets have updated themselves at this point in the code
-
-        # to do this, we need to iterate through all the widgets and get them to update
-        # this means that children widgets will need to also have this function
-        # the widgets must be drawn from the closest to the furthest, so we draw the widgets as we see
-        # them, followed by their children
-
-        for dirty_rect in dirty_rects:
-            # either it's in this frame or not
-            if not self.render_rect.colliderect(dirty_rect):
-                # nothing to do with us
+    def update_dirty_widget(self, widget):
+        # either we contain this widget or not
+        # drill down to find the widget
+        original_offset = widget.frame_offset
+        if widget.get_root() == self:
+            # keep doing this until we get to the root
+            while widget.parent is not None:
+                # draw the area that is dirty to the parent
+                # so the distance we need to redraw is based on the frame_offset difference
+                offset_diff = Position(widget.frame_offset.x - widget.parent.frame_offset.x,
+                                       widget.frame_offset.y - widget.parent.frame_offset.y)
+                # so we need to draw this area onto the parent area
+                widget.parent.texture.blit(widget.texture, (offset_diff.x, offset_diff.y))
+                widget = widget.parent
+            # finally, draw the last widget to us
+            self.texture.blit(widget.texture, (widget.frame_offset.x, widget.frame_offset.y))
+            return pygame.Rect(original_offset.x, original_offset.y,
+                               widget.current_size.width, widget.current_size.height)
+        else:
+            # it's not us, but does it overlap us?
+            area = pygame.Rect(self.position.x, self.position.y, self.size.width, self.size.height)
+            collide_area = area.clip(area)
+            if collide_area.size == 0:
+                # nothing to do
                 return
-            overlap_area = self.render_rect.clip(dirty_rect)
-            # if our widget is a container, drill down
-            if self.widget.container:
-                self.widget.update_dirty_rect(overlap_area)
-            # and then just copy from this texture to our texture
-            self.texture.blit(self.widget.texture, (overlap_area.x, overlap_area.y), overlap_area)
-            # render that new area to the screen
-            surface.blit(self.texture, (overlap_area.x, overlap_area.y), overlap_area)
+            return collide_area
 
 
 class Frame(Root):
