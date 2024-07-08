@@ -1,7 +1,5 @@
-import pygame.display
-
-from pyui.base import Size, Color, Align, Expand, Margin
-from pyui.setup import init, await_keypress
+from pyui.base import Size, Expand, Align, Color, Margin
+from pyui.events.loop import app
 from pyui.widgets import Button, HBox, Frame
 
 
@@ -15,9 +13,6 @@ def get_layout():
 
 
 if __name__ == '__main__':
-    display = init()
-    window = get_layout()
-    window.render(Size(800, 600))
-    display.blit(window.texture, (0, 0))
-    pygame.display.flip()
-    await_keypress()
+    layout = get_layout()
+    app.push_frame(layout)
+    app.event_loop()

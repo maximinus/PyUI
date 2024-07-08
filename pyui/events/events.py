@@ -7,6 +7,9 @@ MOUSE_BUTTON_MIDDLE = 2
 MOUSE_BUTTON_RIGHT = 3
 
 
+# Seems over-complicated to have an enum and a class, essentially 2 types
+
+
 class Event(Enum):
     # an event is something that a widget will ask for a callback for
     EventNull = -1
@@ -17,6 +20,8 @@ class Event(Enum):
     MouseRightClickUp = 4
     ClickOutside = 5
     FrameClosed = 6
+    MouseIn = 7
+    MouseOut = 8
 
 
 class PyUiEvent:
@@ -85,6 +90,22 @@ class MouseLeftClickUp(PyUiEvent):
 
 class MouseRightClickUp(PyUiEvent):
     type = Event.MouseRightClickUp
+
+    def __init__(self, event):
+        self.xpos = event.pos[0]
+        self.ypos = event.pos[1]
+
+
+class MouseIn(PyUiEvent):
+    type = Event.MouseIn
+
+    def __init__(self, event):
+        self.xpos = event.pos[0]
+        self.ypos = event.pos[1]
+
+
+class MouseOut(PyUiEvent):
+    type = Event.MouseOut
 
     def __init__(self, event):
         self.xpos = event.pos[0]

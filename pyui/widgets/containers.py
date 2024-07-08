@@ -21,15 +21,10 @@ class Box(Widget):
             self.widgets = widgets
         else:
             self.widgets = []
-        self.size = Size(0, 0)
 
     def add_widget(self, widget):
         widget.parent = self
         self.widgets.append(widget)
-        # a box has to account for the child widgets
-        self.size = Size(0, 0)
-        for widget in self.widgets:
-            self.size += widget.min_size
 
     @property
     def container(self):
