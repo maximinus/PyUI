@@ -72,29 +72,29 @@ class Root(Widget):
     def update_dirty_widget(self, widget):
         # either we contain this widget or not
         # drill down to find the widget
-        original_offset = widget.frame_offset
+        original_widget = widget
         if widget.get_root() == self:
-            # keep doing this until we get to the root
+            # the first widget renders from its origin
+            source_position = Position(0, 0)
+            # where it goes to is the difference between the offsets
+            dest_position = widget.frame_offset - widget.parent.frame_offset
             while widget.parent is not None:
-                # draw the area that is dirty to the parent
-                # so the distance we need to redraw is based on the frame_offset difference
-                offset_diff = Position(widget.frame_offset.x - widget.parent.frame_offset.x,
-                                       widget.frame_offset.y - widget.parent.frame_offset.y)
-                # so we need to draw this area onto the parent area
-                widget.parent.texture.blit(widget.texture, (offset_diff.x, offset_diff.y))
+                # now we draw the widget texture part to the parent
+                from_rect = (source_position.x, source_position.y,
+                             original_widget.current_size.width, original_widget.current_size.height)
+                widget.parent.texture.blit(widget.texture, (dest_position.x, dest_position.y), from_rect)
+                source_position = dest_position
+                dest_position += widget.parent.frame_offset
                 widget = widget.parent
-            # finally, draw the last widget to us
-            self.texture.blit(widget.texture, (widget.frame_offset.x, widget.frame_offset.y))
-            return pygame.Rect(original_offset.x, original_offset.y,
-                               widget.current_size.width, widget.current_size.height)
+            # the area should be the size of the widget
+            return pygame.Rect(original_widget.frame_offset.x, original_widget.frame_offset.y,
+                               original_widget.current_size.width, original_widget.current_size.height)
         else:
             # it's not us, but does it overlap us?
             area = pygame.Rect(self.position.x, self.position.y, self.size.width, self.size.height)
             collide_area = area.clip(area)
-            if collide_area.size == 0:
-                # nothing to do
-                return
-            return collide_area
+            if collide_area.size != 0:
+                return collide_area
 
 
 class Frame(Root):

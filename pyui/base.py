@@ -69,6 +69,9 @@ class Position:
     def __add__(self, other):
         return Position(self.x + other.x, self.y + other.y)
 
+    def __sub__(self, other):
+        return Position(self.x - other.x, self.y - other.y)
+
     def __eq__(self, other):
         if isinstance(other, Position):
             return self.x == other.y and self.x == other.y

@@ -1,11 +1,11 @@
 import pygame
 
-from pyui.base import Size, get_asset
+from pyui.base import Size, get_asset, Color
 from pyui.events.events import Event
 from pyui.events.loop import app
 from pyui.theme import THEME
 from pyui.widget_base import Widget
-from pyui.widgets import TextLabel
+from pyui.widgets import TextLabel, ColorRect
 
 
 class NinePatch(Widget):

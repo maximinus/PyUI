@@ -1,4 +1,4 @@
-from pyui.base import Size, Expand, Align, Color, Margin, Position
+from pyui.base import Size, Expand, Align, Margin, Position
 from pyui.events.loop import app
 from pyui.widgets import Button, HBox, Frame
 

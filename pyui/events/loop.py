@@ -169,6 +169,7 @@ class PyUIApp:
                 # if a frame is deleted, all frames are rendered anyway
                 self.dirty_widgets = []
             self.add_deferred_frames()
+            pygame.display.flip()
             clock.tick(60)
 
     def remove_dead_frames(self):
@@ -193,7 +194,6 @@ class PyUIApp:
             # add the frame, and draw it
             self.add_frame(frame)
             self.window_data[0].frame.render(self.display, None, DEFAULT_SIZE)
-        pygame.display.flip()
         self.deferred_frames = []
 
     def draw_all_frames(self):
@@ -279,14 +279,22 @@ class PyUIApp:
         # we have the frame offset for each widget.
         # What we do is update all frames and update that area of the frame
         # first thing to do it calculate the screen rectangle to update
+        if len(self.dirty_widgets) == 0:
+            return
+
         for window in self.window_data:
             areas = []
             for widget in self.dirty_widgets:
                 update = window.frame.update_dirty_widget(widget)
+                # pygame rect or None
                 if update is not None:
                     areas.append(update)
-            if len(areas) > 0:
-                print(areas)
+            frame_pos = window.frame.position
+            for area in areas:
+                # the area is the SCREEN position to blit to, we need to adjust slightly
+                screen_pos = (area.x, area.y)
+                self.display.blit(window.frame.texture, screen_pos,
+                                  (area.x - frame_pos.x, area.y - frame_pos.y, area.width, area.height))
         self.dirty_widgets = []
 
 
