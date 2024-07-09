@@ -15,23 +15,23 @@ class TestSimpleFrame(unittest.TestCase):
     def test_with_frame(self):
         frame = Frame(Size(0, 0), margin=Margin(10, 10, 10, 10))
         size = frame.min_size
-        self.assertEqual(size.width, 20)
-        self.assertEqual(size.height, 20)
+        self.assertEqual(size.width, 0)
+        self.assertEqual(size.height, 0)
 
     def test_with_color_rect(self):
         frame = Frame(Size(0, 0), widget=ColorRect(Size(20, 20), Color.RED), margin=Margin(10, 10, 10, 10))
         size = frame.min_size
-        # the frame min size always ignores the widget it contains
-        self.assertEqual(size.width, 20)
-        self.assertEqual(size.height, 20)
+        # the frame min size always ignores the margin; you asked for this size
+        self.assertEqual(size.width, 0)
+        self.assertEqual(size.height, 0)
 
     def test_with_color_rect_and_margin(self):
         frame = Frame(Size(100, 100),
                       widget=ColorRect(Size(20, 20), Color.RED, margin=Margin(5, 5, 5, 5)),
                       margin=Margin(10, 10, 10, 10))
         size = frame.min_size
-        self.assertEqual(size.width, 120)
-        self.assertEqual(size.height, 120)
+        self.assertEqual(size.width, 100)
+        self.assertEqual(size.height, 100)
 
 
 class TestSimpleBorder(SDLTest):

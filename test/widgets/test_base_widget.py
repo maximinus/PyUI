@@ -36,14 +36,14 @@ class TestBaseWidget(unittest.TestCase):
         self.assertEqual(size.height, 0)
 
 
-class TestBaseWidgetSpec(unittest):
+class TestBaseWidgetSpec(unittest.TestCase):
     def test_simple_render(self):
-        # When a widget is rendered to a size N, it will create a texture of that size, although it may not use all of it
+        # When a widget is rendered to size N, it will create a texture of that size, although it may not use all of it
         w = Widget()
         w.render(Size(20, 20), Position(0, 0))
         self.assertEqual(w.current_size.width, 20)
         self.assertEqual(w.current_size.height, 20)
-        self.assertIsNotNone(self.texture)
+        self.assertIsNotNone(w.texture)
 
     def test_no_render_no_texture(self):
         # A widgets texture is always None until it is rendered.
