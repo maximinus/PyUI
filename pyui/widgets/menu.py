@@ -36,13 +36,16 @@ class MenuItem(Widget):
         # render widget to me
         self.texture.blit(self.widget.texture, (self.margin.left, self.margin.top))
 
-    def render(self, available_size):
+    def render(self, available_size, offset=Position(0, 0)):
         if available_size == self.current_size:
             return
         self.draw(available_size)
+        self.frame_offset = offset
 
 
 def set_item_heights(items):
+    if len(items) == 0:
+        return []
     item_height = max([x.min_size.height for x in items])
     for item in items:
         height_diff = item_height - item.min_size.height

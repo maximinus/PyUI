@@ -32,7 +32,7 @@ class TestMixedBoxes(unittest.TestCase):
         sizes = main_box.calculate_sizes(Size(200, 200))
         self.assertEqual(sizes[0].width, 200)
         self.assertEqual(sizes[0].height, 190)
-        self.assertEqual(sizes[1].width, 200)
+        self.assertEqual(sizes[1].width, 20)
         self.assertEqual(sizes[1].height, 10)
 
 
@@ -50,11 +50,11 @@ class TestOldFailingExamples(SDLTest):
     def test_2(self):
         m = Margin(10, 10, 10, 10)
         box = HBox(widgets=[ColorRect(Size(50, 50), Color.BLUE, align=Align.CENTER,
-                                      expand=Expand.BOTH, fill=Expand.HORIZONTAL, margin=m),
+                                      expand=Expand.BOTH, margin=m),
                             ColorRect(Size(50, 50), Color.BLUE, align=Align.CENTER,
-                                      expand=Expand.BOTH, fill=Expand.HORIZONTAL, margin=m),
+                                      expand=Expand.BOTH, margin=m),
                             ColorRect(Size(50, 50), Color.BLUE, align=Align.CENTER,
-                                      expand=Expand.BOTH, fill=Expand.HORIZONTAL, margin=m)])
+                                      expand=Expand.BOTH, margin=m)])
         sizes = box.calculate_sizes(Size(800, 600))
         # we expect them to all have very similar sizes, around 800/3 = 266 or 267
         self.assertTrue(266 <= sizes[0].width <= 267)

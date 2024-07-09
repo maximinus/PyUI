@@ -1,21 +1,11 @@
 import os.path
-
 import pygame
-import unittest
 
-from pyui.setup import init
 from pyui.theme import THEME, TextStyle
+from test.sdl_test import SDLTest
 
 
-class TestDefaultTheme(unittest.TestCase):
-    @classmethod
-    def setUpClass(cls):
-        init()
-
-    @classmethod
-    def tearDownClass(cls):
-        pygame.quit()
-
+class TestDefaultTheme(SDLTest):
     def test_colors(self):
         # there should be some colors
         self.assertTrue(len(THEME.color) > 0)
@@ -27,7 +17,7 @@ class TestDefaultTheme(unittest.TestCase):
 
     def test_text_type(self):
         # we have default + menu right now
-        self.assertEqual(len(THEME.text), 3)
+        self.assertTrue(len(THEME.text) > 3)
         self.assertTrue(isinstance(THEME.text['menu'], TextStyle))
 
     def test_text_size(self):

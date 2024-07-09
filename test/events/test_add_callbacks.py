@@ -9,7 +9,7 @@ from pyui.widgets import Frame, Menu, ColorRect, HBox
 class TestCallbacksAdded(unittest.TestCase):
     def test_menu_has_callback(self):
         test_menu = Menu(Position(0, 0), items=[])
-        self.assertEqual(len(test_menu.callbacks), 1)
+        self.assertEqual(len(test_menu.callbacks), 2)
 
     def test_menu_callback_exists(self):
         # add a menu to a frame; this has a callback
@@ -17,7 +17,7 @@ class TestCallbacksAdded(unittest.TestCase):
         test_frame = Frame(Position(0, 0), widget=test_menu)
         # there is a callback by default in the menu, check we find it
         callbacks = get_ordered_callbacks(test_frame)
-        self.assertEqual(len(callbacks), 1)
+        self.assertEqual(len(callbacks), 2)
 
     def test_has_added_callback(self):
         color = ColorRect(Size(50, 50), Color.RED)

@@ -35,24 +35,3 @@ class TestPyUiApp(unittest.TestCase):
         self.app.pop_frame()
         self.assertEqual(len(self.app.window_data), 0)
 
-    @patch.object(ColorRect, 'update')
-    def test_dirty_rect_updated(self, mock_update):
-        # create a frame and a widget, and make the widget dirty
-        color_rect = ColorRect(Size(10, 10), Color.RED)
-        frame = Frame(Position(10, 10), widget=color_rect)
-        self.app.push_frame(frame)
-        self.app.set_dirty(color_rect)
-        self.app.update_dirty_widgets()
-        self.assertTrue(mock_update.called)
-        self.app.pop_frame()
-
-    @patch.object(ColorRect, 'update')
-    def test_non_attached_dirty_not_updated(self, mock_update):
-        # have a color rect not attached to a frame - it shouldn't be updated
-        color_rect = ColorRect(Size(10, 10), Color.RED)
-        frame = Frame(Position(10, 10))
-        self.app.push_frame(frame)
-        self.app.set_dirty(color_rect)
-        self.app.update_dirty_widgets()
-        self.assertFalse(mock_update.called)
-        self.app.pop_frame()

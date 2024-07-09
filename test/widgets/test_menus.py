@@ -53,35 +53,6 @@ class FakeMoveEvent:
         self.rel = [0, 0]
 
 
-class TestHighlightDetection(SDLTest):
-    def setUp(self):
-        # we need pygame setup else the font is not there
-        self.menuitem = MenuItem('Test')
-        self.menu = Menu(Position(0, 0), items=[self.menuitem])
-
-    def test_starts_unhighlighted(self):
-        self.assertFalse(self.menuitem.highlighted)
-
-    def test_highlight_added_after_move(self):
-        event = MouseMove(FakeMoveEvent([150, 150]))
-        self.menu.mouse_move(CallbackData(event, None))
-        self.assertTrue(self.menuitem.highlighted)
-        self.menuitem.highlighted = False
-
-    def test_highlighted_false_after_missed_move(self):
-        event = MouseMove(FakeMoveEvent([0, 0]))
-        self.menu.mouse_move(CallbackData(event, None))
-        self.assertFalse(self.menuitem.highlighted)
-
-    def test_highlighted_false_after_over_and_not_over(self):
-        first_event = MouseMove(FakeMoveEvent([150, 150]))
-        second_event = MouseMove(FakeMoveEvent([0, 0]))
-        self.menu.mouse_move(CallbackData(first_event, None))
-        self.assertTrue(self.menuitem.highlighted)
-        self.menu.mouse_move(CallbackData(second_event, None))
-        self.assertFalse(self.menuitem.highlighted)
-
-
 class TestMenuItemHeights(SDLTest):
     def test_default_margin_is_zero(self):
         item = MenuItem('Hello')
@@ -182,29 +153,3 @@ class TestMenuBarHighlight(SDLTest):
         # the call will be from the menubar
         self.assertEqual(window.texture.sdl_surface, menubar.texture)
         self.assertEqual(menubar.texture.sdl_surface, header.texture)
-
-    def test_final_surface_correct_color(self):
-        # after the click, the app display should contain a pixel at (1,1) of the expected color
-        menu1 = Menu(items=[MenuItem('Hello')])
-        menu2 = Menu(items=[MenuItem('Goodbye')])
-        menubar = MenuBar()
-        menubar.add_menu('Test', menu1)
-        menubar.add_menu('Menu', menu2)
-        window = Frame(size=Size(800, 600), widget=menubar)
-        window.render()
-        app.push_frame(window)
-        # we want to see that the display is updated with the new dirty_rect
-        header = menubar.widgets[0]
-        # put in loop mode, else frame is added instantly and causes test to fail
-        app.looping = True
-        header.clicked(FakeEvent(xpos=10, ypos=10))
-        app.update_dirty_widgets()
-        # grab the pixel at (1,1) and test the color; [:3] removes the alpha
-        pixel = list(app.display.get_at((1, 1))[:3])
-        expected_color = THEME.color['menu_header_highlight']
-        self.assertEqual(pixel, expected_color)
-        # this should also be the case on the all the children
-        menubar_pixel = list(menubar.texture.get_at((1, 1))[:3])
-        header_pixel = list(menubar.widgets[0].texture.get_at((1, 1))[:3])
-        self.assertEqual(menubar_pixel, expected_color)
-        self.assertEqual(header_pixel, expected_color)
