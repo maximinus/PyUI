@@ -24,4 +24,7 @@ class TestBasicFrameOffset(SDLTest):
         box = HBox(widgets=[crect], margin=Margin(10, 10, 10, 10))
         frame = Frame(Size(100, 100), pos=Position(0, 0), widget=box, margin=Margin(10, 10, 10, 10))
         frame.draw(frame.current_size)
-        self.assertEqual(crect.frame_offset, Position(20, 20))
+        self.assertEqual(frame.frame_offset, Position(0, 0))
+        self.assertEqual(box.frame_offset, Position(10, 10))
+        # crect is centered in thr widget, thus the offset
+        self.assertEqual(crect.frame_offset, Position(25, 25))

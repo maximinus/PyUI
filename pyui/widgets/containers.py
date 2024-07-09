@@ -147,6 +147,7 @@ class HBox(Box):
         max_height = max([x.height for x in all_sizes])
         total_child_area = Size(sum([x.width for x in all_sizes]), max_height)
 
+        # here we are offsetting the widget to handle the alignment here
         offset = self.get_align_offset(total_child_area, new_size.subtract_margin(self.margin))
         widget_offset += offset
 
