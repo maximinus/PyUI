@@ -1,6 +1,6 @@
 import pygame
 from pyui.setup import init, await_keypress, DEFAULT_SIZE
-from pyui.base import Expand, Position, Align
+from pyui.base import Expand, Position, Align, Size
 from pyui.widgets import TextLabel, VBox, HBox
 from pyui.theme import THEME
 
@@ -45,7 +45,8 @@ if __name__ == '__main__':
     screens = [screen1(), screen2(), screen3(), screen4()]
     for single_screen in screens:
         display.fill(BACKGROUND_COLOR)
-        single_screen.render(display, Position(0, 0), Position(0, 0), DEFAULT_SIZE)
+        single_screen.draw(Size(800, 600))
+        display.blit(single_screen.texture, (0, 0))
         pygame.display.flip()
         await_keypress()
     pygame.quit()

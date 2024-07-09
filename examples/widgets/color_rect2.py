@@ -27,13 +27,13 @@ def screen3():
 
 def screen4():
     # the rect is on the left middle
-    return ColorRect(Size(100, 100), Color.GREEN, align=Align.LEFT | Align.CENTER,
+    return ColorRect(Size(100, 100), Color.GREEN, align=Align.LEFT|Align.CENTER,
                      background=Color.BLUE, margin=Margin(50, 50, 50, 50))
 
 
 if __name__ == '__main__':
     display = init()
-    screens = [screen4()]
+    screens = [screen1(), screen2(), screen3(), screen4()]
     for single_screen in screens:
         display.fill(BACKGROUND_COLOR)
         single_screen.render(DEFAULT_SIZE)

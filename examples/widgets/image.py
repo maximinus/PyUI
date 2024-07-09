@@ -1,6 +1,6 @@
 import pygame
 from pyui.setup import init, await_keypress, DEFAULT_SIZE
-from pyui.base import get_asset, Margin, Position
+from pyui.base import get_asset, Margin, Position, Size
 from pyui.widgets import Image, Border
 
 BACKGROUND_COLOR = (80, 80, 80)
@@ -23,8 +23,8 @@ if __name__ == '__main__':
     screens = [screen1(), screen2()]
     for single_screen in screens:
         display.fill(BACKGROUND_COLOR)
-        single_screen.render(display, Position(0, 0), Position(0, 0), None)
-        single_screen.draw(display)
+        single_screen.draw(Size(800, 600))
+        display.blit(single_screen.texture, (100, 100))
         pygame.display.flip()
         await_keypress()
     pygame.quit()

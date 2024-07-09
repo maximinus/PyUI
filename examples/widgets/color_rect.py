@@ -80,14 +80,11 @@ def screen7():
     m = Margin(20, 20, 20, 20)
     box = HBox(background=[0, 0, 50], align=Align.CENTER,
                widgets=[ColorRect(Size(50, 50), Color.RED, align=Align.CENTER,
-                                  expand=Expand.NONE, fill=Expand.HORIZONTAL, margin=m,
-                                  background=(50, 50, 50)),
+                                  expand=Expand.NONE, margin=m, background=(50, 50, 50)),
                         ColorRect(Size(50, 50), Color.BLUE, align=Align.TOP,
-                                  expand=Expand.HORIZONTAL, fill=Expand.NONE, margin=m,
-                                  background=(100, 100, 100)),
+                                  expand=Expand.HORIZONTAL, margin=m, background=(100, 100, 100)),
                         ColorRect(Size(50, 50), Color.GREEN, align=Align.BOTTOM,
-                                  expand=Expand.NONE, fill=Expand.HORIZONTAL, margin=m,
-                                  background=(150, 150, 150))])
+                                  expand=Expand.NONE, margin=m, background=(150, 150, 150))])
     return box
 
 

@@ -24,6 +24,7 @@ if __name__ == '__main__':
     for single_screen in screens:
         display.fill(BACKGROUND_COLOR)
         single_screen.draw(display)
+        display.blit(single_screen.texture, (0, 0))
         pygame.display.flip()
         await_keypress()
     pygame.quit()
