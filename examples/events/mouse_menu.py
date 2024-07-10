@@ -1,4 +1,4 @@
-from pyui.base import Position
+from pyui.base import Position, Align
 from pyui.widgets import MenuBar, Frame, MenuItem, Menu
 from pyui.events.loop import app, DEFAULT_SIZE
 

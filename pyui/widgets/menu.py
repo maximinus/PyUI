@@ -20,6 +20,8 @@ class MenuItem(Widget):
         self.widget.add_widget(TextLabel(text, style=style, margin=Margin(0, 8, 0, 0)))
         self.size = self.widget.min_size
         self.highlighted = False
+        self.connect(Event.MouseIn, self.mouse_in)
+        self.connect(Event.MouseOut, self.mouse_out)
 
     @property
     def min_size(self):
@@ -35,12 +37,28 @@ class MenuItem(Widget):
         self.widget.draw(new_size)
         # render widget to me
         self.texture.blit(self.widget.texture, (self.margin.left, self.margin.top))
+        self.widget_area = pygame.Rect(self.frame_offset.x, self.frame_offset.y, new_size.width, new_size.height)
+        self.current_size = new_size
 
     def render(self, available_size, offset=Position(0, 0)):
         if available_size == self.current_size:
             return
-        self.draw(available_size)
         self.frame_offset = offset
+        self.draw(available_size)
+
+    def mouse_in(self, data):
+        if self.highlighted:
+            return
+        self.highlighted = True
+        self.draw(self.current_size)
+        self.set_dirty()
+
+    def mouse_out(self, data):
+        if not self.highlighted:
+            return
+        self.highlighted = False
+        self.draw(self.current_size)
+        self.set_dirty()
 
 
 def set_item_heights(items):
@@ -69,6 +87,7 @@ class Menu(Border):
                 box.add_widget(item)
         # menus are modal by default
         super().__init__(None, pos, widget=box, modal=True)
+
         self.connect(Event.MouseMove, self.mouse_move)
         # we also need to "cancel" the menu. This is done by clicking the main menu outside the box
         self.connect(Event.ClickOutside, self.cancel_menu)
@@ -119,6 +138,9 @@ class MenuHeader(TextLabel):
         return Position(50, 50)
 
     def clicked(self, event):
+
+        print('Clicked')
+
         if self.menu_showing:
             # we are already open, ignore the click
             return
@@ -126,7 +148,7 @@ class MenuHeader(TextLabel):
         # we update our highlight
         self.background = THEME.color['menu_header_highlight']
         self.draw(self.current_size)
-        app.set_dirty(self)
+        self.set_dirty()
         # we place a menu below us
         self.menu.position = self.get_menu_position()
         app.push_frame(self.menu)
@@ -135,12 +157,12 @@ class MenuHeader(TextLabel):
     def menu_closed(self, event):
         if event.event.frame == self.menu:
             self.background = None
-            app.set_dirty(self)
+            self.set_dirty()
 
 
 class MenuBar(HBox):
-    def __init__(self):
-        super().__init__(expand=Expand.HORIZONTAL, background=THEME.color['menubar_background'])
+    def __init__(self, align=Align.TOP):
+        super().__init__(expand=Expand.HORIZONTAL, background=THEME.color['menubar_background'], align=align)
         # to make the widget as big as possible, we put a spacer at the end with expand on
         self.add_widget(Spacer(Size(0, 0), expand=Expand.HORIZONTAL))
 
@@ -150,6 +172,6 @@ class MenuBar(HBox):
         # we need to add the menu not at the end, but one before it
         # that way the spacer keeps to the right
         self.widgets.insert(len(self.widgets) - 1, header_widget)
-        self.size = Size(0, 0)
+        self.current_size = Size(0, 0)
         for widget in self.widgets:
-            self.size += widget.min_size
+            self.current_size += widget.min_size

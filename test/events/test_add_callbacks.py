@@ -1,9 +1,9 @@
 import unittest
 
-from pyui.events.events import Event
-from pyui.events.loop import get_ordered_callbacks
+from pyui.events.events import Event, MouseLeftClickDown
+from pyui.events.loop import get_ordered_callbacks, app
 from pyui.base import Position, Size, Color
-from pyui.widgets import Frame, Menu, ColorRect, HBox
+from pyui.widgets import Frame, Menu, ColorRect, HBox, MenuBar, MenuItem
 
 
 class TestCallbacksAdded(unittest.TestCase):
@@ -29,6 +29,14 @@ class TestCallbacksAdded(unittest.TestCase):
         color.connect(Event.MouseMove, self.test_menu_has_callback)
         test_frame = Frame(Position(0, 0), widget=color)
         callbacks = get_ordered_callbacks(test_frame)
+        self.assertEqual(len(callbacks), 1)
+
+    def test_menu_bar(self):
+        menubar = MenuBar()
+        menubar.add_menu('File', Menu(items=[MenuItem('Help')]))
+        window = Frame(size=Size(800, 600), widget=menubar)
+        app.push_frame(window)
+        callbacks = app.window_data[0].get_filtered_callbacks([Event.MouseLeftClickDown])
         self.assertEqual(len(callbacks), 1)
 
 
