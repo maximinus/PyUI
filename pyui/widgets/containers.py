@@ -208,9 +208,7 @@ class VBox(Box):
 
         # Set final values
         final_heights = []
-        width = 0
-        #if len(self.widgets) > 0:
-        #    width = max([x.min_size.width for x in self.widgets])
+
         for widget in self.widgets:
             if widget.expand.is_horizontal:
                 width = available_size.width
@@ -243,7 +241,19 @@ class VBox(Box):
 
         widget_offset = self.frame_offset + Position(x, y)
 
+        # compute the total size we need and then align the result; which will also affect the frame offsets
+        max_width = max([x.width for x in all_sizes])
+        total_child_area = Size(max_width, sum([x.height for x in all_sizes]))
+
+        # here we are offsetting the widget to handle the alignment here
+        offset = self.get_align_offset(total_child_area, new_size.subtract_margin(self.margin))
+        widget_offset += offset
+
+        x += offset.x
+        y += offset.y
+
         for widget, widget_size in zip(self.widgets, all_sizes):
+            widget_size.width = max_width
             widget.render(widget_size, offset=widget_offset.copy())
             self.texture.blit(widget.texture, (x, y))
             # no need to add the margin because it is computed in the widget size

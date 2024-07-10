@@ -146,13 +146,11 @@ class Button(StackBox):
         self.widgets[0] = self.highlight_image
         self.draw(self.current_size)
         app.set_dirty(self)
-        print('mouse_inside')
 
     def mouse_out(self, callback):
         self.widgets[0] = self.normal_image
         self.draw(self.current_size)
         app.set_dirty(self)
-        print('mouse_outside')
 
     def button_clicked(self, callback):
         pass

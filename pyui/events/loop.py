@@ -24,6 +24,8 @@ BACKGROUND_COLOR = (140, 140, 140)
 # Only the widget with focus gets keyboard input???
 # 2 widgets can have focus, they would be sent the same messages
 
+# Edit: Event should signal intent, if extra code is required here thats fine
+
 # Things can send events, it's not just the SDL events that cause this
 # When things are done, we also raise an event
 # As a GUI, we only look at key presses and mouse clicks for now
@@ -209,12 +211,13 @@ class PyUIApp:
         # do it this way in case something adds a handler in an event
 
         # some events are tied to mouse move events, so handle those differently
-        # per frame there could be multiple mouse move events. We don't care about any of those except the last one
+        # per frame there could be multiple mouse move events. However, we are only sent the last one
         if event.type == Event.MouseMove:
             self.handle_mouse_move_event(event)
             return
 
         for frame in self.window_data:
+            # get all callbacks listening to this event
             for callback in [y for y in frame.get_filtered_callbacks([event.type])]:
                 # if any kind of mouse event, then we need to offset the coords by the frames position
                 event = adjust_mouse_coords(frame.frame.position, event)
