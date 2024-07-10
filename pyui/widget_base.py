@@ -1,7 +1,7 @@
 import pygame
 
 from pyui.base import Expand, Margin, Align, Size, Position
-from pyui.events.loop import Callback
+from pyui.events.loop import Callback, set_dirty
 
 
 # Widget
@@ -22,6 +22,7 @@ from pyui.events.loop import Callback
 # some functions:
 # render:       draw yourself
 # mouse_hit     is the given position over this widget?
+# set_dirty     tell the main loop to re-render this widget
 
 class Widget:
     def __init__(self, expand=None, margin=None, align=None, background=None):
@@ -72,6 +73,9 @@ class Widget:
         if self.parent is None:
             return self
         return self.parent.get_root()
+
+    def set_dirty(self):
+        set_dirty(self)
 
     def connect(self, event_type, callback, data=None):
         self.callbacks.append(Callback(callback, event_type, self, data))

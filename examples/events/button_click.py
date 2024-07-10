@@ -19,7 +19,7 @@ class ExampleApp:
     def button_clicked(self, data):
         self.count += 1
         self.label.update_text(f'Clicked {self.count} times')
-        app.set_dirty(self.label)
+        self.label.set_dirty()
 
 
 if __name__ == '__main__':

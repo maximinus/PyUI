@@ -266,11 +266,6 @@ class PyUIApp:
                 callback.callback(CallbackData(event, callback.data))
                 self.widgets_overlapped.append(callback.widget)
 
-    def set_dirty(self, widget):
-        # store a widget that needs to be updated
-        # the widget should have already updated itself by this point
-        self.dirty_widgets.append(widget)
-
     def update_dirty_widgets(self):
         # the widgets have redrawn themselves, but no re-sizing has been done
         # we have the frame offset for each widget.
@@ -296,3 +291,7 @@ class PyUIApp:
 
 
 app = PyUIApp()
+
+
+def set_dirty(widget):
+    app.dirty_widgets.append(widget)
