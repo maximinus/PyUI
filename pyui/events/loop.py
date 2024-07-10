@@ -223,15 +223,9 @@ class PyUIApp:
                 event = adjust_mouse_coords(frame.frame.position, event)
                 # if it is a mouse click, we need to validate the widgets render_rect against this clock position
                 if is_mouse_click(event.type):
-                    if callback.widget.render_rect is None:
-                        # not yet rendered, so cannot get a click, ignore this one
+                    # we need to confirm that the mouse area matches the widget
+                    if not callback.widget.mouse_hit(Position(event.xpos, event.ypos) - frame.frame.frame_offset):
                         continue
-                    # some widgets need to know if a click was NOT made in their widget
-                    # ensure the click was in the widget
-                    if not callback.widget.render_rect.collidepoint(event.xpos, event.ypos):
-                        # didn't click this widget, so maybe ignore
-                        if callback.event_type != Event.ClickOutside:
-                            continue
                 if callback.callback(CallbackData(event, callback.data)):
                     # event has been dealt with
                     return
@@ -251,7 +245,7 @@ class PyUIApp:
             mouse_pos = Position(event.xpos - frame_pos.x, event.ypos - frame_pos.y)
             for callback in callbacks:
                 # are we in this widget?
-                if callback.widget.mouse_rect.collidepoint((mouse_pos.x, mouse_pos.y)):
+                if callback.widget.mouse_hit(mouse_pos):
                     # if the widget has been handled already, ignore
                     if callback.widget not in self.widgets_overlapped:
                         if callback.event_type == Event.MouseIn:

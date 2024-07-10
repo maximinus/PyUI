@@ -139,8 +139,8 @@ class Button(StackBox):
             widget.render(self.smallest_size, offset=self.frame_offset)
             self.texture.blit(widget.texture, (offset.x, offset.y))
 
-        self.mouse_rect = pygame.Rect(self.frame_offset.x + offset.x, self.frame_offset.y + offset.y,
-                                      self.size.width, self.size.height)
+        self.widget_area = pygame.Rect(self.frame_offset.x + offset.x, self.frame_offset.y + offset.y,
+                                       self.size.width, self.size.height)
 
     def mouse_in(self, callback):
         self.widgets[0] = self.highlight_image

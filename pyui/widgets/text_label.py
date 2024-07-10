@@ -21,6 +21,15 @@ class TextLabel(Widget):
     def min_size(self):
         return self.text_size.add_margin(self.margin)
 
+    def update_text(self, new_text):
+        self.image = self.font.render(new_text, True, self.style.color)
+        new_text_size = Size(self.image.get_width(), self.image.get_height())
+        if new_text_size != self.text_size:
+            # need to update widgets
+            pass
+        self.text_size = new_text_size
+        self.draw(self.current_size)
+
     def draw(self, new_size):
         self.texture = self.get_texture(new_size)
 

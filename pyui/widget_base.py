@@ -16,9 +16,12 @@ from pyui.events.loop import Callback
 # background:   a color that covers the whole of the rear of the image
 # container:    A property that is True if this widget is a container for other widgets
 # current_size: The Size of the widget on last draw, or Size(-1, -1) with no texture
+# widget_area:  The rect of the drawn widget, excluding margins
+#               Used when updating the image oe testing mouse checks
 
 # some functions:
 # render:       draw yourself
+# mouse_hit     is the given position over this widget?
 
 class Widget:
     def __init__(self, expand=None, margin=None, align=None, background=None):
@@ -31,7 +34,7 @@ class Widget:
         self.background = background
         self.current_size = Size(-1, -1)
         self.frame_offset = Position(0, 0)
-        self.mouse_rect = None
+        self.widget_area = None
 
     @property
     def min_size(self):
@@ -41,6 +44,11 @@ class Widget:
     @property
     def container(self):
         return False
+
+    def mouse_hit(self, mouse_pos):
+        if self.widget_area is None:
+            return False
+        return self.widget_area.collidepoint((mouse_pos.x, mouse_pos.y))
 
     def render(self, available_size, offset=Position(0, 0)):
         if available_size == self.current_size:

@@ -79,14 +79,29 @@ class Root(Widget):
             # where it goes to is the difference between the offsets
             dest_position = widget.frame_offset - widget.parent.frame_offset
             while widget.parent is not None:
+
+                # If the widget has an alpha, it will merely draw over itself
+                # So to do it properly, we need to render from the frame down
+                # To do this, we need to clear the space under the blit area and put in our
+                # background texture before we blit to the area
+
                 # now we draw the widget texture part to the parent
-                from_rect = (source_position.x, source_position.y,
-                             original_widget.current_size.width, original_widget.current_size.height)
+                from_rect = pygame.Rect(source_position.x, source_position.y,
+                                        original_widget.current_size.width, original_widget.current_size.height)
+
+                # before we blit, take the area (dest.x, dest.y, from_rect.width, from rect.height),
+                # clear it and add the background if we have one
+                bg_rect = pygame.Rect(dest_position.x, dest_position.y, from_rect.width, from_rect.height)
+                if self.background is None:
+                    pygame.draw.rect(widget.parent.texture, (0, 0, 0, 0), bg_rect)
+                else:
+                    pygame.draw.rect(widget.parent.texture, self.background, bg_rect)
+
                 widget.parent.texture.blit(widget.texture, (dest_position.x, dest_position.y), from_rect)
                 source_position = dest_position
                 dest_position += widget.parent.frame_offset
                 widget = widget.parent
-            # the area should be the size of the widget
+            # the area should be the size of the original widget
             return pygame.Rect(original_widget.frame_offset.x, original_widget.frame_offset.y,
                                original_widget.current_size.width, original_widget.current_size.height)
         else:
