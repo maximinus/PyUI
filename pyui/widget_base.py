@@ -1,7 +1,8 @@
 import pygame
 
 from pyui.base import Expand, Margin, Align, Size, Position
-from pyui.events.loop import Callback, set_dirty
+from pyui.events.loop import set_dirty
+from pyui.events.queue import Callback, add_listener
 
 
 # Widget
@@ -77,8 +78,8 @@ class Widget:
     def set_dirty(self):
         set_dirty(self)
 
-    def connect(self, event_type, callback, data=None):
-        self.callbacks.append(Callback(callback, event_type, self, data))
+    def connect(self, event_type, function, data=None):
+        add_listener(event_type, Callback(function, self))
 
     def get_align_offset(self, widget_size, given_size):
         # if the given size is larger, work out where to place the widget based on the alignment
