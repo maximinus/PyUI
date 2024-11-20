@@ -1,6 +1,6 @@
 import pygame
 from pyui.setup import init, await_keypress, DEFAULT_SIZE
-from pyui.base import Expand, Size, Color, Align, Margin, Position
+from pyui.base import Expand, Size, Color, Align
 from pyui.widgets import ColorRect, HBox, VBox, Spacer
 
 BACKGROUND_COLOR = (80, 80, 80)
@@ -35,56 +35,52 @@ def screen3():
 
 def screen4():
     # 3 rows of 3 ColorRects, the centre one fills, the rest are centered
-    m = Margin(10, 10, 10, 10)
-    row1 = HBox(widgets=[ColorRect(Size(50, 50), Color.RED, align=Align.CENTER, expand=Expand.NONE, margin=m),
+    row1 = HBox(widgets=[ColorRect(Size(50, 50), Color.RED, align=Align.CENTER, expand=Expand.NONE),
                          Spacer(expand=Expand.HORIZONTAL),
-                         ColorRect(Size(50, 50), Color.RED, align=Align.CENTER, expand=Expand.NONE, margin=m),
+                         ColorRect(Size(50, 50), Color.RED, align=Align.CENTER, expand=Expand.NONE),
                          Spacer(expand=Expand.HORIZONTAL),
-                         ColorRect(Size(50, 50), Color.RED, align=Align.CENTER, expand=Expand.NONE, margin=m)])
-    row2 = HBox(widgets=[ColorRect(Size(50, 50), Color.RED, align=Align.CENTER, expand=Expand.NONE, margin=m),
-                         ColorRect(Size(50, 50), Color.RED, align=Align.CENTER, expand=Expand.BOTH, margin=m),
-                         ColorRect(Size(50, 50), Color.RED, align=Align.CENTER, expand=Expand.NONE, margin=m)])
-    row3 = HBox(widgets=[ColorRect(Size(50, 50), Color.RED, align=Align.CENTER, expand=Expand.NONE, margin=m),
+                         ColorRect(Size(50, 50), Color.RED, align=Align.CENTER, expand=Expand.NONE)])
+    row2 = HBox(widgets=[ColorRect(Size(50, 50), Color.RED, align=Align.CENTER, expand=Expand.NONE),
+                         ColorRect(Size(50, 50), Color.RED, align=Align.CENTER, expand=Expand.BOTH),
+                         ColorRect(Size(50, 50), Color.RED, align=Align.CENTER, expand=Expand.NONE)])
+    row3 = HBox(widgets=[ColorRect(Size(50, 50), Color.RED, align=Align.CENTER, expand=Expand.NONE),
                          Spacer(expand=Expand.HORIZONTAL),
-                         ColorRect(Size(50, 50), Color.RED, align=Align.CENTER, expand=Expand.NONE, margin=m),
+                         ColorRect(Size(50, 50), Color.RED, align=Align.CENTER, expand=Expand.NONE),
                          Spacer(expand=Expand.HORIZONTAL),
-                         ColorRect(Size(50, 50), Color.RED, align=Align.CENTER, expand=Expand.NONE, margin=m)])
+                         ColorRect(Size(50, 50), Color.RED, align=Align.CENTER, expand=Expand.NONE)])
     return VBox(widgets=[row1, row2, row3])
 
 
 def screen5():
-    # 3x1 array, but give a margin of differing sizes to each, center vertically
-    m = Margin(10, 10, 10, 10)
-    box = HBox(widgets=[ColorRect(Size(50, 50), Color.RED, align=Align.CENTER, expand=Expand.BOTH, margin=m),
-                        ColorRect(Size(50, 50), Color.BLUE, align=Align.CENTER, expand=Expand.BOTH, margin=m),
-                        ColorRect(Size(50, 50), Color.GREEN, align=Align.CENTER, expand=Expand.BOTH, margin=m)])
+    # 3x1 array, center vertically
+    box = HBox(widgets=[ColorRect(Size(50, 50), Color.RED, align=Align.CENTER, expand=Expand.BOTH),
+                        ColorRect(Size(50, 50), Color.BLUE, align=Align.CENTER, expand=Expand.BOTH),
+                        ColorRect(Size(50, 50), Color.GREEN, align=Align.CENTER, expand=Expand.BOTH)])
     return box
 
 
 def screen6():
     # like 5, but with differing background colors
-    # 3x1 array, but give a margin of differing sizes to each, center vertically
-    m = Margin(20, 20, 20, 20)
+    # 3x1 array, center vertically
     box = HBox(widgets=[ColorRect(Size(50, 50), Color.RED, align=Align.CENTER, expand=Expand.BOTH,
-                                  margin=m, background=(50, 50, 50)),
+                                  background=(50, 50, 50)),
                         ColorRect(Size(50, 50), Color.BLUE, align=Align.TOP, expand=Expand.HORIZONTAL,
-                                  margin=m, background=(100, 100, 100)),
+                                  background=(100, 100, 100)),
                         ColorRect(Size(50, 50), Color.GREEN, align=Align.BOTTOM, expand=Expand.HORIZONTAL,#
-                                  margin=m, background=(150, 150, 150))])
+                                  background=(150, 150, 150))])
     return box
 
 
 def screen7():
     # like 5, but with differing background colors
-    # 3x1 array, but give a margin of differing sizes to each, center vertically
-    m = Margin(20, 20, 20, 20)
+    # 3x1 array, center vertically
     box = HBox(background=[0, 0, 50], align=Align.CENTER,
                widgets=[ColorRect(Size(50, 50), Color.RED, align=Align.CENTER,
-                                  expand=Expand.NONE, margin=m, background=(50, 50, 50)),
+                                  expand=Expand.NONE, background=(50, 50, 50)),
                         ColorRect(Size(50, 50), Color.BLUE, align=Align.TOP,
-                                  expand=Expand.HORIZONTAL, margin=m, background=(100, 100, 100)),
+                                  expand=Expand.HORIZONTAL, background=(100, 100, 100)),
                         ColorRect(Size(50, 50), Color.GREEN, align=Align.BOTTOM,
-                                  expand=Expand.NONE, margin=m, background=(150, 150, 150))])
+                                  expand=Expand.NONE, background=(150, 150, 150))])
     return box
 
 

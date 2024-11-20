@@ -1,6 +1,6 @@
 import pygame
 from pyui.setup import init, await_keypress, DEFAULT_SIZE
-from pyui.base import Expand, Size, Color, Align, Margin, Position
+from pyui.base import Expand, Size, Color, Align
 from pyui.widgets import ColorRect, HBox, VBox
 
 BACKGROUND_COLOR = (80, 80, 80)
@@ -10,25 +10,22 @@ BACKGROUND_COLOR = (80, 80, 80)
 
 def screen1():
     # a rect fills the whole screen
-    return ColorRect(Size(100, 100), Color.RED, expand=Expand.BOTH,
-                     background=Color.GREEN, margin=Margin(50, 50, 50, 50))
+    return ColorRect(Size(100, 100), Color.RED, expand=Expand.BOTH, background=Color.GREEN)
 
 
 def screen2():
     # a rect is centered, but does not fill (the default is to align in the center)
-    return ColorRect(Size(100, 100), Color.RED, background=Color.BLUE, margin=Margin(50, 50, 50, 50))
+    return ColorRect(Size(100, 100), Color.RED, background=Color.BLUE)
 
 
 def screen3():
     # the rect is on the bottom right
-    return ColorRect(Size(100, 100), Color.GREEN, align=Align.RIGHT|Align.BOTTOM,
-                     background=Color.BLUE, margin=Margin(50, 50, 50, 50))
+    return ColorRect(Size(100, 100), Color.GREEN, align=Align.RIGHT|Align.BOTTOM, background=Color.BLUE)
 
 
 def screen4():
     # the rect is on the left middle
-    return ColorRect(Size(100, 100), Color.GREEN, align=Align.LEFT|Align.CENTER,
-                     background=Color.BLUE, margin=Margin(50, 50, 50, 50))
+    return ColorRect(Size(100, 100), Color.GREEN, align=Align.LEFT|Align.CENTER, background=Color.BLUE)
 
 
 if __name__ == '__main__':

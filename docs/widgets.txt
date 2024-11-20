@@ -9,8 +9,6 @@ Widgets only ever render to themselves, through a function render()
     * When a widget is rendered to a size N, it will create a texture of that size, although it may not use all of it
     * A widgets texture is always None until it is rendered.
     * All widgets have a background color which is always drawn if it exists
-    * All widgets have a margin
-        * If you ask for a widget of a given size and also a margin, the min size is the widget size + margin size
     * Widgets keep a record of the size of the last texture, so they do not need to redraw
     * Widget also keeps an offset of its position compared to the root frame
     * Every widget has a min_size(), which reports the minimum size of the widget.
@@ -32,7 +30,6 @@ Notes:
         The container that fits over the whole screen is hard-fixed.
         The one representing a floating window can and will change
     But the main point is they always have a size.
-        Logically if you want a margin it will come out of the size
         A container HBox will spread out the horizontal axis based on the children;
             However it's height will be the whatever the max height of the child widgets are
             We choose that when rendering all the widgets, we offer them all the space we have for them
@@ -67,5 +64,3 @@ Notes:
 Frames are top level widgets. They always contain one child.
     * Frames are allocated a size, and a position.
     * If the size is changed, then the widget must be redrawn
-    * If a frame has a margin, it must be taken from the actual size passed in
-    * So if you ask for a frame of Size N, the space for widgets will be N - margin

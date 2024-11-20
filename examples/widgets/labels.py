@@ -1,6 +1,6 @@
 import pygame
-from pyui.setup import init, await_keypress, DEFAULT_SIZE
-from pyui.base import Expand, Position, Align, Size
+from pyui.setup import init, await_keypress
+from pyui.base import Expand, Align, Size
 from pyui.widgets import TextLabel, VBox, HBox
 from pyui.theme import THEME
 

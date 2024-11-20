@@ -75,13 +75,13 @@ def get_ordered_callbacks(frame):
     # get the children by depth first search
     all_widgets = []
 
-    def depth_first_search(widget):
-        if widget is None:
+    def depth_first_search(base_widget):
+        if base_widget is None:
             return
-        if widget.container:
-            for child in widget.children:
+        if base_widget.container:
+            for child in base_widget.children:
                 depth_first_search(child)
-        all_widgets.append(widget)
+        all_widgets.append(base_widget)
 
     # iterate over list and return all callbacks
     depth_first_search(frame)
