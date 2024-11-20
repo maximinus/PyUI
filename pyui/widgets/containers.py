@@ -1,5 +1,3 @@
-import pygame.draw
-
 from pyui.base import Expand, Size, Position
 from pyui.widget_base import Widget
 
@@ -78,10 +76,9 @@ class HBox(Box):
             child_size = child.min_size
             base_size.width += child_size.width
             base_size.height = max(base_size.height, child_size.height)
-        return base_size.add_margin(self.margin)
+        return base_size
 
     def calculate_sizes(self, available_size):
-        available_size = available_size.subtract_margin(self.margin)
         fixed_width = 0
         expandable_count = 0
 
@@ -135,24 +132,22 @@ class HBox(Box):
         if len(self.widgets) == 0:
             return
 
-        total_size = new_size.subtract_margin(self.margin)
-        x = self.margin.left
-        y = self.margin.top
+        total_size = new_size
         all_sizes = self.calculate_sizes(total_size)
 
         # at this point we have our own frame offset set
-        widget_offset = self.frame_offset + Position(x, y)
+        widget_offset = self.frame_offset
 
         # compute the total size we need and then align the result; which will also affect the frame offsets
         max_height = max([x.height for x in all_sizes])
         total_child_area = Size(sum([x.width for x in all_sizes]), max_height)
 
         # here we are offsetting the widget to handle the alignment here
-        offset = self.get_align_offset(total_child_area, new_size.subtract_margin(self.margin))
+        offset = self.get_align_offset(total_child_area, new_size)
         widget_offset += offset
 
-        x += offset.x
-        y += offset.y
+        x = offset.x
+        y = offset.y
 
         for widget, widget_size in zip(self.widgets, all_sizes):
             # this needs the screen position added, we must do it now because this could be another Box
@@ -177,7 +172,7 @@ class VBox(Box):
             child_size = child.min_size
             base_size.width = max(base_size.width, child_size.width)
             base_size.height += child_size.height
-        return base_size.add_margin(self.margin)
+        return base_size
 
     def calculate_sizes(self, available_size=None):
         if available_size is None:
@@ -234,23 +229,21 @@ class VBox(Box):
         if len(self.widgets) == 0:
             return
 
-        total_size = new_size.subtract_margin(self.margin)
-        x = self.margin.left
-        y = self.margin.top
+        total_size = new_size
         all_sizes = self.calculate_sizes(total_size)
 
-        widget_offset = self.frame_offset + Position(x, y)
+        widget_offset = self.frame_offset
 
         # compute the total size we need and then align the result; which will also affect the frame offsets
         max_width = max([x.width for x in all_sizes])
         total_child_area = Size(max_width, sum([x.height for x in all_sizes]))
 
         # here we are offsetting the widget to handle the alignment here
-        offset = self.get_align_offset(total_child_area, new_size.subtract_margin(self.margin))
+        offset = self.get_align_offset(total_child_area, new_size)
         widget_offset += offset
 
-        x += offset.x
-        y += offset.y
+        x = offset.x
+        y = offset.y
 
         for widget, widget_size in zip(self.widgets, all_sizes):
             widget_size.width = max_width

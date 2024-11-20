@@ -57,12 +57,7 @@ class Root(Widget):
         self.texture = self.get_texture(self.current_size)
         if self.background is not None:
             self.texture.fill(self.background)
-        widget_space = self.current_size.subtract_margin(self.margin)
-        # when we draw, we need to tell the next widget where it is relative to us
-        # so here, for example, we are telling the widget to render to the given position,
-        # which is an offset into our texture: we also need to tell it where that is on screen
-        screen_pos = Position(self.position.x + self.margin.left, self.position.y + self.margin.top)
-        self.widget.render(widget_space, Position(self.margin.left, self.margin.top))
+        self.widget.render(self.current_size)
 
     def render(self, available_size, offset=Position(0, 0)):
         # available size is ignored here, we always fit the current size
@@ -106,7 +101,7 @@ class Root(Widget):
                                original_widget.current_size.width, original_widget.current_size.height)
         else:
             # it's not us, but does it overlap us?
-            area = pygame.Rect(self.position.x, self.position.y, self.size.width, self.size.height)
+            area = pygame.Rect(self.position.x, self.position.y, self.current_size.width, self.current_size.height)
             collide_area = area.clip(area)
             if collide_area.size != 0:
                 return collide_area
@@ -124,12 +119,10 @@ class Frame(Root):
         if self.background is not None:
             self.texture.fill(self.background)
 
-        size_with_margin = self.current_size.subtract_margin(self.margin)
-        # the effective render size is the size of the frame minus it's margin
         if self.widget is not None:
             # since this is the root frame, the offset is just the margin
-            self.widget.render(size_with_margin, Position(self.margin.left, self.margin.top))
-            self.texture.blit(self.widget.texture, (self.margin.left, self.margin.top))
+            self.widget.render(self.current_size)
+            self.texture.blit(self.widget.texture, (0, 0))
 
 
 class Border(Root):
@@ -204,9 +197,8 @@ class Border(Root):
         if self.background is not None:
             pygame.draw.rect(self.texture, self.background, (x, y, render_size.width, render_size.height))
         # TODO: Fix this +2. It is to do with overlap on the 9-patch; we need to define a better 9-patch object
-        border_size = self.corner.width + (self.middle.width // 2) - 2
         if self.widget is not None:
-            self.widget.render(render_size, Position(self.margin.left, self.margin.top))
+            self.widget.render(render_size)
             self.texture.blit(self.widget.texture, (x, y))
 
     def get_texture(self, size):

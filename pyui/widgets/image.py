@@ -1,5 +1,3 @@
-import pygame
-
 from pyui.base import Expand, Size, Align, Position
 from pyui.widget_base import Widget
 
@@ -14,12 +12,12 @@ class Image(Widget):
 
     @property
     def min_size(self):
-        return self.size.add_margin(self.margin)
+        return self.size
 
     def draw(self, new_size=None):
         # images ignore the fill, they are always a fixed size
         self.texture = self.get_texture(self.min_size)
         if self.background is not None:
             self.texture.fill(self.background)
-        self.texture.blit(self.image, (self.margin.left, self.margin.top))
+        self.texture.blit(self.image, (0, 0))
         self.current_size = new_size

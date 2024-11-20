@@ -1,5 +1,3 @@
-import pygame
-
 from pyui.base import Size, Position
 from pyui.widget_base import Widget
 
@@ -7,7 +5,6 @@ from pyui.widget_base import Widget
 class Spacer(Widget):
     def __init__(self, size=Size(0, 0), expand=None):
         # a spacer is a simple widget whose only job is to consume space
-        # it has no margin
         super().__init__(expand=expand)
         self.size = size
         # we never draw this widget

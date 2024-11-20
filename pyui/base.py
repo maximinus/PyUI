@@ -31,14 +31,6 @@ class Expand(Enum):
         return self in [Expand.VERTICAL, Expand.BOTH]
 
 
-class Margin:
-    def __init__(self, left=0, right=0, top=0, bottom=0):
-        self.left = left
-        self.right = right
-        self.top = top
-        self.bottom = bottom
-
-
 class Align:
     LEFT = 1
     RIGHT = 2

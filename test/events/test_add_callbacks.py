@@ -1,6 +1,6 @@
 import unittest
 
-from pyui.events.events import Event, MouseLeftClickDown
+from pyui.events.events import Event
 from pyui.events.loop import get_ordered_callbacks, app
 from pyui.base import Position, Size, Color
 from pyui.widgets import Frame, Menu, ColorRect, HBox, MenuBar, MenuItem

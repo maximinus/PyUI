@@ -1,6 +1,6 @@
 import pygame
 
-from pyui.base import get_asset, Size, Margin, Expand, Align, Position
+from pyui.base import get_asset, Size, Expand, Align, Position
 from pyui.theme import THEME
 from pyui.widget_base import Widget
 from pyui.widgets import Border, VBox, HBox, TextLabel, Image, Spacer
@@ -25,7 +25,7 @@ class MenuItem(Widget):
 
     @property
     def min_size(self):
-        return self.size.add_margin(self.margin)
+        return self.size
 
     def draw(self, new_size):
         self.texture = self.get_texture(new_size)
@@ -36,7 +36,7 @@ class MenuItem(Widget):
             self.texture.fill(self.background)
         self.widget.draw(new_size)
         # render widget to me
-        self.texture.blit(self.widget.texture, (self.margin.left, self.margin.top))
+        self.texture.blit(self.widget.texture, (0, 0))
         self.widget_area = pygame.Rect(self.frame_offset.x, self.frame_offset.y, new_size.width, new_size.height)
         self.current_size = new_size
 
@@ -46,14 +46,14 @@ class MenuItem(Widget):
         self.frame_offset = offset
         self.draw(available_size)
 
-    def mouse_in(self, data):
+    def mouse_in(self, _data):
         if self.highlighted:
             return
         self.highlighted = True
         self.draw(self.current_size)
         self.set_dirty()
 
-    def mouse_out(self, data):
+    def mouse_out(self, _data):
         if not self.highlighted:
             return
         self.highlighted = False
@@ -95,7 +95,7 @@ class Menu(Border):
     def add_menu_item(self, menu_item):
         self.widget.add_widget(menu_item)
 
-    def cancel_menu(self, data):
+    def cancel_menu(self, _data):
         # this means there was a click, but not on our widget. It could have been any mouse click
         # we just need to close this modal frame
         app.remove_frame(self)
@@ -137,10 +137,7 @@ class MenuHeader(TextLabel):
         # TODO: Fix this
         return Position(50, 50)
 
-    def clicked(self, event):
-
-        print('Clicked')
-
+    def clicked(self, _event):
         if self.menu_showing:
             # we are already open, ignore the click
             return

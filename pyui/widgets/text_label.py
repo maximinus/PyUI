@@ -1,6 +1,6 @@
 import pygame
 
-from pyui.base import Size, Align, Position
+from pyui.base import Size, Align
 from pyui.widget_base import Widget
 from pyui.theme import THEME
 
@@ -19,7 +19,7 @@ class TextLabel(Widget):
 
     @property
     def min_size(self):
-        return self.text_size.add_margin(self.margin)
+        return self.text_size
 
     def update_text(self, new_text):
         self.image = self.font.render(new_text, True, self.style.color)
@@ -36,8 +36,8 @@ class TextLabel(Widget):
         # text labels ignore "fill" as they cannot naturally expand
         if self.background is not None:
             self.texture.fill(self.background)
-        x = self.margin.left
-        y = self.margin.top
+        x = 0
+        y = 0
 
         horiz_align = self.align.horizontal()
         full_size = self.min_size

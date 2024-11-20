@@ -1,6 +1,6 @@
 import pygame
 
-from pyui.base import Size, Expand, Align, Position
+from pyui.base import Size, Position
 from pyui.widget_base import Widget
 
 
@@ -15,7 +15,7 @@ class ColorRect(Widget):
 
     @property
     def min_size(self):
-        return self.size.add_margin(self.margin)
+        return self.size
 
     def draw(self, new_size):
         self.current_size = new_size
@@ -24,19 +24,19 @@ class ColorRect(Widget):
             self.texture.fill(self.background)
 
         # only draw to the space we need to
-        draw_pos = Position(self.margin.left, self.margin.top)
+        draw_pos = Position(0, 0)
         if self.expand.is_horizontal:
             # fill the space
-            width = new_size.width - (self.margin.left + self.margin.right)
+            width = new_size.width
         else:
             # the size does not include the width, but it will have been calculated in the min size
             width = self.size.width
 
         if self.expand.is_vertical:
-            height = new_size.height - (self.margin.top + self.margin.bottom)
+            height = new_size.height
         else:
             height = self.size.height
 
-        offset = self.get_align_offset(Size(width, height), new_size.subtract_margin(self.margin))
+        offset = self.get_align_offset(Size(width, height), new_size)
         draw_pos += offset
         pygame.draw.rect(self.texture, self.color, (draw_pos.x, draw_pos.y, width, height))

@@ -1,9 +1,8 @@
 import unittest
-from unittest.mock import patch
 
-from pyui.base import Size, Position, Color
+from pyui.base import Size, Position
 from pyui.events.loop import PyUIApp
-from pyui.widgets import Frame, ColorRect
+from pyui.widgets import Frame
 
 
 class TestPyUiApp(unittest.TestCase):

@@ -1,12 +1,11 @@
 import pygame
 
-from pyui.base import Expand, Margin, Align, Size, Position
+from pyui.base import Expand, Align, Size, Position
 from pyui.events.loop import Callback, set_dirty
 
 
 # Widget
 # expand:       does the widget ask for as much space as possible, or just the minimum?
-# margin:      the size of the margin around the widget
 # min_size:    the smallest size the widget could be, with its margin
 # align:       if there is more size than the min size, and we are not filling, where should we align the widget?
 # parent:      the parent widget, or None if the root
@@ -25,9 +24,8 @@ from pyui.events.loop import Callback, set_dirty
 # set_dirty     tell the main loop to re-render this widget
 
 class Widget:
-    def __init__(self, expand=None, margin=None, align=None, background=None):
+    def __init__(self, expand=None, align=None, background=None):
         self.expand = expand if expand is not None else Expand.NONE
-        self.margin = margin if margin is not None else Margin()
         self.align = Align(align) if align is not None else Align(Align.CENTER)
         self.parent = None
         self.callbacks = []

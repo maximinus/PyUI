@@ -2,11 +2,9 @@ import pygame
 
 from pyui.base import Size, get_asset
 from pyui.events.events import Event
-from pyui.events.loop import app
 from pyui.theme import THEME
 from pyui.widget_base import Widget
 from pyui.widgets import TextLabel
-from pyui.events.loop import set_dirty
 
 
 class NinePatch(Widget):
@@ -30,7 +28,6 @@ class NinePatch(Widget):
 
     def draw(self, new_size):
         self.current_size = new_size
-        # TODO: Add margin calculations
 
         self.texture = pygame.Surface((new_size.width, new_size.height), pygame.SRCALPHA)
         if self.patch_background is not None:

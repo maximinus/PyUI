@@ -2,7 +2,7 @@ from unittest.mock import patch
 
 import pygame
 
-from pyui.base import Size, Align, Position, Margin
+from pyui.base import Size, Align, Position
 from pyui.events.loop import app
 from pyui.widgets import Frame, TextLabel, Button, VBox
 from test.sdl_test import SDLTest
@@ -49,9 +49,8 @@ class TestFrameDirtyUpdates(SDLTest):
         self.assertEqual(area, pygame.Rect(20, 20, 760, 560))
 
     def test_nested_widget(self):
-        m = Margin(16, 16, 16, 16)
-        button = Button('Click Me', Size(120, 60), margin=m, align=Align.CENTER)
-        label = TextLabel('Clicked 0 times', margin=m, align=Align.CENTER)
+        button = Button('Click Me', Size(120, 60), align=Align.CENTER)
+        label = TextLabel('Clicked 0 times', align=Align.CENTER)
         box = VBox(align=Align.CENTER, widgets=[button, label])
         frame = Frame(size=Size(800, 600), pos=Position(0, 0), widget=box, background=(80, 80, 80))
         frame.draw(Size(800, 600))
