@@ -1,54 +1,11 @@
-Our aim is to make enough GUI to build an IDE.
+Our aim is to make a GUI for Pygame
 
-To not get side-tracked, we need to build towards this rather than anything else.
-This means that, at a minimum, we need to solve the following:
+TODO:
 
-1: We need drop-down menus
-2: We need a text widget
-3: The window must be re-sizeable
-4: We need to be able to produce a new window
-5: We need to get fonts from the system and use them
-6: We need a file selector
-7: We need a tree widget
-8: We need to have a scrollable box widget
-9: We need a widget model that responds to events
-10: Other widgets: Checkbox, Drop-down menu, text input, splitter, tabs, icon, button
-
-
-Plan
-----
-
-* Get a single menu displaying
-* Connect that to a menubar
-* Get the mouse working with a connection to the menu items
-* Add actions to the system to handle callbacks
-5: Allow the window to be resized
-6: Add a text editor widget
-7: Allow editing of text
-8: Add a file manager to the lhs; include a splitter widget
-9: Fill in the menus
-10: Add search / replace
-11: Add allowing to make an extra window
-12: Allow saving and loading
-13: Add tabs to the text editor
-
-
-Current Work and Latest:
-
-Clean up the base widget as according to the new spec
-Make a button widget that has mouse over and click images
-Render this example as the ColorRect code
-Update the other widgets to fall in line with this code
-Re-vist the mouse menu and use the same code to make that work
-Finish the mouse-menu
-
-
-Window can be resized
-* Menus look ok
-* Basic text widget added.
-
-
-Phase 2
--------
-
-At this point, we start to move to Lisp.
+Remove the margin and add it as an extra widget with one child
+Make the rendering immediate mode
+Simplify the events capture from the mouse
+Make all the examples works
+Make all the tests pass
+Review the current code setup
+Build a wheel and add as a pip package
