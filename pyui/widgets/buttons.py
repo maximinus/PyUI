@@ -152,9 +152,3 @@ class Button(StackBox):
         self.widgets[0] = self.normal_image
         self.draw(self.current_size)
         self.set_dirty()
-
-    def button_clicked(self, callback):
-        pass
-
-    def button_click_release(self, callback):
-        pass

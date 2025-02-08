@@ -40,7 +40,7 @@ class CallbackData:
         return f'CallbackData: {self.event}, {self.data}'
 
 
-class Callback:
+class CallbackOld:
     def __init__(self, callback, event_type, widget, data=None):
         self.callback = callback
         self.event_type = event_type
@@ -138,33 +138,6 @@ class PyUIApp:
         clock = get_clock()
         self.looping = True
         while True:
-            # convert all pygame events into our events
-            pyui_events = []
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    pygame.quit()
-                    sys.exit(True)
-                pyui_event = PyUiEvent.event(event)
-                if pyui_event is not None:
-                    pyui_events.append(pyui_event)
-
-            # we are only interested in the LAST mouse move event in every frame, so remove the rest
-            mouse_move_found = False
-            filtered_events = []
-            for event in reversed(pyui_events):
-                if event.type == Event.MouseMove:
-                    if not mouse_move_found:
-                        filtered_events.append(event)
-                        mouse_move_found = True
-                else:
-                    filtered_events.append(event)
-            filtered_events.reverse()
-            pyui_events = filtered_events
-
-            pyui_events.extend(self.frame_events)
-            self.frame_events = []
-            for single_event in pyui_events:
-                self.handle_event(single_event)
             if not self.remove_dead_frames():
                 self.update_dirty_widgets()
             else:
@@ -207,9 +180,6 @@ class PyUIApp:
         pygame.display.flip()
 
     def handle_event(self, event):
-        # cycle through the frames
-        # do it this way in case something adds a handler in an event
-
         # some events are tied to mouse move events, so handle those differently
         # per frame there could be multiple mouse move events. However, we are only sent the last one
         if event.type == Event.MouseMove:
