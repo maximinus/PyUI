@@ -1,3 +1,5 @@
+from pygame import Surface
+
 from src.helpers import Size, Margin, Alignment, Position
 
 
@@ -55,3 +57,6 @@ class Widget:
         elif self.align in [Alignment.BOTTOM, Alignment.CENTER_BOTTOM, Alignment.BOTTOM_LEFT, Alignment.BOTTOM_RIGHT]:
             return Alignment.BOTTOM
         return Alignment.CENTER
+
+    def render(self, destination: Surface, pos: Position, size: Size):
+        pass
