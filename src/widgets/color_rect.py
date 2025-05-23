@@ -1,4 +1,4 @@
-from pyray import Color
+from pygame import Color
 
 from src.widget import Widget
 from src.helpers import Size

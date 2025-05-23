@@ -1,6 +1,6 @@
 import unittest
 
-from pyray import Color
+from pygame import Color
 
 from src.widgets import ColorRect
 from src.helpers import Size, Margin
