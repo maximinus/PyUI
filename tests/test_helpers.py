@@ -1,6 +1,6 @@
 import unittest
 
-from src.helpers import Size, Margin, Position
+from pyui.helpers import Size, Margin, Position
 
 
 class TestSize(unittest.TestCase):

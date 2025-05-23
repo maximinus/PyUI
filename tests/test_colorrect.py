@@ -2,8 +2,8 @@ import unittest
 
 from pygame import Color
 
-from src.widgets import ColorRect
-from src.helpers import Size, Margin
+from pyui.widgets import ColorRect
+from pyui.helpers import Size, Margin
 
 
 class TestColorRect(unittest.TestCase):

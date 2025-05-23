@@ -1,7 +1,7 @@
 from pygame import Surface
 
-from src.widget import Widget
-from src.helpers import Size, Position
+from pyui.widget import Widget
+from pyui.helpers import Size, Position
 
 
 class Image(Widget):

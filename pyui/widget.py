@@ -1,6 +1,6 @@
 from pygame import Surface
 
-from src.helpers import Size, Margin, Alignment, Position
+from pyui.helpers import Size, Margin, Alignment, Position
 
 
 class Widget:

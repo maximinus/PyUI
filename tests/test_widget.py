@@ -1,7 +1,7 @@
 import unittest
 
-from src.widget import Widget
-from src.helpers import Size, Margin, Position, Alignment
+from pyui.widget import Widget
+from pyui.helpers import Size, Margin, Position, Alignment
 
 
 class TestWidget(unittest.TestCase):
