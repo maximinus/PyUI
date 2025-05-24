@@ -25,7 +25,7 @@ class Widget:
             return render_position
         # calculate position based on alignment
         if space_x > 0:
-            match self.horizontal_align:
+            match self.align.horizontal:
                 case Alignment.LEFT:
                     render_position.x = 0
                 case Alignment.RIGHT:
@@ -33,7 +33,7 @@ class Widget:
                 case _:
                     render_position.x = space_x // 2
         if space_y > 0:
-            match self.vertical_align:
+            match self.align.vertical:
                 case Alignment.TOP:
                     render_position.y = 0
                 case Alignment.BOTTOM:
@@ -41,22 +41,6 @@ class Widget:
                 case _:
                     render_position.y = space_y // 2
         return render_position
-
-    @property
-    def horizontal_align(self):
-        if self.align in [Alignment.LEFT, Alignment.CENTER_LEFT, Alignment.TOP_LEFT, Alignment.BOTTOM_LEFT]:
-            return Alignment.LEFT
-        elif self.align in [Alignment.RIGHT, Alignment.CENTER_RIGHT, Alignment.TOP_RIGHT, Alignment.BOTTOM_RIGHT]:
-            return Alignment.RIGHT
-        return Alignment.CENTER
-
-    @property
-    def vertical_align(self):
-        if self.align in [Alignment.TOP, Alignment.CENTER_TOP, Alignment.TOP_LEFT, Alignment.TOP_RIGHT]:
-            return Alignment.TOP
-        elif self.align in [Alignment.BOTTOM, Alignment.CENTER_BOTTOM, Alignment.BOTTOM_LEFT, Alignment.BOTTOM_RIGHT]:
-            return Alignment.BOTTOM
-        return Alignment.CENTER
 
     def render(self, destination: Surface, pos: Position, size: Size):
         pass

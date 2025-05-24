@@ -19,66 +19,6 @@ class TestWidget(unittest.TestCase):
         self.assertEqual(widget.min_size, Size(5 + 5, 5 + 5))
 
 
-class TestWidgetAlignHorizontal(unittest.TestCase):
-    def test_horizontal_align(self):
-        widget = Widget(align=Alignment.LEFT)
-        self.assertEqual(widget.horizontal_align, Alignment.LEFT)
-
-    def test_horizontal_align_center(self):
-        widget = Widget(align=Alignment.CENTER)
-        self.assertEqual(widget.horizontal_align, Alignment.CENTER)
-
-    def test_horizontal_align_right(self):
-        widget = Widget(align=Alignment.RIGHT)
-        self.assertEqual(widget.horizontal_align, Alignment.RIGHT)
-
-    def test_horizontal_align_top_left(self):
-        widget = Widget(align=Alignment.TOP_LEFT)
-        self.assertEqual(widget.horizontal_align, Alignment.LEFT)
-
-    def test_horizontal_align_top_right(self):
-        widget = Widget(align=Alignment.TOP_RIGHT)
-        self.assertEqual(widget.horizontal_align, Alignment.RIGHT)
-
-    def test_horizontal_align_bottom_left(self):
-        widget = Widget(align=Alignment.BOTTOM_LEFT)
-        self.assertEqual(widget.horizontal_align, Alignment.LEFT)
-
-    def test_horizontal_align_bottom_right(self):
-        widget = Widget(align=Alignment.BOTTOM_RIGHT)
-        self.assertEqual(widget.horizontal_align, Alignment.RIGHT)
-
-
-class TestWidgetAlignVertical(unittest.TestCase):
-    def test_vertical_align(self):
-        widget = Widget(align=Alignment.TOP)
-        self.assertEqual(widget.vertical_align, Alignment.TOP)
-
-    def test_vertical_align_center(self):
-        widget = Widget(align=Alignment.CENTER)
-        self.assertEqual(widget.vertical_align, Alignment.CENTER)
-
-    def test_vertical_align_bottom(self):
-        widget = Widget(align=Alignment.BOTTOM)
-        self.assertEqual(widget.vertical_align, Alignment.BOTTOM)
-
-    def test_vertical_align_top_left(self):
-        widget = Widget(align=Alignment.TOP_LEFT)
-        self.assertEqual(widget.vertical_align, Alignment.TOP)
-
-    def test_vertical_align_top_right(self):
-        widget = Widget(align=Alignment.TOP_RIGHT)
-        self.assertEqual(widget.vertical_align, Alignment.TOP)
-
-    def test_vertical_align_bottom_left(self):
-        widget = Widget(align=Alignment.BOTTOM_LEFT)
-        self.assertEqual(widget.vertical_align, Alignment.BOTTOM)
-
-    def test_vertical_align_bottom_right(self):
-        widget = Widget(align=Alignment.BOTTOM_RIGHT)
-        self.assertEqual(widget.vertical_align, Alignment.BOTTOM)
-
-
 class TestWidgetPosition(unittest.TestCase):
     def test_position(self):
         widget = Widget(margin=Margin(20, 20, 20, 20))

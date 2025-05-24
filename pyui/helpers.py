@@ -1,21 +1,37 @@
-from enum import Enum, auto
+from enum import IntEnum, auto
 from dataclasses import dataclass
 
 
-class Alignment(Enum):
-    LEFT = auto()
-    RIGHT = auto
-    CENTER = auto()
-    TOP = auto()
-    BOTTOM = auto()
-    TOP_LEFT = auto()
-    TOP_RIGHT = auto()
-    BOTTOM_LEFT = auto()
-    BOTTOM_RIGHT = auto()
-    CENTER_LEFT = auto()
-    CENTER_RIGHT = auto()
-    CENTER_TOP = auto()
-    CENTER_BOTTOM = auto()
+class Alignment(IntEnum):
+    LEFT = 3
+    RIGHT = 5
+    CENTER = 4
+    TOP = 7
+    BOTTOM = 1
+    TOP_LEFT = 6
+    TOP_RIGHT = 8
+    BOTTOM_LEFT = 0
+    BOTTOM_RIGHT = 2
+
+    @property
+    def horizontal(self):
+        match self.value % 3:
+            case 0:
+                return Alignment.LEFT
+            case 1:
+                return Alignment.CENTER
+            case _:
+                return Alignment.RIGHT
+
+    @property
+    def vertical(self):
+        match self.value // 3:
+            case 0:
+                return Alignment.BOTTOM
+            case 1:
+                return Alignment.CENTER
+            case _:
+                return Alignment.TOP
 
 
 @dataclass

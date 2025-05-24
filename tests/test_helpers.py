@@ -1,6 +1,6 @@
 import unittest
 
-from pyui.helpers import Size, Margin, Position
+from pyui.helpers import Size, Margin, Position, Alignment
 
 
 class TestSize(unittest.TestCase):
@@ -91,3 +91,50 @@ class TestMargin(unittest.TestCase):
         margin = Margin.none()
         expected_margin = Margin(0, 0, 0, 0)
         self.assertEqual(margin, expected_margin)
+
+
+class TestAlignment(unittest.TestCase):
+    def test_top_left(self):
+        align = Alignment.TOP_LEFT
+        self.assertEqual(align.horizontal, Alignment.LEFT)
+        self.assertEqual(align.vertical, Alignment.TOP)
+
+    def test_top(self):
+        align = Alignment.TOP
+        self.assertEqual(align.horizontal, Alignment.CENTER)
+        self.assertEqual(align.vertical, Alignment.TOP)
+
+    def test_top_right(self):
+        align = Alignment.TOP_RIGHT
+        self.assertEqual(align.horizontal, Alignment.RIGHT)
+        self.assertEqual(align.vertical, Alignment.TOP)
+    
+    def test_left(self):
+        align = Alignment.LEFT
+        self.assertEqual(align.horizontal, Alignment.LEFT)
+        self.assertEqual(align.vertical, Alignment.CENTER)
+    
+    def test_center(self):
+        align = Alignment.CENTER
+        self.assertEqual(align.horizontal, Alignment.CENTER)
+        self.assertEqual(align.vertical, Alignment.CENTER)
+    
+    def test_right(self):
+        align = Alignment.RIGHT
+        self.assertEqual(align.horizontal, Alignment.RIGHT)
+        self.assertEqual(align.vertical, Alignment.CENTER)
+    
+    def test_bottom_left(self):
+        align = Alignment.BOTTOM_LEFT
+        self.assertEqual(align.horizontal, Alignment.LEFT)
+        self.assertEqual(align.vertical, Alignment.BOTTOM)
+    
+    def test_bottom(self):
+        align = Alignment.BOTTOM
+        self.assertEqual(align.horizontal, Alignment.CENTER)
+        self.assertEqual(align.vertical, Alignment.BOTTOM)
+    
+    def test_bottom_right(self):
+        align = Alignment.BOTTOM_RIGHT
+        self.assertEqual(align.horizontal, Alignment.RIGHT)
+        self.assertEqual(align.vertical, Alignment.BOTTOM)
