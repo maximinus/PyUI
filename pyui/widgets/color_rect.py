@@ -30,12 +30,10 @@ class ColorRect(Widget):
         # the maximum expansion is the size of the destination minus the margin
         render_width = self.size.width
         if self.expand.horizontal:
-            render_width = size.width - self.margin.right
+            render_width = size.width - self.margin.width
         render_height = self.size.height
         if self.expand.vertical:
-            render_height = size.height - self.margin.bottom
-        if self.expand.vertical:
-            render_pos.height = size.height - self.margin.size.height
+            render_height = size.height - self.margin.height
         pygame.draw.rect(destination,
                          self.color, (render_pos.x, render_pos.y,
                                       render_width, render_height))

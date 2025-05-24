@@ -102,3 +102,11 @@ class Margin:
         width = self.left + self.right
         height = self.top + self.bottom
         return Size(width, height)
+    
+    @property
+    def width(self) -> int:
+        return self.left + self.right
+
+    @property
+    def height(self) -> int:
+        return self.top + self.bottom
