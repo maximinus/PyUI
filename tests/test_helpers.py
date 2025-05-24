@@ -1,6 +1,6 @@
 import unittest
 
-from pyui.helpers import Size, Margin, Position, Alignment
+from pyui.helpers import Size, Margin, Position, Alignment, Expand
 
 
 class TestSize(unittest.TestCase):
@@ -138,3 +138,25 @@ class TestAlignment(unittest.TestCase):
         align = Alignment.BOTTOM_RIGHT
         self.assertEqual(align.horizontal, Alignment.RIGHT)
         self.assertEqual(align.vertical, Alignment.BOTTOM)
+
+
+class TestExpand(unittest.TestCase):
+    def test_no_expand(self):
+        expand = Expand.NONE
+        self.assertEqual(expand.horizontal, False)
+        self.assertEqual(expand.vertical, False)
+    
+    def test_horizontal_expand(self):
+        expand = Expand.HORIZONTAL
+        self.assertEqual(expand.horizontal, True)
+        self.assertEqual(expand.vertical, False)
+    
+    def test_vertical_expand(self):
+        expand = Expand.VERTICAL
+        self.assertEqual(expand.horizontal, False)
+        self.assertEqual(expand.vertical, True)
+    
+    def test_both_expand(self):
+        expand = Expand.BOTH
+        self.assertEqual(expand.horizontal, True)
+        self.assertEqual(expand.vertical, True)

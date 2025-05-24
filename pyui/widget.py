@@ -1,16 +1,20 @@
 from pygame import Surface
 
-from pyui.helpers import Size, Margin, Alignment, Position
+from pyui.helpers import Size, Margin, Alignment, Position, Expand
 
 
 class Widget:
-    def __init__(self, margin=None, align=None):
+    def __init__(self, margin=None, align=None, expand=None, background=None):
         if margin is None:
             margin = Margin.none()
         if align is None:
             align = Alignment.CENTER
+        if expand is None:
+            expand = Expand.NONE
         self.align = align
         self.margin = margin
+        self.expand = expand
+        self.background = background
 
     @property
     def min_size(self) -> Size:

@@ -1,5 +1,20 @@
-from enum import IntEnum, auto
+from enum import IntEnum
 from dataclasses import dataclass
+
+
+class Expand(IntEnum):
+    NONE = 0
+    HORIZONTAL = 1
+    VERTICAL = 2
+    BOTH = 3
+
+    @property
+    def horizontal(self) -> bool:
+        return self.value % 2 == 1
+
+    @property
+    def vertical(self) -> bool:
+        return self.value > 1
 
 
 class Alignment(IntEnum):
