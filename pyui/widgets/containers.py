@@ -3,6 +3,7 @@ from pygame import Surface
 from pyui.widget import Widget
 from pyui.helpers import Size, Position
 
+
 def split_pixels(total_children, spare_pixels):
     if total_children == 0:
         return []        
@@ -16,7 +17,26 @@ def split_pixels(total_children, spare_pixels):
         result[i] += 1
     return result
 
-class HBox(Widget):
+
+class Container(Widget):
+    """
+    A base class for all container widgets. Containers can hold other widgets.
+    """
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.children = []
+
+    def add_child(self, child: Widget):
+        self.children.append(child)
+        child.parent = self
+
+    def remove_child(self, child: Widget):
+        if child in self.children:
+            self.children.remove(child)
+            child.parent = None
+
+
+class HBox(Container):
     """
     A horizontal box container that arranges its children in a single row.
     """
@@ -34,7 +54,7 @@ class HBox(Widget):
             box_size.height = max(box_size.height, child_size.height)
         total_children = len(self.children)
         if total_children > 1:
-            box_size.width += total_children * self.spacing
+            box_size.width += (total_children - 1) * self.spacing
         return box_size + self.margin.size
 
     def render(self, destination: Surface, pos: Position, size: Size):
@@ -65,7 +85,7 @@ class HBox(Widget):
             current_x += child_size.width
 
 
-class VBox(Widget):
+class VBox(Container):
     """
     A vertical box container that arranges its children in a single column.
     """

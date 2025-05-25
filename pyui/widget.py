@@ -15,6 +15,7 @@ class Widget:
         self.margin = margin
         self.expand = expand
         self.background = background
+        self.parent = None
 
     @property
     def min_size(self) -> Size:
@@ -28,7 +29,7 @@ class Widget:
         if space_x < 0 or space_y < 0:
             return render_position
         # calculate position based on alignment
-        if space_x > 0:
+        if space_x > 0 and not self.expand.horizontal:
             match self.align.horizontal:
                 case Alignment.LEFT:
                     render_position.x = 0
@@ -36,7 +37,7 @@ class Widget:
                     render_position.x = space_x
                 case _:
                     render_position.x = space_x // 2
-        if space_y > 0:
+        if space_y > 0 and not self.expand.vertical:
             match self.align.vertical:
                 case Alignment.TOP:
                     render_position.y = 0

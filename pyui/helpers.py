@@ -80,6 +80,12 @@ class Size:
             return NotImplemented
         return Size(self.width + other.width, self.height + other.height)
 
+    def __sub__(self, other):
+        if not isinstance(other, Size):
+            return NotImplemented
+        return Size(self.width - other.width, self.height - other.height)
+
+
 @dataclass
 class Margin:
     left: int
