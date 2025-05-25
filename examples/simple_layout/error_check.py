@@ -1,6 +1,6 @@
 import pygame
 
-from pyui.widgets import ColorRect, HBox
+from pyui.widgets import Image
 from pyui.utility import wait_for_keypress
 from pyui.helpers import Margin, Position, Size, Expand
 
@@ -11,10 +11,10 @@ def run_example():
     pygame.display.set_caption("Simple Color Rect Example")
     screen.fill((20, 20, 80))
 
-    box = HBox(spacing=0, margin=Margin(0, 0, 0, 0))
-    box.add_child(ColorRect(color=(255, 0, 0), size=Size(20, 50), expand=Expand.HORIZONTAL))
-    box.add_child(ColorRect(color=(0, 255, 0), size=Size(20, 50), expand=Expand.HORIZONTAL))
-    box.render(screen, Position(0, 0), Size(100, 100))
+    img_surface = pygame.Surface((30, 30))
+    img_surface.fill((0, 255, 0))
+    image_widget = Image(image=img_surface, margin=Margin(10, 10, 10, 10))
+    image_widget.render(screen, Position(0, 0), Size(50, 50))
     pygame.display.flip()
 
     wait_for_keypress()

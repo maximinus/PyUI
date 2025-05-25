@@ -87,8 +87,8 @@ class TestMargin(unittest.TestCase):
         expected_size = Size(30, 70)
         self.assertEqual(margin.size, expected_size)
     
-    def test_none(self):
-        margin = Margin.none()
+    def test_default(self):
+        margin = Margin()
         expected_margin = Margin(0, 0, 0, 0)
         self.assertEqual(margin, expected_margin)
 

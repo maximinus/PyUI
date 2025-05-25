@@ -6,7 +6,7 @@ from pyui.helpers import Size, Margin, Alignment, Position, Expand
 class Widget:
     def __init__(self, margin=None, align=None, expand=None, background=None):
         if margin is None:
-            margin = Margin.none()
+            margin = Margin()
         if align is None:
             align = Alignment.CENTER
         if expand is None:

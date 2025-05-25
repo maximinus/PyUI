@@ -11,6 +11,7 @@ class Image(Widget):
     def __init__(self, image: Surface, **kwargs):
         super().__init__(**kwargs)
         self.size = Size(image.get_width(), image.get_height())
+        self.image = image
 
     @property
     def min_size(self) -> Size:

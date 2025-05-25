@@ -65,10 +65,12 @@ class Position:
         return Position(self.x + other.x, self.y + other.y)
 
 
-@dataclass
 class Size:
-    width: int
-    height: int
+    def __init__(self, width: int = 0, height: int = 0):
+        if min([width, height]) < 0:
+            raise ValueError("Size dimensions cannot be negative.")
+        self.width = width
+        self.height = height
 
     def __eq__(self, other):
         if not isinstance(other, Size):
@@ -86,16 +88,17 @@ class Size:
         return Size(self.width - other.width, self.height - other.height)
 
 
-@dataclass
 class Margin:
-    left: int
-    right: int
-    top: int
-    bottom: int
-
-    @classmethod
-    def none(cls):
-        return cls(left=0, right=0, top=0, bottom=0)
+    def __init__(self, left: int = 0, right: int = 0, top: int = 0, bottom: int = 0):
+        """
+        Initialize a Margin with specified values for left, right, top, and bottom.
+        """
+        if min([left, right, top, bottom]) < 0:
+            raise ValueError("Margin values cannot be negative.")
+        self.left = left
+        self.right = right
+        self.top = top
+        self.bottom = bottom
 
     def __eq__(self, other):
         if not isinstance(other, Margin):
