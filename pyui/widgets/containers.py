@@ -103,7 +103,7 @@ class VBox(Container):
             box_size.height += child_size.height
         total_children = len(self.children)
         if total_children > 1:
-            box_size.height += total_children * self.spacing
+            box_size.height += (total_children - 1) * self.spacing
         return box_size + self.margin.size
 
     def render(self, destination: Surface, pos: Position, size: Size):
