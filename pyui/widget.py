@@ -16,6 +16,9 @@ class Widget:
         self.expand = expand
         self.background = background
         self.parent = None
+        # if a widget is expanding, it means it will draw to the extra
+        # apce allocated to it
+        self.expanding = False
 
     @property
     def min_size(self) -> Size:
@@ -29,7 +32,8 @@ class Widget:
         if space_x < 0 or space_y < 0:
             return render_position
         # calculate position based on alignment
-        if space_x > 0 and not self.expand.horizontal:
+        # don't offset if wanting to expand AND self-expanding
+        if space_x > 0 and not (self.expand.horizontal and self.expanding):
             match self.align.horizontal:
                 case Alignment.LEFT:
                     render_position.x = 0
@@ -37,7 +41,7 @@ class Widget:
                     render_position.x = space_x
                 case _:
                     render_position.x = space_x // 2
-        if space_y > 0 and not self.expand.vertical:
+        if space_y > 0 and not (self.expand.vertical and self.expanding):
             match self.align.vertical:
                 case Alignment.TOP:
                     render_position.y = 0

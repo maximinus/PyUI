@@ -13,6 +13,8 @@ class ColorRect(Widget):
         super().__init__(**kwargs)
         self.size = size
         self.color = color
+        # we can expand the rectangle to fill the available space
+        self.expanding = True
 
     @property
     def min_size(self) -> Size:

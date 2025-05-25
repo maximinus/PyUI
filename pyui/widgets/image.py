@@ -22,6 +22,7 @@ class Image(Widget):
         Render the image to the given surface at the specified position.
         """
         render_pos = self.get_position(size)
+        render_pos += position
         # add the margin left and top
         render_pos.x += self.margin.left
         render_pos.y += self.margin.top

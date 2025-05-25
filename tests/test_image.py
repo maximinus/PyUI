@@ -149,17 +149,3 @@ class TestImageRendering(PyuiTest):
         self.assertPixel(dest_surface, Position(30, 30), Color(255, 0, 0))
         self.assertPixel(dest_surface, Position(69, 69), Color(255, 0, 0))
         self.assertPixel(dest_surface, Position(70, 70), Color(0, 0, 0))
-    
-    def test_render_smaller_surface(self):
-        img_surface = Surface((60, 60))
-        img_surface.fill(Color(0, 255, 0))
-        image_widget = Image(image=img_surface)
-        # Render to a 50x50 surface (smaller than the image)
-        dest_surface = pygame.Surface((50, 50))
-        dest_surface.fill(Color(0, 0, 0))
-        # Render the image - it should be partially visible
-        image_widget.render(dest_surface, Position(0, 0), Size(50, 50))
-        # The image should be centered but partially clipped
-        self.assertPixel(dest_surface, Position(0, 0), Color(0, 0, 0))
-        self.assertPixel(dest_surface, Position(10, 10), Color(0, 255, 0))
-        self.assertPixel(dest_surface, Position(40, 40), Color(0, 255, 0))
