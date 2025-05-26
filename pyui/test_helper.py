@@ -19,3 +19,7 @@ class PyuiTest(unittest.TestCase):
         pixel_color = surface.get_at((pos.x, pos.y))
         assert pixel_color == col, f"Pixel at {pos} is {pixel_color}, expected {col}"
     
+    def assertNotPixel(self, surface: pygame.Surface, pos: Position, col: pygame.Color):
+        # Test if a pixel at the given position is NOT the expected color.
+        pixel_color = surface.get_at((pos.x, pos.y))
+        assert pixel_color != col, f"Pixel at {pos} is {pixel_color}, expected not {col}"
