@@ -13,6 +13,10 @@ class ImageCache:
         self.image = new_image
         self.size = Size(new_image.get_width(), new_image.get_height())
     
+    def clear(self):
+        self.image = None
+        self.size = None
+
     def matches(self, size: Size) -> bool:
         if self.image is None or self.size is None:
             return False

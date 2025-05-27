@@ -2,17 +2,48 @@ import pygame
 from pathlib import Path
 from typing import Dict
 
+from pyui.helpers import Size
+
+
 ASSETS_FOLDER = Path(__file__).parent / "assets"
+
+
+class Font:
+    """
+    A class that represents a font for rendering text.
+    """
+    def __init__(self, font_name: str, size: int = 16):
+        """
+        Initialize a Font object.
+        Args:
+            font_name: Name of the font or path to a font file
+            size: Font size in points
+        """
+        from pyui.assets import ASSETS_FOLDER
+        font_path = ASSETS_FOLDER / "fonts" / font_name
+        self.font = pygame.font.Font(str(font_path), size)
+        self.size = size
+
+    def render(self, text, color=(0, 0, 0)):
+        """Render text using the font."""
+        return self.font.render(text, True, color)
+    
+    def size_of(self, text) -> Size:
+        """Get the size of rendered text."""
+        pygame_size = self.font.size(text)
+        return Size(pygame_size[0], pygame_size[1])
 
 
 class FileCache:
     def __init__(self):
         self.images: Dict[str, pygame.Surface] = {}
         self.nine_patch: Dict[str, pygame.Surface] = {}
+        self.fonts: Dict[str, pygame.font.Font] = {}
 
     def clear(self):
         self.images = {}
         self.nine_patch = {}
+        self.fonts = {}
 
 
 file_cache = FileCache()
@@ -56,3 +87,13 @@ def get_nine_patch_data(json_name: str):
     """Get NinePatchData from a JSON file in the assets folder."""
     from pyui.widgets.nine_patch import NinePatchData
     return NinePatchData.from_json(json_name)
+
+
+def get_font(font_name: str, size: int = 16) -> Font:
+    font_key = f"{font_name}_{size}"
+    if font_key in file_cache.fonts:
+        return file_cache.fonts[font_key]
+    font_path = ASSETS_FOLDER / "fonts" / font_name
+    font = Font(font_path, size)
+    file_cache.fonts[font_key] = font
+    return font
