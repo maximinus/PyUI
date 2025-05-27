@@ -18,46 +18,19 @@ class Expand(IntEnum):
 
 
 class Align:
-    HORIZONTAL = Enum('Horizontal', ['LEFT', 'CENTER', 'RIGHT', 'STRETCH'])
-    VERTICAL = Enum('Vertical', ['TOP', 'CENTER', 'BOTTOM', 'STRETCH'])
+    LEFT = 1
+    CENTER = 2
+    RIGHT = 3
+    TOP = 4
+    BOTTOM = 5
+    FILL = 6
 
     def __init__(self, x, y):
+        assert x in (self.LEFT, self.CENTER, self.RIGHT, self.FILL), "Invalid horizontal alignment"
+        assert y in (self.TOP, self.CENTER, self.BOTTOM, self.FILL), "Invalid vertical alignment"
         self.horizontal = x
         self.vertical = y
 
-
-"""
-class Alignment(IntEnum):
-    LEFT = 3
-    RIGHT = 5
-    CENTER = 4
-    TOP = 7
-    BOTTOM = 1
-    TOP_LEFT = 6
-    TOP_RIGHT = 8
-    BOTTOM_LEFT = 0
-    BOTTOM_RIGHT = 2
-
-    @property
-    def horizontal(self):
-        match self.value % 3:
-            case 0:
-                return Alignment.LEFT
-            case 1:
-                return Alignment.CENTER
-            case _:
-                return Alignment.RIGHT
-
-    @property
-    def vertical(self):
-        match self.value // 3:
-            case 0:
-                return Alignment.BOTTOM
-            case 1:
-                return Alignment.CENTER
-            case _:
-                return Alignment.TOP
-"""
 
 @dataclass
 class Position:

@@ -8,7 +8,7 @@ class Widget:
         if margin is None:
             margin = Margin()
         if align is None:
-            align = Align(Align.HORIZONTAL.CENTER, Align.VERTICAL.CENTER)
+            align = Align(Align.CENTER, Align.CENTER)
         if expand is None:
             expand = Expand.NONE
         self.align = align
@@ -30,23 +30,23 @@ class Widget:
             return render_position
         # calculate position based on alignment
         # don't offset if wanting to expand AND self-expanding
-        if space_x > 0 and not (self.expand.horizontal and self.expanding):
+        if space_x > 0:
             match self.align.horizontal:
-                case Align.HORIZONTAL.LEFT:
+                case Align.LEFT:
                     render_position.x = 0
-                case Align.HORIZONTAL.RIGHT:
+                case Align.RIGHT:
                     render_position.x = space_x
-                case Align.HORIZONTAL.STRETCH:
+                case Align.FILL:
                     render_position.x = 0
                 case _:
                     render_position.x = space_x // 2
-        if space_y > 0 and not (self.expand.vertical and self.expanding):
+        if space_y > 0:
             match self.align.vertical:
-                case Align.VERTICAL.TOP:
+                case Align.TOP:
                     render_position.y = 0
-                case Align.VERTICAL.BOTTOM:
+                case Align.BOTTOM:
                     render_position.y = space_y
-                case Align.VERTICAL.STRETCH:
+                case Align.FILL:
                     render_position.y = 0
                 case _:
                     render_position.y = space_y // 2

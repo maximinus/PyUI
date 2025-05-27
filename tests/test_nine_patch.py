@@ -4,7 +4,7 @@ import pygame
 from pygame import Color, Surface
 
 from pyui.widgets import NinePatch, NinePatchData
-from pyui.helpers import Size, Margin, Position, Alignment, Expand
+from pyui.helpers import Size, Margin, Position, Align, Expand
 from pyui.test_helper import PyuiTest
 
 
@@ -93,7 +93,7 @@ class TestNinePatchRendering(PyuiTest):
     def test_render_with_alignment_top_left(self):
         """Test rendering with top-left alignment"""
         nine_patch = NinePatch(nine_patch_data=self.nine_patch_data,
-                               align=Alignment.TOP_LEFT)
+                               align=Align(Align.LEFT, Align.TOP))
         dest_surface = pygame.Surface((100, 100))
         dest_surface.fill((0, 0, 0))
         nine_patch.render(dest_surface, Position(0, 0), Size(50, 50))
@@ -105,7 +105,7 @@ class TestNinePatchRendering(PyuiTest):
     def test_render_with_alignment_bottom_right(self):
         """Test rendering with bottom-right alignment"""
         nine_patch = NinePatch(nine_patch_data=self.nine_patch_data,
-                               align=Alignment.BOTTOM_RIGHT)
+                               align=Align(Align.RIGHT, Align.BOTTOM))
         dest_surface = pygame.Surface((100, 100))
         dest_surface.fill((0, 0, 0))
         # Render at bottom-right of a 50x50 area
@@ -123,8 +123,11 @@ class TestNinePatchRendering(PyuiTest):
         
         # Render at a size much larger than the original image
         self.nine_patch.expand = Expand.BOTH
+        old_align = self.nine_patch.align
+        self.nine_patch.align = Align(Align.FILL, Align.FILL)
         self.nine_patch.render(dest_surface, Position(0, 0), Size(80, 80))
         self.nine_patch.expand = Expand.NONE
+        self.nine_patch.align = old_align
 
         # Check that the nine-patch expanded to fill most of the space
         self.assertNotPixel(dest_surface, Position(10, 10), (0, 0, 0))

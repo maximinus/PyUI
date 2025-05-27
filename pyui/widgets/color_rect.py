@@ -2,7 +2,7 @@ import pygame
 from pygame import Color, Surface
 
 from pyui.widget import Widget
-from pyui.helpers import Size, Position
+from pyui.helpers import Size, Position, Align
 
 
 class ColorRect(Widget):
@@ -10,11 +10,10 @@ class ColorRect(Widget):
     A widget that displays a solid color rectangle.
     """
     def __init__(self, color: Color, size: Size, **kwargs):
-        super().__init__(**kwargs)
+        assert "align" not in kwargs, "ColorRect does not support alignment."
+        super().__init__(align=Align(Align.FILL, Align.FILL), **kwargs)
         self.size = size
         self.color = color
-        # we can expand the rectangle to fill the available space
-        self.expanding = True
 
     @property
     def min_size(self) -> Size:

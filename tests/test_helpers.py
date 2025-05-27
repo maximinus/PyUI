@@ -95,54 +95,54 @@ class TestMargin(unittest.TestCase):
 
 class TestAlignment(unittest.TestCase):
     def test_top_left(self):
-        align = Align(Align.HORIZONTAL.LEFT, Align.VERTICAL.TOP)
-        self.assertEqual(align.horizontal, Align.HORIZONTAL.LEFT)
-        self.assertEqual(align.vertical, Align.VERTICAL.TOP)
+        align = Align(Align.LEFT, Align.TOP)
+        self.assertEqual(align.horizontal, Align.LEFT)
+        self.assertEqual(align.vertical, Align.TOP)
 
     def test_top(self):
-        align = Align(Align.HORIZONTAL.CENTER, Align.VERTICAL.TOP)
-        self.assertEqual(align.horizontal, Align.HORIZONTAL.CENTER)
-        self.assertEqual(align.vertical, Align.VERTICAL.TOP)
+        align = Align(Align.CENTER, Align.TOP)
+        self.assertEqual(align.horizontal, Align.CENTER)
+        self.assertEqual(align.vertical, Align.TOP)
 
     def test_top_right(self):
-        align = Align(Align.HORIZONTAL.RIGHT, Align.VERTICAL.TOP)
-        self.assertEqual(align.horizontal, Align.HORIZONTAL.RIGHT)
-        self.assertEqual(align.vertical, Align.VERTICAL.TOP)
+        align = Align(Align.RIGHT, Align.TOP)
+        self.assertEqual(align.horizontal, Align.RIGHT)
+        self.assertEqual(align.vertical, Align.TOP)
     
     def test_left(self):
-        align = Align(Align.HORIZONTAL.LEFT, Align.VERTICAL.CENTER)
-        self.assertEqual(align.horizontal, Align.HORIZONTAL.LEFT)
-        self.assertEqual(align.vertical, Align.VERTICAL.CENTER)
+        align = Align(Align.LEFT, Align.CENTER)
+        self.assertEqual(align.horizontal, Align.LEFT)
+        self.assertEqual(align.vertical, Align.CENTER)
     
     def test_center(self):
-        align = Align(Align.HORIZONTAL.CENTER, Align.VERTICAL.CENTER)
-        self.assertEqual(align.horizontal, Align.HORIZONTAL.CENTER)
-        self.assertEqual(align.vertical, Align.VERTICAL.CENTER)
+        align = Align(Align.CENTER, Align.CENTER)
+        self.assertEqual(align.horizontal, Align.CENTER)
+        self.assertEqual(align.vertical, Align.CENTER)
     
     def test_right(self):
-        align = Align(Align.HORIZONTAL.RIGHT, Align.VERTICAL.CENTER)
-        self.assertEqual(align.horizontal, Align.HORIZONTAL.RIGHT)
-        self.assertEqual(align.vertical, Align.VERTICAL.CENTER)
+        align = Align(Align.RIGHT, Align.CENTER)
+        self.assertEqual(align.horizontal, Align.RIGHT)
+        self.assertEqual(align.vertical, Align.CENTER)
     
     def test_bottom_left(self):
-        align = Align(Align.HORIZONTAL.LEFT, Align.VERTICAL.BOTTOM)
-        self.assertEqual(align.horizontal, Align.HORIZONTAL.LEFT)
-        self.assertEqual(align.vertical, Align.VERTICAL.BOTTOM)
+        align = Align(Align.LEFT, Align.BOTTOM)
+        self.assertEqual(align.horizontal, Align.LEFT)
+        self.assertEqual(align.vertical, Align.BOTTOM)
     
     def test_bottom(self):
-        align = Align(Align.HORIZONTAL.CENTER, Align.VERTICAL.BOTTOM)
-        self.assertEqual(align.horizontal, Align.HORIZONTAL.CENTER)
-        self.assertEqual(align.vertical, Align.VERTICAL.BOTTOM)
+        align = Align(Align.CENTER, Align.BOTTOM)
+        self.assertEqual(align.horizontal, Align.CENTER)
+        self.assertEqual(align.vertical, Align.BOTTOM)
     
     def test_bottom_right(self):
-        align = Align(Align.HORIZONTAL.RIGHT, Align.VERTICAL.BOTTOM)
-        self.assertEqual(align.horizontal, Align.HORIZONTAL.RIGHT)
-        self.assertEqual(align.vertical, Align.VERTICAL.BOTTOM)
+        align = Align(Align.RIGHT, Align.BOTTOM)
+        self.assertEqual(align.horizontal, Align.RIGHT)
+        self.assertEqual(align.vertical, Align.BOTTOM)
     
     def test_stretch(self):
-        align = Align(Align.HORIZONTAL.STRETCH, Align.VERTICAL.STRETCH)
-        self.assertEqual(align.horizontal, Align.HORIZONTAL.STRETCH)
-        self.assertEqual(align.vertical, Align.VERTICAL.STRETCH)
+        align = Align(Align.FILL, Align.FILL)
+        self.assertEqual(align.horizontal, Align.FILL)
+        self.assertEqual(align.vertical, Align.FILL)
 
 
 class TestExpand(unittest.TestCase):

@@ -5,7 +5,7 @@ import pygame
 from pygame import Color, Surface
 
 from pyui.widgets import Image
-from pyui.helpers import Size, Margin, Position, Alignment, Expand
+from pyui.helpers import Size, Margin, Position, Align, Expand
 from pyui.test_helper import PyuiTest
 
 
@@ -56,7 +56,7 @@ class TestImageRendering(PyuiTest):
     def test_render_with_alignment_top_left(self):
         img_surface = Surface((40, 40))
         img_surface.fill(Color(0, 0, 255))
-        image_widget = Image(image=img_surface, align=Alignment.TOP_LEFT)
+        image_widget = Image(image=img_surface, align=Align(Align.LEFT, Align.TOP))
         dest_surface = pygame.Surface((100, 100))
         dest_surface.fill(Color(0, 0, 0))
         image_widget.render(dest_surface, Position(0, 0), Size(100, 100))
@@ -67,7 +67,7 @@ class TestImageRendering(PyuiTest):
     def test_render_with_alignment_top_right(self):
         img_surface = Surface((40, 40))
         img_surface.fill(Color(255, 0, 0))
-        image_widget = Image(image=img_surface, align=Alignment.TOP_RIGHT)
+        image_widget = Image(image=img_surface, align=Align(Align.RIGHT, Align.TOP))
         dest_surface = pygame.Surface((100, 100))
         dest_surface.fill(Color(0, 0, 0))
         image_widget.render(dest_surface, Position(0, 0), Size(100, 100))
@@ -78,7 +78,7 @@ class TestImageRendering(PyuiTest):
     def test_render_with_alignment_bottom_left(self):
         img_surface = Surface((40, 40))
         img_surface.fill(Color(0, 255, 0))
-        image_widget = Image(image=img_surface, align=Alignment.BOTTOM_LEFT)
+        image_widget = Image(image=img_surface, align=Align(Align.LEFT, Align.BOTTOM))
         dest_surface = pygame.Surface((100, 100))
         dest_surface.fill(Color(0, 0, 0))
         image_widget.render(dest_surface, Position(0, 0), Size(100, 100))
@@ -89,7 +89,7 @@ class TestImageRendering(PyuiTest):
     def test_render_with_alignment_bottom_right(self):
         img_surface = Surface((40, 40))
         img_surface.fill(Color(0, 0, 255))
-        image_widget = Image(image=img_surface, align=Alignment.BOTTOM_RIGHT)
+        image_widget = Image(image=img_surface, align=Align(Align.RIGHT, Align.BOTTOM))
         dest_surface = pygame.Surface((100, 100))
         dest_surface.fill(Color(0, 0, 0))
         image_widget.render(dest_surface, Position(0, 0), Size(100, 100))

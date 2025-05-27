@@ -1,7 +1,7 @@
 import unittest
 
 from pyui.widget import Widget
-from pyui.helpers import Size, Margin, Position, Alignment
+from pyui.helpers import Size, Margin, Position, Align
 
 
 class TestWidget(unittest.TestCase):
@@ -31,21 +31,21 @@ class TestWidgetPosition(unittest.TestCase):
         self.assertEqual(position, Position(30, 30))
 
     def test_position_left_with_space(self):
-        widget = Widget(margin=Margin(20, 20, 20, 20), align=Alignment.LEFT)
+        widget = Widget(margin=Margin(20, 20, 20, 20), align=Align(Align.LEFT, Align.CENTER))
         position = widget.get_position(Size(100, 100))
         self.assertEqual(position, Position(0, 30))
     
     def test_position_right_with_space(self):
-        widget = Widget(margin=Margin(20, 20, 20, 20), align=Alignment.RIGHT)
+        widget = Widget(margin=Margin(20, 20, 20, 20), align=Align(Align.RIGHT, Align.CENTER))
         position = widget.get_position(Size(100, 100))
         self.assertEqual(position, Position(60, 30))
 
     def test_position_top_with_space(self):
-        widget = Widget(margin=Margin(20, 20, 20, 20), align=Alignment.TOP)
+        widget = Widget(margin=Margin(20, 20, 20, 20), align=Align(Align.CENTER, Align.TOP))
         position = widget.get_position(Size(100, 100))
         self.assertEqual(position, Position(30, 0))
     
     def test_position_bottom_with_space(self):
-        widget = Widget(margin=Margin(20, 20, 20, 20), align=Alignment.BOTTOM)
+        widget = Widget(margin=Margin(20, 20, 20, 20), align=Align(Align.CENTER, Align.BOTTOM))
         position = widget.get_position(Size(100, 100))
         self.assertEqual(position, Position(30, 60))
