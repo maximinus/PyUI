@@ -55,8 +55,8 @@ class NinePatch(Widget):
     def __init__(self, nine_patch_data: NinePatchData, size: Size = None, **kwargs):
         super().__init__(**kwargs)
         self.nine_patch_data = nine_patch_data
-        self.image = nine_patch_data.image
-        self.img_size = Size(self.image.get_width(), self.image.get_height())
+        self.render_image = nine_patch_data.image
+        self.img_size = Size(self.render_image.get_width(), self.render_image.get_height())
         if size:
             self.size = size
         else:
@@ -68,12 +68,16 @@ class NinePatch(Widget):
     @property
     def min_size(self) -> Size:
         return self.size + self.margin.size
-    
+
     def render(self, destination: Surface, position: Position, size: Size):
         """
         Render the nine patch image to the given surface at the specified position.
         Stretches the center parts to fit the given size while preserving corners.
         """
+        if self.image.matches(size):
+            destination.blit(self.image, position)
+            return
+
         render_pos = self.get_position(size)
         render_pos += position
         # Add the margin left and top
@@ -94,38 +98,38 @@ class NinePatch(Widget):
         
         # Draw the corners (they remain the same size)
         # Top-left corner
-        patch_surface.blit(self.image.subsurface((0, 0, n.left, n.top)), (0, 0))
-        patch_surface.blit(self.image.subsurface((self.img_size.width - n.right, 0, n.right, n.top)),
+        patch_surface.blit(self.render_image.subsurface((0, 0, n.left, n.top)), (0, 0))
+        patch_surface.blit(self.render_image.subsurface((self.img_size.width - n.right, 0, n.right, n.top)),
                            (render_width - n.right, 0))
-        patch_surface.blit(self.image.subsurface((0, self.img_size.height - n.bottom, n.left, n.bottom)),
+        patch_surface.blit(self.render_image.subsurface((0, self.img_size.height - n.bottom, n.left, n.bottom)),
                            (0, render_height - n.bottom))
-        patch_surface.blit(self.image.subsurface(
+        patch_surface.blit(self.render_image.subsurface(
             (self.img_size.width - n.right, self.img_size.height - n.bottom, n.right, n.bottom)),
             (render_width - n.right, render_height - n.bottom))
         
         # Top edge
-        top_edge = self.image.subsurface((n.left, 0, self.img_size.width - n.left - n.right, n.top))
+        top_edge = self.render_image.subsurface((n.left, 0, self.img_size.width - n.left - n.right, n.top))
         scaled_top_edge = transform.scale(top_edge, (render_width - n.left - n.right, n.top))
         patch_surface.blit(scaled_top_edge, (n.left, 0))
         
         # Bottom edge
-        bottom_edge = self.image.subsurface((n.left, self.img_size.height - n.bottom, 
+        bottom_edge = self.render_image.subsurface((n.left, self.img_size.height - n.bottom, 
                                             self.img_size.width - n.left - n.right, n.bottom))
         scaled_bottom_edge = transform.scale(bottom_edge, (render_width - n.left - n.right, n.bottom))
         patch_surface.blit(scaled_bottom_edge, (n.left, render_height - n.bottom))
         
         # Left edge
-        left_edge = self.image.subsurface((0, n.top, n.left, self.img_size.height - n.top - n.bottom))
+        left_edge = self.render_image.subsurface((0, n.top, n.left, self.img_size.height - n.top - n.bottom))
         scaled_left_edge = transform.scale(left_edge, (n.left, render_height - n.top - n.bottom))
         patch_surface.blit(scaled_left_edge, (0, n.top))
         
         # Right edge
-        right_edge = self.image.subsurface((self.img_size.width - n.right, n.top, n.right, self.img_size.height - n.top - n.bottom))
+        right_edge = self.render_image.subsurface((self.img_size.width - n.right, n.top, n.right, self.img_size.height - n.top - n.bottom))
         scaled_right_edge = transform.scale(right_edge,
                                             (n.right, render_height - n.top - n.bottom))
         patch_surface.blit(scaled_right_edge, (render_width - n.right, n.top))
         # Center section
-        center = self.image.subsurface((n.left, n.top, self.img_size.width - n.left - n.right,
+        center = self.render_image.subsurface((n.left, n.top, self.img_size.width - n.left - n.right,
                                         self.img_size.height - n.top - n.bottom))
         scaled_center = transform.scale(center, 
                                     (render_width - n.left - n.right, 

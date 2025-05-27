@@ -50,3 +50,9 @@ def get_nine_patch(patch_name: str) -> pygame.Surface:
     nine_patch = pygame.image.load(patch_path)
     file_cache.nine_patch[patch_name] = nine_patch
     return nine_patch
+
+
+def get_nine_patch_data(json_name: str):
+    """Get NinePatchData from a JSON file in the assets folder."""
+    from pyui.widgets.nine_patch import NinePatchData
+    return NinePatchData.from_json(json_name)

@@ -23,8 +23,11 @@ class ColorRect(Widget):
         """
         Render the color rectangle to the given surface at the specified position.
         """
+        if self.image.matches(size):
+            destination.blit(self.image.image, position.as_tuple)
+            return
+        new_image = self.get_new_image(size)
         render_pos = self.get_position(size)
-        render_pos += position
         # add the margin left and top
         render_pos.x += self.margin.left
         render_pos.y += self.margin.top
@@ -36,6 +39,7 @@ class ColorRect(Widget):
         render_height = self.size.height
         if self.expand.vertical:
             render_height = size.height - self.margin.height
-        pygame.draw.rect(destination,
-                         self.color, (render_pos.x, render_pos.y,
-                                      render_width, render_height))
+        pygame.draw.rect(new_image,
+                         self.color, (0, 0, render_width, render_height))
+        self.image.update(new_image)
+        destination.blit(new_image, (render_pos + position).as_tuple)

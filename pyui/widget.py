@@ -1,6 +1,22 @@
+import pygame
 from pygame import Surface
 
 from pyui.helpers import Size, Margin, Align, Position, Expand
+
+
+class ImageCache:
+    def __init__(self, image: Surface, size: Size): 
+        self.image = image
+        self.size = size
+
+    def update(self, new_image: Surface):
+        self.image = new_image
+        self.size = Size(new_image.get_width(), new_image.get_height())
+    
+    def matches(self, size: Size) -> bool:
+        if self.image is None or self.size is None:
+            return False
+        return self.size == size
 
 
 class Widget:
@@ -16,10 +32,15 @@ class Widget:
         self.expand = expand
         self.background = background
         self.parent = None
+        self.image = ImageCache(None, None)
 
     @property
     def min_size(self) -> Size:
-        return self.margin.size
+        return Size(0, 0) + self.margin.size
+
+    def get_new_image(self, size: Size) -> Surface:
+        # The surface needs to have alpha
+        return Surface((size.width, size.height), flags=pygame.SRCALPHA)
 
     def get_position(self, area: Size) -> Position:
         render_position = Position(0, 0)
@@ -52,5 +73,5 @@ class Widget:
                     render_position.y = space_y // 2
         return render_position
 
-    def render(self, destination: Surface, pos: Position, size: Size):
+    def render(self, surface: Surface, pos: Position, size: Size):
         pass

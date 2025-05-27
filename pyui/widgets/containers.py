@@ -84,7 +84,6 @@ class HBox(Container):
             child.render(destination, Position(current_x, pos.y + self.margin.top), child_size)
             current_x += child_size.width
 
-
 class VBox(Container):
     """
     A vertical box container that arranges its children in a single column.

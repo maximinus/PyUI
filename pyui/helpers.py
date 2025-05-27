@@ -47,6 +47,10 @@ class Position:
             return NotImplemented
         return Position(self.x + other.x, self.y + other.y)
 
+    @property
+    def as_tuple(self):
+        return (self.x, self.y)
+
 
 class Size:
     def __init__(self, width: int = 0, height: int = 0):

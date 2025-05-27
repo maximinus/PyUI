@@ -1,8 +1,8 @@
 import pygame
 
-from pyui.widgets import NinePatch, NinePatchData
+from pyui.widgets import NinePatch, NinePatchData, ColorRect
 from pyui.utility import wait_for_keypress
-from pyui.helpers import Position, Size, Expand
+from pyui.helpers import Position, Size, Expand, Margin
 
 
 def run_example():
@@ -11,11 +11,10 @@ def run_example():
     pygame.display.set_caption("Simple Color Rect Example")
     screen.fill((20, 20, 80))
 
-    nine_patch_data = NinePatchData.from_json("button.json")
-    nine_patch = NinePatch(nine_patch_data=nine_patch_data, expand=Expand.BOTH)
-    # Render the image with a position offset of (10, 10)
-    nine_patch.expand = Expand.BOTH
-    nine_patch.render(screen, Position(0, 0), Size(80, 80))
+    color_rect = ColorRect(color=(255, 0, 0),
+                           size=Size(50, 50),
+                           margin=Margin(10, 10, 10, 10))
+    color_rect.render(screen, Position(0, 0), Size(70, 70))
     pygame.display.flip()
 
     wait_for_keypress()

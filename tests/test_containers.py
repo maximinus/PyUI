@@ -2,8 +2,8 @@ import unittest
 
 from pygame import Surface
 
-from pyui.widgets import HBox, VBox, ColorRect
-from pyui.helpers import Margin, Position, Size, Expand
+from pyui.widgets import HBox, VBox, ColorRect, Image
+from pyui.helpers import Margin, Position, Size, Expand, Align
 from pyui.widgets.containers import split_pixels
 from pyui.test_helper import PyuiTest
 

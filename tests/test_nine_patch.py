@@ -41,7 +41,7 @@ class TestNinePatch(unittest.TestCase):
     def test_nine_patch_creation(self):
         """Test basic creation of NinePatch widget"""
         self.assertEqual(self.nine_patch.nine_patch_data, self.nine_patch_data)
-        self.assertEqual(self.nine_patch.image, self.nine_patch_data.image)
+        self.assertEqual(self.nine_patch.render_image, self.nine_patch_data.image)
     
     def test_min_size(self):
         """Test minimum size calculation"""
