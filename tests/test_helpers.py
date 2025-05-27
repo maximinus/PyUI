@@ -1,6 +1,6 @@
 import unittest
 
-from pyui.helpers import Size, Margin, Position, Alignment, Expand
+from pyui.helpers import Size, Margin, Position, Align, Expand
 
 
 class TestSize(unittest.TestCase):
@@ -95,49 +95,54 @@ class TestMargin(unittest.TestCase):
 
 class TestAlignment(unittest.TestCase):
     def test_top_left(self):
-        align = Alignment.TOP_LEFT
-        self.assertEqual(align.horizontal, Alignment.LEFT)
-        self.assertEqual(align.vertical, Alignment.TOP)
+        align = Align(Align.HORIZONTAL.LEFT, Align.VERTICAL.TOP)
+        self.assertEqual(align.horizontal, Align.HORIZONTAL.LEFT)
+        self.assertEqual(align.vertical, Align.VERTICAL.TOP)
 
     def test_top(self):
-        align = Alignment.TOP
-        self.assertEqual(align.horizontal, Alignment.CENTER)
-        self.assertEqual(align.vertical, Alignment.TOP)
+        align = Align(Align.HORIZONTAL.CENTER, Align.VERTICAL.TOP)
+        self.assertEqual(align.horizontal, Align.HORIZONTAL.CENTER)
+        self.assertEqual(align.vertical, Align.VERTICAL.TOP)
 
     def test_top_right(self):
-        align = Alignment.TOP_RIGHT
-        self.assertEqual(align.horizontal, Alignment.RIGHT)
-        self.assertEqual(align.vertical, Alignment.TOP)
+        align = Align(Align.HORIZONTAL.RIGHT, Align.VERTICAL.TOP)
+        self.assertEqual(align.horizontal, Align.HORIZONTAL.RIGHT)
+        self.assertEqual(align.vertical, Align.VERTICAL.TOP)
     
     def test_left(self):
-        align = Alignment.LEFT
-        self.assertEqual(align.horizontal, Alignment.LEFT)
-        self.assertEqual(align.vertical, Alignment.CENTER)
+        align = Align(Align.HORIZONTAL.LEFT, Align.VERTICAL.CENTER)
+        self.assertEqual(align.horizontal, Align.HORIZONTAL.LEFT)
+        self.assertEqual(align.vertical, Align.VERTICAL.CENTER)
     
     def test_center(self):
-        align = Alignment.CENTER
-        self.assertEqual(align.horizontal, Alignment.CENTER)
-        self.assertEqual(align.vertical, Alignment.CENTER)
+        align = Align(Align.HORIZONTAL.CENTER, Align.VERTICAL.CENTER)
+        self.assertEqual(align.horizontal, Align.HORIZONTAL.CENTER)
+        self.assertEqual(align.vertical, Align.VERTICAL.CENTER)
     
     def test_right(self):
-        align = Alignment.RIGHT
-        self.assertEqual(align.horizontal, Alignment.RIGHT)
-        self.assertEqual(align.vertical, Alignment.CENTER)
+        align = Align(Align.HORIZONTAL.RIGHT, Align.VERTICAL.CENTER)
+        self.assertEqual(align.horizontal, Align.HORIZONTAL.RIGHT)
+        self.assertEqual(align.vertical, Align.VERTICAL.CENTER)
     
     def test_bottom_left(self):
-        align = Alignment.BOTTOM_LEFT
-        self.assertEqual(align.horizontal, Alignment.LEFT)
-        self.assertEqual(align.vertical, Alignment.BOTTOM)
+        align = Align(Align.HORIZONTAL.LEFT, Align.VERTICAL.BOTTOM)
+        self.assertEqual(align.horizontal, Align.HORIZONTAL.LEFT)
+        self.assertEqual(align.vertical, Align.VERTICAL.BOTTOM)
     
     def test_bottom(self):
-        align = Alignment.BOTTOM
-        self.assertEqual(align.horizontal, Alignment.CENTER)
-        self.assertEqual(align.vertical, Alignment.BOTTOM)
+        align = Align(Align.HORIZONTAL.CENTER, Align.VERTICAL.BOTTOM)
+        self.assertEqual(align.horizontal, Align.HORIZONTAL.CENTER)
+        self.assertEqual(align.vertical, Align.VERTICAL.BOTTOM)
     
     def test_bottom_right(self):
-        align = Alignment.BOTTOM_RIGHT
-        self.assertEqual(align.horizontal, Alignment.RIGHT)
-        self.assertEqual(align.vertical, Alignment.BOTTOM)
+        align = Align(Align.HORIZONTAL.RIGHT, Align.VERTICAL.BOTTOM)
+        self.assertEqual(align.horizontal, Align.HORIZONTAL.RIGHT)
+        self.assertEqual(align.vertical, Align.VERTICAL.BOTTOM)
+    
+    def test_stretch(self):
+        align = Align(Align.HORIZONTAL.STRETCH, Align.VERTICAL.STRETCH)
+        self.assertEqual(align.horizontal, Align.HORIZONTAL.STRETCH)
+        self.assertEqual(align.vertical, Align.VERTICAL.STRETCH)
 
 
 class TestExpand(unittest.TestCase):

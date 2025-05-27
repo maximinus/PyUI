@@ -1,6 +1,6 @@
 from pygame import Surface
 
-from pyui.helpers import Size, Margin, Alignment, Position, Expand
+from pyui.helpers import Size, Margin, Align, Position, Expand
 
 
 class Widget:
@@ -8,7 +8,7 @@ class Widget:
         if margin is None:
             margin = Margin()
         if align is None:
-            align = Alignment.CENTER
+            align = Align(Align.HORIZONTAL.CENTER, Align.VERTICAL.CENTER)
         if expand is None:
             expand = Expand.NONE
         self.align = align
@@ -16,9 +16,6 @@ class Widget:
         self.expand = expand
         self.background = background
         self.parent = None
-        # if a widget is expanding, it means it will draw to the extra
-        # apce allocated to it
-        self.expanding = False
 
     @property
     def min_size(self) -> Size:
@@ -35,18 +32,22 @@ class Widget:
         # don't offset if wanting to expand AND self-expanding
         if space_x > 0 and not (self.expand.horizontal and self.expanding):
             match self.align.horizontal:
-                case Alignment.LEFT:
+                case Align.HORIZONTAL.LEFT:
                     render_position.x = 0
-                case Alignment.RIGHT:
+                case Align.HORIZONTAL.RIGHT:
                     render_position.x = space_x
+                case Align.HORIZONTAL.STRETCH:
+                    render_position.x = 0
                 case _:
                     render_position.x = space_x // 2
         if space_y > 0 and not (self.expand.vertical and self.expanding):
             match self.align.vertical:
-                case Alignment.TOP:
+                case Align.VERTICAL.TOP:
                     render_position.y = 0
-                case Alignment.BOTTOM:
+                case Align.VERTICAL.BOTTOM:
                     render_position.y = space_y
+                case Align.VERTICAL.STRETCH:
+                    render_position.y = 0
                 case _:
                     render_position.y = space_y // 2
         return render_position

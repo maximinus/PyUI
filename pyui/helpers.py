@@ -1,4 +1,4 @@
-from enum import IntEnum
+from enum import Enum, IntEnum
 from dataclasses import dataclass
 
 
@@ -17,6 +17,16 @@ class Expand(IntEnum):
         return self.value > 1
 
 
+class Align:
+    HORIZONTAL = Enum('Horizontal', ['LEFT', 'CENTER', 'RIGHT', 'STRETCH'])
+    VERTICAL = Enum('Vertical', ['TOP', 'CENTER', 'BOTTOM', 'STRETCH'])
+
+    def __init__(self, x, y):
+        self.horizontal = x
+        self.vertical = y
+
+
+"""
 class Alignment(IntEnum):
     LEFT = 3
     RIGHT = 5
@@ -47,7 +57,7 @@ class Alignment(IntEnum):
                 return Alignment.CENTER
             case _:
                 return Alignment.TOP
-
+"""
 
 @dataclass
 class Position:
