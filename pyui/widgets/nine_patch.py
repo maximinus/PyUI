@@ -78,8 +78,8 @@ class NinePatch(Widget):
             destination.blit(self.image, position)
             return
 
+        new_image = self.get_new_image(size)
         render_pos = self.get_position(size)
-        render_pos += position
         # Add the margin left and top
         render_pos.x += self.margin.left
         render_pos.y += self.margin.top
@@ -135,4 +135,6 @@ class NinePatch(Widget):
                                     (render_width - n.left - n.right, 
                                      render_height - n.top - n.bottom))
         patch_surface.blit(scaled_center, (n.left, n.top))
-        destination.blit(patch_surface, (render_pos.x, render_pos.y))
+        new_image.blit(patch_surface, (render_pos.x, render_pos.y))
+        self.image.update(new_image)
+        destination.blit(new_image, position.as_tuple)

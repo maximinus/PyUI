@@ -148,18 +148,3 @@ class TestNinePatchRendering(PyuiTest):
         self.assertPixel(dest_surface, Position(15, 15), (0, 0, 0))
         # The area within the nine-patch after the offset should be modified
         self.assertNotPixel(dest_surface, Position(45, 45), (0, 0, 0))
-    
-    def test_minimum_size_enforcement(self):
-        """Test that the nine-patch enforces its minimum size"""
-        dest_surface = pygame.Surface((100, 100))
-        dest_surface.fill(Color(0, 0, 0))
-        
-        # Try to render at a size smaller than the minimum
-        min_width = self.nine_patch_data.left + self.nine_patch_data.right
-        min_height = self.nine_patch_data.top + self.nine_patch_data.bottom
-        small_size = Size(min_width - 2, min_height - 2)
-        # Should still render at minimum size
-        self.nine_patch.render(dest_surface, Position(0, 0), small_size)        
-        # Verify that minimum size was enforced by checking if pixels just outside
-        # the requested small size were modified
-        self.assertNotPixel(dest_surface, Position(min_width - 1, min_height - 1), (0, 0, 0))

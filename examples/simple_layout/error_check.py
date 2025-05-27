@@ -1,6 +1,6 @@
 import pygame
 
-from pyui.widgets import NinePatch, NinePatchData, ColorRect
+from pyui.widgets import Image
 from pyui.utility import wait_for_keypress
 from pyui.helpers import Position, Size, Expand, Margin
 
@@ -11,10 +11,10 @@ def run_example():
     pygame.display.set_caption("Simple Color Rect Example")
     screen.fill((20, 20, 80))
 
-    color_rect = ColorRect(color=(255, 0, 0),
-                           size=Size(50, 50),
-                           margin=Margin(10, 10, 10, 10))
-    color_rect.render(screen, Position(0, 0), Size(70, 70))
+    img_surface = pygame.Surface((50, 50))
+    img_surface.fill((255, 0, 0))
+    image_widget = Image(image=img_surface)
+    image_widget.render(screen, Position(0, 0), Size(100, 100))
     pygame.display.flip()
 
     wait_for_keypress()
