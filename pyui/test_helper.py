@@ -1,17 +1,19 @@
 import pygame
 import unittest
 
+from pyui.assets import file_cache
 from pyui.helpers import Position
 
 
 class PyuiTest(unittest.TestCase):
-    # helper class that sets up pygame for testing
     @classmethod
     def setUpClass(cls):
+        # Initialize pygame and create a test surface
         pygame.init()
-    
+
     @classmethod
     def tearDownClass(cls):
+        file_cache.clear()
         pygame.quit()
 
     def assertPixel(self, surface: pygame.Surface, pos: Position, col: pygame.Color):
