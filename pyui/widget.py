@@ -44,7 +44,10 @@ class Widget:
 
     def get_new_image(self, size: Size) -> Surface:
         # The surface needs to have alpha
-        return Surface((size.width, size.height), flags=pygame.SRCALPHA)
+        new_surface = Surface((size.width, size.height), flags=pygame.SRCALPHA)
+        if self.background is not None:
+            new_surface.fill(self.background)
+        return new_surface
 
     def get_position(self, area: Size) -> Position:
         render_position = Position(0, 0)

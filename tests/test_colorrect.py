@@ -32,6 +32,22 @@ class TestColorRect(unittest.TestCase):
                       align=Align(Align.LEFT, Align.TOP))
 
 
+class TestBackgroundRender(PyuiTest):
+    def test_background_color(self):
+        color_rect = ColorRect(color=Color(0, 255, 0), size=Size(30, 30),
+                               margin=Margin(10, 10, 10, 10),
+                               background=Color(255, 0, 0))
+        new_surface = color_rect.get_new_image(Size(50, 50))
+        self.assertPixel(new_surface, Position(0, 0), Color(255, 0, 0))
+        self.assertEqual(color_rect.background, Color(255, 0, 0))
+
+    def test_background_none(self):
+        color_rect = ColorRect(color=Color(0, 255, 0), size=Size(30, 30),
+                               margin=Margin(10, 10, 10, 10))
+        new_surface = color_rect.get_new_image(Size(50, 50))
+        # need to add alpha to get the real value
+        self.assertPixel(new_surface, Position(0, 0), Color(0, 0, 0, 0))
+
 class TestColorRectSizes(PyuiTest):
     def test_size_horizontal(self):
         color_rect = ColorRect(color=Color(255, 0, 0),

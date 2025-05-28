@@ -18,6 +18,14 @@ class TestWidget(unittest.TestCase):
         widget.margin = Margin(5, 5, 5, 5)
         self.assertEqual(widget.min_size, Size(5 + 5, 5 + 5))
 
+    def test_has_no_background_by_default(self):
+        widget = Widget()
+        self.assertIsNone(widget.background)
+    
+    def test_with_background(self):
+        widget = Widget(background=(255, 0, 0))
+        self.assertEqual(widget.background, (255, 0, 0))
+
 
 class TestWidgetPosition(unittest.TestCase):
     def test_position(self):
