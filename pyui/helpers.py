@@ -74,6 +74,9 @@ class Size:
             return NotImplemented
         return Size(self.width - other.width, self.height - other.height)
 
+    @property
+    def as_tuple(self):
+        return (self.width, self.height)
 
 class Margin:
     def __init__(self, left: int = 0, right: int = 0, top: int = 0, bottom: int = 0):

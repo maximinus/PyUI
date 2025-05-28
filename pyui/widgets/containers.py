@@ -26,6 +26,10 @@ class Container(Widget):
         super().__init__(**kwargs)
         self.children = []
 
+    def add_children(self, children):
+        for child in children:
+            self.add_child(child)
+
     def add_child(self, child: Widget):
         self.children.append(child)
         child.parent = self
