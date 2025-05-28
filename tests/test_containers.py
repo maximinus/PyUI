@@ -518,3 +518,27 @@ class TestVBox(PyuiTest):
         # Providing zero size should still render properly based on min_size
         box.render(image, Position(0, 0), Size(0, 0))
         self.assertPixel(image, Position(0, 0), (255, 0, 0))
+
+
+class TestOppositeExpansion(PyuiTest):
+    def test_hbox_vertical(self):
+        # check when the hbox child wants to expand vertically
+        rect = ColorRect(color=(255, 0, 0), size=Size(50, 50), expand=Expand.BOTH)
+        box = HBox(spacing=0, margin=Margin(0, 0, 0, 0))
+        box.add_child(rect)
+        image = Surface((100, 100))
+        image.fill((0, 0, 0))
+        box.render(image, Position(0, 0), Size(100, 100))
+        self.assertPixel(image, Position(0, 0), (255, 0, 0))
+        self.assertPixel(image, Position(99, 99), (255, 0, 0))
+    
+    def test_vbox_horizontal(self):
+        # check when the vbox child wants to expand horizontally
+        rect = ColorRect(color=(255, 0, 0), size=Size(50, 50), expand=Expand.BOTH)
+        box = VBox(spacing=0, margin=Margin(0, 0, 0, 0))
+        box.add_child(rect)
+        image = Surface((100, 100))
+        image.fill((0, 0, 0))
+        box.render(image, Position(0, 0), Size(100, 100))
+        self.assertPixel(image, Position(0, 0), (255, 0, 0))
+        self.assertPixel(image, Position(99, 99), (255, 0, 0))

@@ -84,6 +84,8 @@ class HBox(Container):
             # expand the child if needed
             if child.expand.horizontal:
                 child_size.width += expansions[i]
+            if child.expand.vertical:
+                child_size.height = available_size.height
             # render the child
             child.render(destination, Position(current_x, pos.y + self.margin.top), child_size)
             current_x += child_size.width
@@ -130,6 +132,8 @@ class VBox(Container):
             if i > 0:
                 current_y += self.spacing
             # expand the child if needed
+            if child.expand.horizontal:
+                child_size.width = available_size.width
             if child.expand.vertical:
                 child_size.height += expansions[i]
             # render the child
