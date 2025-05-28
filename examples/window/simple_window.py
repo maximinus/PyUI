@@ -10,7 +10,7 @@ if __name__ == "__main__":
                    expand=Expand.BOTH,
                    align=Align(Align.CENTER, Align.CENTER))
     label2 = Label("Basic", font, color=(0, 255, 0),
-                   expand=Expand.BOTH,
+                   expand=Expand.VERTICAL,
                    align=Align(Align.CENTER, Align.CENTER))
     label3 = Label("Text", font, color=(0, 0, 255),
                    expand=Expand.BOTH,
