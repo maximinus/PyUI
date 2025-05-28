@@ -6,12 +6,13 @@ PyUI is a custom GUI system built in Python using Pygame, designed with modulari
 
 - **Modular Widget System**
   - Base widget architecture with position, size, visibility, and margin support
-  - Container widgets for flexible layouts (HBox, VBox)
+  - Container widgets for flexible layouts (HBox, VBox, Stack)
   - Built-in widgets: ColorRect, Image, and more planned
   - Support for nested widget hierarchies
 
 - **Advanced Layout System**
   - Horizontal and vertical box layouts
+  - Stack layout for overlapping widgets
   - Margin and padding support
   - Precise positioning and sizing controls
   - Parent-child relationship management
@@ -35,6 +36,9 @@ You can find example applications in the `examples/` directory:
   - Simple color rectangles
   - Image display
   - Widget expansion demonstrations
+- `examples/simple_layout/` - Layout container examples
+  - HBox and VBox layouts
+  - Stack layout for overlapping widgets
 
 ## Project Structure
 
