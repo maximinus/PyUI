@@ -12,16 +12,21 @@ class Window:
     A basic window class that manages a single widget (typically a container).
     The window handles initialization, rendering, and the main event loop.
     """
-    def __init__(self, size: Size, widget, background=(200, 200, 200), title: str = "PyUI Window"):
+    def __init__(self, size: Size, background=(200, 200, 200), title: str = "PyUI Window"):
+        pyui_init()
         self.title = title
         self.size = size
-        self.child = widget
+        self.child = None
         self.running = False
         self.background = background
         
         pygame.display.set_caption(self.title)
         self.screen = pygame.display.set_mode(self.size.as_tuple)
    
+    def add_child(self, child):
+        self.child = child
+        self.child.parent = self
+
     def draw(self) -> None:
         """Clear the screen and draw the root widget."""
         self.screen.fill(self.background)

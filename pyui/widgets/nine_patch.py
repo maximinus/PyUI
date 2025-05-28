@@ -93,12 +93,14 @@ class NinePatch(Widget):
             render_height = size.height - self.margin.height
         
         # Create a new surface for the nine-patch rendering
-        patch_surface = Surface((render_width, render_height))
+        patch_surface = Surface((render_width, render_height)).convert_alpha()
+        patch_surface.fill((0, 0, 0, 0))
         n = self.nine_patch_data
         
         # Draw the corners (they remain the same size)
         # Top-left corner
         patch_surface.blit(self.render_image.subsurface((0, 0, n.left, n.top)), (0, 0))
+
         patch_surface.blit(self.render_image.subsurface((self.img_size.width - n.right, 0, n.right, n.top)),
                            (render_width - n.right, 0))
         patch_surface.blit(self.render_image.subsurface((0, self.img_size.height - n.bottom, n.left, n.bottom)),

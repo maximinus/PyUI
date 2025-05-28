@@ -7,7 +7,7 @@ PyUI is a custom GUI system built in Python using Pygame, designed with modulari
 - **Modular Widget System**
   - Base widget architecture with position, size, visibility, and margin support
   - Container widgets for flexible layouts (HBox, VBox, Stack)
-  - Built-in widgets: ColorRect, Image, and more planned
+  - Built-in widgets: ColorRect, Image, Label, and more
   - Support for nested widget hierarchies
 
 - **Advanced Layout System**
@@ -17,6 +17,7 @@ PyUI is a custom GUI system built in Python using Pygame, designed with modulari
   - Precise positioning and sizing controls
   - Parent-child relationship management
   - Relative coordinate system
+  - Alignment control (LEFT, CENTER, RIGHT, TOP, BOTTOM)
 
 - **Layer Management**
   - Z-order rendering support
@@ -25,7 +26,7 @@ PyUI is a custom GUI system built in Python using Pygame, designed with modulari
   - Perfect for modals, popups, tooltips, and menus
 
 - **Asset Management**
-  - Built-in support for images and icons
+  - Built-in support for images, icons and fonts
   - Nine-patch texture support
   - Efficient asset loading and caching
 
@@ -39,17 +40,20 @@ You can find example applications in the `examples/` directory:
 - `examples/simple_layout/` - Layout container examples
   - HBox and VBox layouts
   - Stack layout for overlapping widgets
+- `examples/window/` - Window management examples
 
 ## Project Structure
 
 ```
 pyui/
 ├── widgets/         # Widget implementations
-├── assets/         # Asset management and resources
-│   ├── icons/      # UI icons
-│   ├── images/     # Image resources
-│   └── nine_patch/ # Nine-patch textures
-└── tests/          # Comprehensive test suite
+├── assets/          # Asset management and resources
+│   ├── icons/       # UI icons
+│   ├── images/      # Image resources
+│   ├── fonts/       # Font resources
+│   └── nine_patch/  # Nine-patch textures
+├── tests/           # Comprehensive test suite
+└── __pycache__/     # Python bytecode cache
 ```
 
 ## Getting Started
@@ -85,9 +89,16 @@ PyUI is licensed under the GNU General Public License v3.0. See the LICENSE file
 
 ## Development Status
 
-PyUI is under active development. The core widget system, drawing capabilities, and basic layouts are implemented. Future developments will include:
+PyUI is under active development. The core widget system, drawing capabilities, and basic layouts are implemented. Current features include:
 
-- Additional concrete widgets (Label, Button, TextInput)
+- Widget system with positioning, sizing, and margin support
+- Layout containers (HBox, VBox, Stack)
+- Basic widgets: ColorRect, Image, Label
+- Font and text support
+- Alignment system (horizontal and vertical)
+
+Future developments will include:
+- Additional widgets (Button, TextInput)
 - Composed widgets (menus, menu bars, tooltips, dialogs)
 - Event handling system
 - Animation support

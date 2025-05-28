@@ -61,7 +61,7 @@ def get_image(image_name: str) -> pygame.Surface:
         raise FileNotFoundError(f"Image '{image_name}' not found in assets.")
     
     # Load the image and store in cache
-    image = pygame.image.load(image_path)
+    image = pygame.image.load(image_path).convert_alpha()
     file_cache.images[image_name] = image
     return image
 
@@ -78,7 +78,7 @@ def get_nine_patch(patch_name: str) -> pygame.Surface:
         raise FileNotFoundError(f"Nine patch '{patch_name}' not found in assets.")
     
     # Load the nine patch and store in cache
-    nine_patch = pygame.image.load(patch_path)
+    nine_patch = pygame.image.load(patch_path).convert_alpha()
     file_cache.nine_patch[patch_name] = nine_patch
     return nine_patch
 
