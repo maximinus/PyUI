@@ -9,29 +9,40 @@ def pyui_init():
 
 class Window:
     """
-    A basic window class that manages a single widget (typically a container).
+    A window class that manages multiple widgets.
     The window handles initialization, rendering, and the main event loop.
+    Widgets are rendered in the order they were added (first to last).
     """
     def __init__(self, size: Size, background=(200, 200, 200), title: str = "PyUI Window"):
         pyui_init()
         self.title = title
         self.size = size
-        self.child = None
+        self.widgets = []
         self.running = False
         self.background = background
         
         pygame.display.set_caption(self.title)
         self.screen = pygame.display.set_mode(self.size.as_tuple)
    
-    def add_child(self, child):
-        self.child = child
-        self.child.parent = self
+    def add_widget(self, widget):
+        self.widgets.append(widget)
+        widget.parent = self
+        
+    def remove_widget(self, widget):
+        if widget in self.widgets:
+            self.widgets.remove(widget)
+            widget.parent = None
+            
+    def clear_widgets(self):
+        for widget in self.widgets:
+            widget.parent = None
+        self.widgets = []
 
     def draw(self) -> None:
-        """Clear the screen and draw the root widget."""
+        """Clear the screen and draw all widgets in order."""
         self.screen.fill(self.background)
-        if self.child:
-            self.child.render(self.screen, Position(0, 0), self.size)
+        for widget in self.widgets:
+            widget.render(self.screen, Position(0, 0), self.size)
         pygame.display.flip()
     
     def handle_events(self) -> bool:
