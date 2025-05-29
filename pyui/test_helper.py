@@ -10,6 +10,7 @@ class PyuiTest(unittest.TestCase):
     def setUpClass(cls):
         # Initialize pygame and create a test surface
         pygame.init()
+        pygame.display.set_mode((200, 200))
 
     @classmethod
     def tearDownClass(cls):

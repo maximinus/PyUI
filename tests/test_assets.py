@@ -1,10 +1,9 @@
-import unittest
-
 from pygame import Surface
 
+from pyui.test_helper import PyuiTest
 from pyui.assets import get_image, get_nine_patch, file_cache
 
-class TestAssets(unittest.TestCase):
+class TestAssets(PyuiTest):
     def test_load_image(self):
         image = get_image("dog.png")
         self.assertTrue(isinstance(image, Surface))

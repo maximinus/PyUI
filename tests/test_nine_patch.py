@@ -1,5 +1,3 @@
-import unittest
-
 import pygame
 from pygame import Color, Surface
 
@@ -8,7 +6,7 @@ from pyui.helpers import Size, Margin, Position, Align, Expand
 from pyui.test_helper import PyuiTest
 
 
-class TestNinePatchData(unittest.TestCase):
+class TestNinePatchData(PyuiTest):
     def test_data_creation(self):
         nine_patch_data = NinePatchData(top=3, bottom=3, left=3, right=3)
         self.assertEqual(nine_patch_data.top, 3)
@@ -33,7 +31,7 @@ class TestNinePatchData(unittest.TestCase):
             NinePatchData.from_json("nonexistent.json")
 
 
-class TestNinePatch(unittest.TestCase):
+class TestNinePatch(PyuiTest):
     def setUp(self):
         self.nine_patch_data = NinePatchData.from_json("button.json")
         self.nine_patch = NinePatch(nine_patch_data=self.nine_patch_data)

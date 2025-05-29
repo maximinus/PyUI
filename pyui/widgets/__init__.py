@@ -4,6 +4,7 @@ from .containers import HBox, VBox
 from .nine_patch import NinePatch, NinePatchData
 from .label import Label
 from .stack import Stack
+from .frame import Frame
 
 __all__ = ['ColorRect',
            'Image',
@@ -13,4 +14,5 @@ __all__ = ['ColorRect',
            'NinePatchData',
            'Label',
            'Font',
-           'Stack']
+           'Stack',
+           'Frame']
