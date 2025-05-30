@@ -1,21 +1,18 @@
 from pyui.window import Window
-from pyui.widgets import Image, HBox, NinePatchData, NinePatch
-from pyui.helpers import Size, Margin, Expand, Align
-from pyui.assets import get_font, get_image
+from pyui.widgets import VBox, MenuBar
+from pyui.helpers import Size, Expand, Align
+
 
 if __name__ == "__main__":
     window = Window(Size(640, 480), background=(200, 200, 200))
     
-    font = get_font("creato.otf", 20)
-    data = NinePatchData.from_json("frame.json")
-    nine = NinePatch(data, Size(200, 200),
-                     expand=Expand.NONE,
-                     background=(200, 200, 200))
-    picture = get_image("dog_alpha.png")
-    img = Image(picture)
-    box = HBox()
-    box.add_child(nine)
-    box.add_child(img)
-    window.add_child(box)
-    
+    menu = MenuBar(background=(150, 150, 150))
+    menu.add_menu("File")
+    menu.add_menu("Edit")
+    menu.add_menu("Selection")
+    menu.add_menu("Help")
+
+    box = VBox(expand=Expand.BOTH)
+    box.add_child(menu)
+    window.add_widget(box)    
     window.run()
