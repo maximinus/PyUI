@@ -94,7 +94,8 @@ class TestStack(PyuiTest):
         
         # Render the stack to a test surface
         test_surface = Surface((100, 100), flags=pygame.SRCALPHA)
-        stack.render(test_surface, Position(0, 0), Size(100, 100))
+        mouse = self.create_mouse()
+        stack.render(mouse, test_surface, Position(0, 0), Size(100, 100))
         
         # The center pixel should be the color of the top widget (blue)
         self.assertPixel(test_surface, Position(50, 50), (0, 0, 255, 255))
@@ -111,7 +112,8 @@ class TestStack(PyuiTest):
         # Render the stack to a test surface
         test_surface = Surface((100, 100), flags=pygame.SRCALPHA)
         test_surface.fill((255, 255, 255))  # White background
-        stack.render(test_surface, Position(0, 0), Size(100, 100))
+        mouse = self.create_mouse()
+        stack.render(mouse, test_surface, Position(0, 0), Size(100, 100))
         
         # Check colors at different positions
         # Inside margins (should be black - the stack's background)
@@ -134,7 +136,8 @@ class TestStack(PyuiTest):
         stack.add_child(rect3)
 
         test_surface = Surface((200, 200), flags=pygame.SRCALPHA)
-        stack.render(test_surface, Position(0, 0), Size(200, 200))
+        mouse = self.create_mouse()
+        stack.render(mouse, test_surface, Position(0, 0), Size(200, 200))
         # Blue rect (last added) should be visible in the center
         self.assertPixel(test_surface, Position(100, 100), (0, 0, 255, 255))
     
@@ -149,7 +152,8 @@ class TestStack(PyuiTest):
         
         # Render the stack with a size larger than the minimum
         test_surface = Surface((200, 200), flags=pygame.SRCALPHA)
-        stack.render(test_surface, Position(0, 0), Size(200, 200))
+        mouse = self.create_mouse()
+        stack.render(mouse, test_surface, Position(0, 0), Size(200, 200))
         
         # Check that the rectangle has expanded to fill the available space (minus margins)
         self.assertPixel(test_surface, Position(100, 100), (255, 0, 0, 255))        

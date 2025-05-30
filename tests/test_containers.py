@@ -3,7 +3,7 @@ import unittest
 from pygame import Surface
 
 from pyui.widgets import HBox, VBox, ColorRect, Image
-from pyui.helpers import Margin, Position, Size, Expand, Align
+from pyui.helpers import Margin, Position, Size, Expand, Mouse
 from pyui.widgets.containers import split_pixels
 from pyui.test_helper import PyuiTest
 
@@ -45,7 +45,7 @@ class TestHBox(PyuiTest):
         box.add_child(ColorRect(color=(255, 0, 0), size=Size(50, 50)))
         image = Surface((100, 100))
         image.fill((0, 0, 0))
-        box.render(image, Position(0, 0), Size(100, 100))
+        box.render(self.mouse, image, Position(0, 0), Size(100, 100))
         self.assertPixel(image, Position(0, 0), (255, 0, 0))
         self.assertPixel(image, Position(50, 0), (0, 0, 0))
 
@@ -54,7 +54,7 @@ class TestHBox(PyuiTest):
         box.add_child(ColorRect(color=(255, 0, 0), size=Size(50, 50)))
         image = Surface((100, 100))
         image.fill((0, 0, 0))
-        box.render(image, Position(0, 0), Size(100, 100))
+        box.render(self.mouse, image, Position(0, 0), Size(100, 100))
         # With margins, the box should start at (10, 10)
         self.assertPixel(image, Position(0, 0), (0, 0, 0))
         self.assertPixel(image, Position(10, 10), (255, 0, 0))
@@ -65,7 +65,7 @@ class TestHBox(PyuiTest):
         box.add_child(ColorRect(color=(255, 0, 0), size=Size(50, 50)))
         image = Surface((100, 100))
         image.fill((0, 0, 0))
-        box.render(image, Position(0, 0), Size(100, 100))
+        box.render(self.mouse, image, Position(0, 0), Size(100, 100))
         # With left margin, the box should start at (15, 0)
         self.assertPixel(image, Position(0, 0), (0, 0, 0))
         self.assertPixel(image, Position(15, 0), (255, 0, 0))
@@ -76,7 +76,7 @@ class TestHBox(PyuiTest):
         box.add_child(ColorRect(color=(255, 0, 0), size=Size(50, 50)))
         image = Surface((100, 100))
         image.fill((0, 0, 0))
-        box.render(image, Position(0, 0), Size(100, 100))
+        box.render(self.mouse, image, Position(0, 0), Size(100, 100))
         # With top margin, the box should start at (0, 20)
         self.assertPixel(image, Position(0, 0), (0, 0, 0))
         self.assertPixel(image, Position(0, 20), (255, 0, 0))
@@ -87,7 +87,7 @@ class TestHBox(PyuiTest):
         box.add_child(ColorRect(color=(255, 0, 0), size=Size(50, 50)))
         image = Surface((100, 100))
         image.fill((0, 0, 0))
-        box.render(image, Position(10, 10), Size(80, 80))
+        box.render(self.mouse, image, Position(10, 10), Size(80, 80))
         # With position offset, the box should start at (10, 10)
         self.assertPixel(image, Position(0, 0), (0, 0, 0))
         self.assertPixel(image, Position(10, 10), (255, 0, 0))
@@ -99,7 +99,7 @@ class TestHBox(PyuiTest):
         box.add_child(ColorRect(color=(0, 255, 0), size=Size(30, 50)))
         image = Surface((100, 100))
         image.fill((0, 0, 0))
-        box.render(image, Position(0, 0), Size(100, 100))
+        box.render(self.mouse, image, Position(0, 0), Size(100, 100))
         # First box at (0, 0), second box at (30, 0)
         self.assertPixel(image, Position(0, 0), (255, 0, 0))
         self.assertPixel(image, Position(30, 0), (0, 255, 0))
@@ -111,7 +111,7 @@ class TestHBox(PyuiTest):
         box.add_child(ColorRect(color=(0, 255, 0), size=Size(30, 50)))
         image = Surface((100, 100))
         image.fill((0, 0, 0))
-        box.render(image, Position(0, 0), Size(100, 100))
+        box.render(self.mouse, image, Position(0, 0), Size(100, 100))
         # First box at (0, 0), 10px spacing, second box at (40, 0)
         self.assertPixel(image, Position(0, 0), (255, 0, 0))
         self.assertPixel(image, Position(30, 0), (0, 0, 0))  # Spacing
@@ -125,7 +125,7 @@ class TestHBox(PyuiTest):
         box.add_child(ColorRect(color=(0, 0, 255), size=Size(20, 40)))
         image = Surface((100, 100))
         image.fill((0, 0, 0))
-        box.render(image, Position(0, 0), Size(100, 100))
+        box.render(self.mouse, image, Position(0, 0), Size(100, 100))
         # Boxes at (5,5), (30,5), and (55,5) with 5px spacing and 5px margin
         self.assertPixel(image, Position(5, 5), (255, 0, 0))
         self.assertPixel(image, Position(25, 5), (0, 0, 0))  # Spacing
@@ -140,7 +140,7 @@ class TestHBox(PyuiTest):
         box.add_child(ColorRect(color=(0, 255, 0), size=Size(30, 50)))
         image = Surface((100, 100))
         image.fill((0, 0, 0))
-        box.render(image, Position(0, 0), Size(100, 100))
+        box.render(self.mouse, image, Position(0, 0), Size(100, 100))
         # First box should expand to fill available space (40px extra)
         self.assertPixel(image, Position(69, 0), (255, 0, 0))
         self.assertPixel(image, Position(70, 0), (0, 255, 0))
@@ -151,7 +151,7 @@ class TestHBox(PyuiTest):
         box.add_child(ColorRect(color=(0, 255, 0), size=Size(20, 50), expand=Expand.HORIZONTAL))
         image = Surface((100, 100))
         image.fill((0, 0, 0))
-        box.render(image, Position(0, 0), Size(100, 100))
+        box.render(self.mouse, image, Position(0, 0), Size(100, 100))
         # Both boxes should expand equally (30px extra each)
         self.assertPixel(image, Position(0, 0), (255, 0, 0))
         self.assertPixel(image, Position(49, 0), (255, 0, 0))
@@ -165,7 +165,7 @@ class TestHBox(PyuiTest):
         box.add_child(ColorRect(color=(0, 0, 255), size=Size(20, 50)))
         image = Surface((100, 100))
         image.fill((0, 0, 0))
-        box.render(image, Position(0, 0), Size(100, 100))
+        box.render(self.mouse, image, Position(0, 0), Size(100, 100))
         # First two boxes should expand by 20px each
         self.assertPixel(image, Position(0, 0), (255, 0, 0))
         self.assertPixel(image, Position(39, 0), (255, 0, 0))
@@ -179,7 +179,7 @@ class TestHBox(PyuiTest):
         box.add_child(ColorRect(color=(0, 255, 0), size=Size(30, 30)))
         image = Surface((100, 100))
         image.fill((0, 0, 0))
-        box.render(image, Position(0, 0), Size(100, 100))
+        box.render(self.mouse, image, Position(0, 0), Size(100, 100))
         # Vertical expansion shouldn't affect horizontal layout
         self.assertPixel(image, Position(0, 0), (255, 0, 0))
         self.assertPixel(image, Position(30, 0), (0, 255, 0))
@@ -191,7 +191,7 @@ class TestHBox(PyuiTest):
         box.add_child(ColorRect(color=(0, 255, 0), size=Size(30, 30)))
         image = Surface((100, 100))
         image.fill((0, 0, 0))
-        box.render(image, Position(0, 0), Size(100, 100))
+        box.render(self.mouse, image, Position(0, 0), Size(100, 100))
         # BOTH expansion should include horizontal
         self.assertPixel(image, Position(0, 0), (255, 0, 0))
         self.assertPixel(image, Position(69, 0), (255, 0, 0))
@@ -203,7 +203,7 @@ class TestHBox(PyuiTest):
         box.add_child(ColorRect(color=(0, 255, 0), size=Size(30, 40)))
         image = Surface((100, 100))
         image.fill((0, 0, 0))
-        box.render(image, Position(0, 0), Size(100, 100))
+        box.render(self.mouse, image, Position(0, 0), Size(100, 100))
         # Both children should align at the top
         self.assertPixel(image, Position(0, 0), (255, 0, 0))
         self.assertPixel(image, Position(0, 19), (255, 0, 0))
@@ -219,7 +219,7 @@ class TestHBox(PyuiTest):
         box.add_child(ColorRect(color=(0, 0, 255), size=Size(20, 20)))
         image = Surface((100, 100))
         image.fill((0, 0, 0))
-        box.render(image, Position(0, 0), Size(100, 100))
+        box.render(self.mouse, image, Position(0, 0), Size(100, 100))
         # 10px spacing between each child
         self.assertPixel(image, Position(0, 0), (255, 0, 0))
         self.assertPixel(image, Position(20, 0), (0, 0, 0))  # Spacing
@@ -263,7 +263,7 @@ class TestHBox(PyuiTest):
         box.add_child(ColorRect(color=(0, 255, 0), size=Size(60, 50)))
         image = Surface((100, 100))
         image.fill((0, 0, 0))
-        box.render(image, Position(0, 0), Size(100, 100))
+        box.render(self.mouse, image, Position(0, 0), Size(100, 100))
         # Children should render but not expand beyond their natural size
         self.assertPixel(image, Position(0, 0), (255, 0, 0))
         self.assertPixel(image, Position(59, 0), (255, 0, 0))
@@ -275,7 +275,7 @@ class TestHBox(PyuiTest):
         image = Surface((100, 100))
         image.fill((0, 0, 0))
         # Providing zero size should still render properly based on min_size
-        box.render(image, Position(0, 0), Size(0, 0))
+        box.render(self.mouse, image, Position(0, 0), Size(0, 0))
         self.assertPixel(image, Position(0, 0), (255, 0, 0))
 
 
@@ -286,7 +286,7 @@ class TestVBox(PyuiTest):
         box.add_child(ColorRect(color=(255, 0, 0), size=Size(50, 50)))
         image = Surface((100, 100))
         image.fill((0, 0, 0))
-        box.render(image, Position(0, 0), Size(100, 100))
+        box.render(self.mouse, image, Position(0, 0), Size(100, 100))
         self.assertPixel(image, Position(0, 0), (255, 0, 0))
         self.assertPixel(image, Position(0, 50), (0, 0, 0))
 
@@ -295,7 +295,7 @@ class TestVBox(PyuiTest):
         box.add_child(ColorRect(color=(255, 0, 0), size=Size(50, 50)))
         image = Surface((100, 100))
         image.fill((0, 0, 0))
-        box.render(image, Position(0, 0), Size(100, 100))
+        box.render(self.mouse, image, Position(0, 0), Size(100, 100))
         # With margins, the box should start at (10, 10)
         self.assertPixel(image, Position(0, 0), (0, 0, 0))
         self.assertPixel(image, Position(10, 10), (255, 0, 0))
@@ -306,7 +306,7 @@ class TestVBox(PyuiTest):
         box.add_child(ColorRect(color=(255, 0, 0), size=Size(50, 50)))
         image = Surface((100, 100))
         image.fill((0, 0, 0))
-        box.render(image, Position(0, 0), Size(100, 100))
+        box.render(self.mouse, image, Position(0, 0), Size(100, 100))
         # With left margin, the box should start at (15, 0)
         self.assertPixel(image, Position(0, 0), (0, 0, 0))
         self.assertPixel(image, Position(15, 0), (255, 0, 0))
@@ -317,7 +317,7 @@ class TestVBox(PyuiTest):
         box.add_child(ColorRect(color=(255, 0, 0), size=Size(50, 50)))
         image = Surface((100, 100))
         image.fill((0, 0, 0))
-        box.render(image, Position(0, 0), Size(100, 100))
+        box.render(self.mouse, image, Position(0, 0), Size(100, 100))
         # With top margin, the box should start at (0, 20)
         self.assertPixel(image, Position(0, 0), (0, 0, 0))
         self.assertPixel(image, Position(0, 20), (255, 0, 0))
@@ -328,7 +328,7 @@ class TestVBox(PyuiTest):
         box.add_child(ColorRect(color=(255, 0, 0), size=Size(50, 50)))
         image = Surface((100, 100))
         image.fill((0, 0, 0))
-        box.render(image, Position(10, 10), Size(80, 80))
+        box.render(self.mouse, image, Position(10, 10), Size(80, 80))
         # With position offset, the box should start at (10, 10)
         self.assertPixel(image, Position(0, 0), (0, 0, 0))
         self.assertPixel(image, Position(10, 10), (255, 0, 0))
@@ -340,7 +340,7 @@ class TestVBox(PyuiTest):
         box.add_child(ColorRect(color=(0, 255, 0), size=Size(50, 30)))
         image = Surface((100, 100))
         image.fill((0, 0, 0))
-        box.render(image, Position(0, 0), Size(100, 100))
+        box.render(self.mouse, image, Position(0, 0), Size(100, 100))
         # First box at (0, 0), second box at (0, 30)
         self.assertPixel(image, Position(0, 0), (255, 0, 0))
         self.assertPixel(image, Position(0, 30), (0, 255, 0))
@@ -352,7 +352,7 @@ class TestVBox(PyuiTest):
         box.add_child(ColorRect(color=(0, 255, 0), size=Size(50, 30)))
         image = Surface((100, 100))
         image.fill((0, 0, 0))
-        box.render(image, Position(0, 0), Size(100, 100))
+        box.render(self.mouse, image, Position(0, 0), Size(100, 100))
         # First box at (0, 0), 10px spacing, second box at (0, 40)
         self.assertPixel(image, Position(0, 0), (255, 0, 0))
         self.assertPixel(image, Position(0, 30), (0, 0, 0))  # Spacing
@@ -366,7 +366,7 @@ class TestVBox(PyuiTest):
         box.add_child(ColorRect(color=(0, 0, 255), size=Size(40, 20)))
         image = Surface((100, 100))
         image.fill((0, 0, 0))
-        box.render(image, Position(0, 0), Size(100, 100))
+        box.render(self.mouse, image, Position(0, 0), Size(100, 100))
         # Boxes at (5,5), (5,30), and (5,55) with 5px spacing and 5px margin
         self.assertPixel(image, Position(5, 5), (255, 0, 0))
         self.assertPixel(image, Position(5, 25), (0, 0, 0))  # Spacing
@@ -381,7 +381,7 @@ class TestVBox(PyuiTest):
         box.add_child(ColorRect(color=(0, 255, 0), size=Size(50, 30)))
         image = Surface((100, 100))
         image.fill((0, 0, 0))
-        box.render(image, Position(0, 0), Size(100, 100))
+        box.render(self.mouse, image, Position(0, 0), Size(100, 100))
         # First box should expand to fill available space (40px extra)
         self.assertPixel(image, Position(0, 69), (255, 0, 0))
         self.assertPixel(image, Position(0, 70), (0, 255, 0))
@@ -392,7 +392,7 @@ class TestVBox(PyuiTest):
         box.add_child(ColorRect(color=(0, 255, 0), size=Size(50, 20), expand=Expand.VERTICAL))
         image = Surface((100, 100))
         image.fill((0, 0, 0))
-        box.render(image, Position(0, 0), Size(100, 100))
+        box.render(self.mouse, image, Position(0, 0), Size(100, 100))
         # Both boxes should expand equally (30px extra each)
         self.assertPixel(image, Position(0, 0), (255, 0, 0))
         self.assertPixel(image, Position(0, 49), (255, 0, 0))
@@ -406,7 +406,7 @@ class TestVBox(PyuiTest):
         box.add_child(ColorRect(color=(0, 0, 255), size=Size(50, 20)))
         image = Surface((100, 100))
         image.fill((0, 0, 0))
-        box.render(image, Position(0, 0), Size(100, 100))
+        box.render(self.mouse, image, Position(0, 0), Size(100, 100))
         # First two boxes should expand by 20px each
         self.assertPixel(image, Position(0, 0), (255, 0, 0))
         self.assertPixel(image, Position(0, 39), (255, 0, 0))
@@ -420,7 +420,7 @@ class TestVBox(PyuiTest):
         box.add_child(ColorRect(color=(0, 255, 0), size=Size(30, 30)))
         image = Surface((100, 100))
         image.fill((0, 0, 0))
-        box.render(image, Position(0, 0), Size(100, 100))
+        box.render(self.mouse, image, Position(0, 0), Size(100, 100))
         # Horizontal expansion shouldn't affect vertical layout
         self.assertPixel(image, Position(0, 0), (255, 0, 0))
         self.assertPixel(image, Position(0, 30), (0, 255, 0))
@@ -432,7 +432,7 @@ class TestVBox(PyuiTest):
         box.add_child(ColorRect(color=(0, 255, 0), size=Size(30, 30)))
         image = Surface((100, 100))
         image.fill((0, 0, 0))
-        box.render(image, Position(0, 0), Size(100, 100))
+        box.render(self.mouse, image, Position(0, 0), Size(100, 100))
         # BOTH expansion should include vertical
         self.assertPixel(image, Position(0, 0), (255, 0, 0))
         self.assertPixel(image, Position(0, 69), (255, 0, 0))
@@ -444,7 +444,7 @@ class TestVBox(PyuiTest):
         box.add_child(ColorRect(color=(0, 255, 0), size=Size(40, 30)))
         image = Surface((100, 100))
         image.fill((0, 0, 0))
-        box.render(image, Position(0, 0), Size(100, 100))
+        box.render(self.mouse, image, Position(0, 0), Size(100, 100))
         # Both children should align at the left
         self.assertPixel(image, Position(0, 0), (255, 0, 0))
         self.assertPixel(image, Position(19, 0), (255, 0, 0))
@@ -460,7 +460,7 @@ class TestVBox(PyuiTest):
         box.add_child(ColorRect(color=(0, 0, 255), size=Size(20, 20)))
         image = Surface((100, 100))
         image.fill((0, 0, 0))
-        box.render(image, Position(0, 0), Size(100, 100))
+        box.render(self.mouse, image, Position(0, 0), Size(100, 100))
         # 10px spacing between each child
         self.assertPixel(image, Position(0, 0), (255, 0, 0))
         self.assertPixel(image, Position(0, 20), (0, 0, 0))  # Spacing
@@ -504,7 +504,7 @@ class TestVBox(PyuiTest):
         box.add_child(ColorRect(color=(0, 255, 0), size=Size(50, 60)))
         image = Surface((100, 100))
         image.fill((0, 0, 0))
-        box.render(image, Position(0, 0), Size(100, 100))
+        box.render(self.mouse, image, Position(0, 0), Size(100, 100))
         # Children should render but not expand beyond their natural size
         self.assertPixel(image, Position(0, 0), (255, 0, 0))
         self.assertPixel(image, Position(0, 59), (255, 0, 0))
@@ -516,7 +516,7 @@ class TestVBox(PyuiTest):
         image = Surface((100, 100))
         image.fill((0, 0, 0))
         # Providing zero size should still render properly based on min_size
-        box.render(image, Position(0, 0), Size(0, 0))
+        box.render(self.mouse, image, Position(0, 0), Size(0, 0))
         self.assertPixel(image, Position(0, 0), (255, 0, 0))
 
 
@@ -528,7 +528,7 @@ class TestOppositeExpansion(PyuiTest):
         box.add_child(rect)
         image = Surface((100, 100))
         image.fill((0, 0, 0))
-        box.render(image, Position(0, 0), Size(100, 100))
+        box.render(self.mouse, image, Position(0, 0), Size(100, 100))
         self.assertPixel(image, Position(0, 0), (255, 0, 0))
         self.assertPixel(image, Position(99, 99), (255, 0, 0))
     
@@ -539,6 +539,6 @@ class TestOppositeExpansion(PyuiTest):
         box.add_child(rect)
         image = Surface((100, 100))
         image.fill((0, 0, 0))
-        box.render(image, Position(0, 0), Size(100, 100))
+        box.render(self.mouse, image, Position(0, 0), Size(100, 100))
         self.assertPixel(image, Position(0, 0), (255, 0, 0))
         self.assertPixel(image, Position(99, 99), (255, 0, 0))

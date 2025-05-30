@@ -69,7 +69,7 @@ class NinePatch(Widget):
     def min_size(self) -> Size:
         return self.size + self.margin.size
 
-    def render(self, destination: Surface, position: Position, size: Size):
+    def render(self, mouse, destination: Surface, position: Position, size: Size):
         """
         Render the nine patch image to the given surface at the specified position.
         Stretches the center parts to fit the given size while preserving corners.

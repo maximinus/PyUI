@@ -79,7 +79,8 @@ class TestLabelRender(PyuiTest):
         label = Label("Test", font, Color(255, 0, 0))
         surface = pygame.Surface((100, 50), flags=pygame.SRCALPHA)
         surface.fill(Color(0, 0, 0, 0))
-        label.render(surface, Position(0, 0), Size(100, 50))
+        mouse = self.create_mouse()
+        label.render(mouse, surface, Position(0, 0), Size(100, 50))
         
         # The exact pixel position would depend on font metrics and alignment
         # But we can verify that something was drawn by checking for non-black pixels
@@ -99,7 +100,8 @@ class TestLabelRender(PyuiTest):
                      align=Align(Align.CENTER, Align.CENTER))
         surface = pygame.Surface((100, 50), flags=pygame.SRCALPHA)
         surface.fill(Color(0, 0, 0, 0))
-        label.render(surface, Position(0, 0), Size(100, 50))
+        mouse = self.create_mouse()
+        label.render(mouse, surface, Position(0, 0), Size(100, 50))
         
         # Center aligned - we should have transparent pixels at the edges
         self.assertEqual(surface.get_at((0, 0)), (0, 0, 0, 0))
@@ -111,7 +113,8 @@ class TestLabelRender(PyuiTest):
                      margin=Margin(10, 10, 10, 10))
         surface = pygame.Surface((100, 50), flags=pygame.SRCALPHA)
         surface.fill(Color(0, 0, 0, 0))
-        label.render(surface, Position(0, 0), Size(100, 50))
+        mouse = self.create_mouse()
+        label.render(mouse, surface, Position(0, 0), Size(100, 50))
         
         # Margin should leave transparent pixels at the edges
         self.assertEqual(surface.get_at((5, 5)), (0, 0, 0, 0))
@@ -122,7 +125,8 @@ class TestLabelRender(PyuiTest):
         surface = pygame.Surface((100, 50), flags=pygame.SRCALPHA)
         
         # First render
-        label.render(surface, Position(0, 0), Size(100, 50))
+        mouse = self.create_mouse()
+        label.render(mouse, surface, Position(0, 0), Size(100, 50))
         
         # Cache should be used on second render
         self.assertTrue(label.image.matches(Size(100, 50)))

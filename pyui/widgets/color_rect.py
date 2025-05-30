@@ -19,7 +19,7 @@ class ColorRect(Widget):
     def min_size(self) -> Size:
         return self.size + self.margin.size
 
-    def render(self, destination: Surface, position: Position, size: Size):
+    def render(self, mouse, destination: Surface, position: Position, size: Size):
         """
         Render the color rectangle to the given surface at the specified position.
         """

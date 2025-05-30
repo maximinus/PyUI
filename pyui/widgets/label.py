@@ -41,7 +41,7 @@ class Label(Widget):
         # Reset the image cache
         self.image.clear()
 
-    def render(self, destination: Surface, position: Position, size: Size):
+    def render(self, mouse, destination: Surface, position: Position, size: Size):
         """
         Render the text to the given surface at the specified position.
         """

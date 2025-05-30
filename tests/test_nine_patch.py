@@ -65,6 +65,7 @@ class TestNinePatch(PyuiTest):
 
 class TestNinePatchRendering(PyuiTest):
     def setUp(self):
+        super().setUp()
         self.nine_patch_data = NinePatchData.from_json("button_test.json")
         self.nine_patch = NinePatch(nine_patch_data=self.nine_patch_data)
     
@@ -72,7 +73,7 @@ class TestNinePatchRendering(PyuiTest):
         """Test basic rendering of a nine-patch"""
         dest_surface = pygame.Surface((100, 100))
         dest_surface.fill(Color(0, 0, 0))
-        self.nine_patch.render(dest_surface, Position(0, 0), Size(50, 50))
+        self.nine_patch.render(self.mouse, dest_surface, Position(0, 0), Size(50, 50))
         # The nine-patch should be rendered in the center
         # Check that the surface is modified from the original black
         self.assertNotPixel(dest_surface, Position(25, 25), (0, 0, 0))
@@ -83,7 +84,7 @@ class TestNinePatchRendering(PyuiTest):
                                margin=Margin(10, 10, 10, 10))
         dest_surface = pygame.Surface((70, 70))
         dest_surface.fill(Color(0, 0, 0))
-        nine_patch.render(dest_surface, Position(0, 0), Size(70, 70))
+        nine_patch.render(self.mouse, dest_surface, Position(0, 0), Size(70, 70))
         self.assertPixel(dest_surface, Position(5, 5), (0, 0, 0))
         # Center area should be modified
         self.assertNotPixel(dest_surface, Position(35, 35), (0, 0, 0))
@@ -94,7 +95,7 @@ class TestNinePatchRendering(PyuiTest):
                                align=Align(Align.LEFT, Align.TOP))
         dest_surface = pygame.Surface((100, 100))
         dest_surface.fill((0, 0, 0))
-        nine_patch.render(dest_surface, Position(0, 0), Size(50, 50))
+        nine_patch.render(self.mouse, dest_surface, Position(0, 0), Size(50, 50))
         # Top-left area should be modified
         self.assertNotPixel(dest_surface, Position(5, 5), (0, 0, 0))
         # Bottom-right should be black (outside nine-patch)
@@ -107,7 +108,7 @@ class TestNinePatchRendering(PyuiTest):
         dest_surface = pygame.Surface((100, 100))
         dest_surface.fill((0, 0, 0))
         # Render at bottom-right of a 50x50 area
-        nine_patch.render(dest_surface, Position(0, 0), Size(50, 50))
+        nine_patch.render(self.mouse, dest_surface, Position(0, 0), Size(50, 50))
         
         # Bottom-right of the 50x50 area should be modified
         self.assertNotPixel(dest_surface, Position(45, 45), (0, 0, 0))
@@ -123,7 +124,7 @@ class TestNinePatchRendering(PyuiTest):
         self.nine_patch.expand = Expand.BOTH
         old_align = self.nine_patch.align
         self.nine_patch.align = Align(Align.FILL, Align.FILL)
-        self.nine_patch.render(dest_surface, Position(0, 0), Size(80, 80))
+        self.nine_patch.render(self.mouse, dest_surface, Position(0, 0), Size(80, 80))
         self.nine_patch.expand = Expand.NONE
         self.nine_patch.align = old_align
 
@@ -141,7 +142,7 @@ class TestNinePatchRendering(PyuiTest):
         dest_surface.fill(Color(0, 0, 0))
         
         # Render with a position offset of (20, 20)
-        self.nine_patch.render(dest_surface, Position(20, 20), Size(50, 50))
+        self.nine_patch.render(self.mouse, dest_surface, Position(20, 20), Size(50, 50))
         # The area before the offset should be black
         self.assertPixel(dest_surface, Position(15, 15), (0, 0, 0))
         # The area within the nine-patch after the offset should be modified

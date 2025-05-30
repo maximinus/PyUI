@@ -20,6 +20,7 @@ def create_test_image(width, height):
 
 class TestFrame(PyuiTest):
     def setUp(self):
+        super().setUp()
         self.mock_image = create_test_image(20, 20)
         self.nine_patch_data = NinePatchData(
             top=5, bottom=5, left=5, right=5, image=self.mock_image
@@ -49,17 +50,17 @@ class TestFrame(PyuiTest):
     def test_render_calls_child_render(self):
         frame = Frame(self.mock_child, self.nine_patch_data)
         destination = Surface((100, 100))
-        frame.render(destination, Position(0, 0), Size(100, 100))
+        frame.render(self.mouse, destination, Position(0, 0), Size(100, 100))
         self.mock_child.render.assert_called_once()
         
     def test_render_positions_child_correctly(self):
         frame = Frame(self.mock_child, self.nine_patch_data)
         destination = Surface((100, 100))
-        frame.render(destination, Position(0, 0), Size(100, 100))
+        frame.render(self.mouse, destination, Position(0, 0), Size(100, 100))
         
         # Extract the position argument from the child's render call
         _, args, _ = self.mock_child.render.mock_calls[0]
-        position_arg = args[1]
+        position_arg = args[2]
         
         # Child should be positioned at (left, top) of nine patch
         self.assertEqual(position_arg.x, 5)

@@ -80,5 +80,5 @@ class Widget:
                     render_position.y = space_y // 2
         return render_position
 
-    def render(self, surface: Surface, pos: Position, size: Size):
+    def render(self, mouse, surface: Surface, pos: Position, size: Size):
         pass

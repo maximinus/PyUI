@@ -61,7 +61,7 @@ class HBox(Container):
             box_size.width += (total_children - 1) * self.spacing
         return box_size + self.margin.size
 
-    def render(self, destination: Surface, pos: Position, size: Size):
+    def render(self, mouse, destination: Surface, pos: Position, size: Size):
         # the total size available for children is the size minus the margin
         available_size = size - self.margin.size
         spare_width = available_size.width - self.min_size.width
@@ -87,7 +87,7 @@ class HBox(Container):
             if child.expand.vertical:
                 child_size.height = available_size.height
             # render the child
-            child.render(destination, Position(current_x, pos.y + self.margin.top), child_size)
+            child.render(mouse, destination, Position(current_x, pos.y + self.margin.top), child_size)
             current_x += child_size.width
 
 class VBox(Container):
@@ -111,7 +111,7 @@ class VBox(Container):
             box_size.height += (total_children - 1) * self.spacing
         return box_size + self.margin.size
 
-    def render(self, destination: Surface, pos: Position, size: Size):
+    def render(self, mouse, destination: Surface, pos: Position, size: Size):
         # the total size available for children is the size minus the margin
         available_size = size - self.margin.size
         spare_height = available_size.height - self.min_size.height
@@ -137,5 +137,5 @@ class VBox(Container):
             if child.expand.vertical:
                 child_size.height += expansions.pop(0)
             # render the child
-            child.render(destination, Position(pos.x + self.margin.left, current_y), child_size)
+            child.render(mouse, destination, Position(pos.x + self.margin.left, current_y), child_size)
             current_y += child_size.height

@@ -1,5 +1,4 @@
 import pygame
-import unittest
 from unittest.mock import MagicMock, patch
 
 from pyui.test_helper import PyuiTest
@@ -14,8 +13,13 @@ class MockWidget(Widget):
         self.render_called = False
         self.render_position = None
         self.render_size = None
+        self.update_called = False
+        self.update_mouse = None
+        self.update_surface = None
+        self.update_pos = None
+        self.update_size = None
     
-    def render(self, surface, pos, size):
+    def render(self, mouse, surface, pos, size):
         self.render_called = True
         self.render_position = pos
         self.render_size = size
@@ -112,7 +116,7 @@ class TestWindow(PyuiTest):
                 super().__init__()
                 self.index = index
                 
-            def render(self, surface, pos, size):
+            def render(self, mouse, surface, pos, size):
                 render_order.append(self.index)
         
         # Add widgets
@@ -149,3 +153,68 @@ class TestWindow(PyuiTest):
         
         # The method should return True to indicate the window should continue running
         self.assertTrue(result)
+        
+    def test_mouse_initialization(self):
+        # Test that Mouse object is properly initialized in Window
+        self.assertIsNotNone(self.window.mouse)
+        self.assertEqual(self.window.mouse.position.x, 0)
+        self.assertEqual(self.window.mouse.position.y, 0)
+        self.assertFalse(self.window.mouse.left_button)
+        self.assertFalse(self.window.mouse.middle_button)
+        self.assertFalse(self.window.mouse.right_button)
+        
+    def test_mouse_update_in_handle_events(self):
+        # Test that mouse state is updated in handle_events
+        mock_pos = (100, 150)
+        mock_buttons = (True, False, True)
+        
+        # Patch pygame.mouse.get_pos and pygame.mouse.get_pressed
+        with patch('pygame.mouse.get_pos', return_value=mock_pos), \
+             patch('pygame.mouse.get_pressed', return_value=mock_buttons), \
+             patch('pygame.event.get', return_value=[]):
+            self.window.handle_events()
+        
+        # Check that mouse state was updated
+        self.assertEqual(self.window.mouse.position.x, 100)
+        self.assertEqual(self.window.mouse.position.y, 150)
+        self.assertTrue(self.window.mouse.left_button)
+        self.assertFalse(self.window.mouse.middle_button)
+        self.assertTrue(self.window.mouse.right_button)
+    
+    def test_run_calls_handle_events_and_draw(self):
+        # Test that run calls handle_events and draw
+        
+        # Create a mock for the window methods
+        original_handle_events = self.window.handle_events
+        original_draw = self.window.draw
+        
+        handle_events_called = False
+        draw_called = False
+        
+        def mock_handle_events():
+            nonlocal handle_events_called
+            handle_events_called = True
+            # Return False to exit the run loop immediately
+            return False
+            
+        def mock_draw():
+            nonlocal draw_called
+            draw_called = True
+        
+        # Replace methods with mocks
+        self.window.handle_events = mock_handle_events
+        self.window.draw = mock_draw
+        
+        try:
+            # Run the window (should exit immediately due to mock_handle_events)
+            with patch('pygame.quit'):
+                self.window.run()
+                
+            # Check that both methods were called
+            self.assertTrue(handle_events_called)
+            self.assertTrue(draw_called)
+            
+        finally:
+            # Restore original methods
+            self.window.handle_events = original_handle_events
+            self.window.draw = original_draw

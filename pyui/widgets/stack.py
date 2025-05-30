@@ -31,7 +31,7 @@ class Stack(Container):
             box_size.height = max(box_size.height, child_size.height)
         return box_size + self.margin.size
 
-    def render(self, destination: Surface, pos: Position, size: Size):
+    def render(self, mouse, destination: Surface, pos: Position, size: Size):
         new_image = self.get_new_image(size)
         if self.background is not None:
             new_image.fill(self.background)
@@ -39,5 +39,5 @@ class Stack(Container):
         available_size = size - self.margin.size
         margin_pos = Position(self.margin.left, self.margin.top)
         for child in self.children:
-            child.render(new_image, margin_pos, available_size)
+            child.render(mouse, new_image, margin_pos, available_size)
         destination.blit(new_image, pos.as_tuple)

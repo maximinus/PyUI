@@ -109,3 +109,28 @@ class Margin:
     @property
     def height(self) -> int:
         return self.top + self.bottom
+
+
+class Mouse:
+    """
+    A class that stores the state of the mouse.
+    Includes position and button states.
+    """
+    def __init__(self):
+        self.position = Position(0, 0)
+        self.left_button = False
+        self.middle_button = False
+        self.right_button = False
+    
+    def update(self, position, buttons):
+        """
+        Update the mouse state with the current position and button states.
+        
+        Args:
+            position: A tuple of (x, y) coordinates
+            buttons: A tuple of button states (left, middle, right)
+        """
+        self.position = Position(position[0], position[1])
+        self.left_button = buttons[0]
+        self.middle_button = buttons[1]
+        self.right_button = buttons[2]

@@ -1,10 +1,13 @@
 import pygame
 
-from pyui.helpers import Size, Position
+from pyui.helpers import Size, Position, Mouse
+
+FRAMES_PER_SECOND = 30
 
 
 def pyui_init():
-    pygame.init()
+    if not pygame.get_init():
+        pygame.init()
 
 
 class Window:
@@ -20,10 +23,21 @@ class Window:
         self.widgets = []
         self.running = False
         self.background = background
+        self.mouse = Mouse()
         
-        pygame.display.set_caption(self.title)
-        self.screen = pygame.display.set_mode(self.size.as_tuple)
+        current_surface = pygame.display.get_surface()
+        if current_surface is not None:
+            # If a surface already exists, we assume pygame is already initialized
+            self.screen = current_surface
+        else:
+            pygame.display.set_caption(self.title)
+            self.screen = pygame.display.set_mode(self.size.as_tuple)
    
+    @classmethod
+    def default(cls):
+        """Create a default window with a size of 800x600."""
+        return cls(Size(200, 200), title="Test Window")
+
     def add_widget(self, widget):
         self.widgets.append(widget)
         widget.parent = self
@@ -42,11 +56,16 @@ class Window:
         """Clear the screen and draw all widgets in order."""
         self.screen.fill(self.background)
         for widget in self.widgets:
-            widget.render(self.screen, Position(0, 0), self.size)
+            widget.render(self.mouse, self.screen, Position(0, 0), self.size)
         pygame.display.flip()
     
     def handle_events(self) -> bool:
-        # return False if we need to quit
+        # Update mouse state
+        mouse_pos = pygame.mouse.get_pos()
+        mouse_buttons = pygame.mouse.get_pressed()
+        self.mouse.update(mouse_pos, mouse_buttons)
+        
+        # Process pygame events
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 return False
@@ -59,11 +78,10 @@ class Window:
         """
         self.running = True
         
-        # Main loop
         self.draw()
         while self.running:
-            # Handle events
             self.running = self.handle_events()
+            self.draw()
             # Control frame rate (60 FPS)
-            pygame.time.Clock().tick(60)
+            pygame.time.Clock().tick(FRAMES_PER_SECOND)
         pygame.quit()

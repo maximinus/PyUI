@@ -55,7 +55,7 @@ class TestColorRectSizes(PyuiTest):
                                margin=Margin(10, 10, 10, 10))
         surface = pygame.Surface((100, 100))
         surface.fill(Color(0, 0, 0))
-        color_rect.render(surface, Position(0, 0), Size(100, 100))
+        color_rect.render(self.mouse, surface, Position(0, 0), Size(100, 100))
         self.assertPixel(surface, Position(10, 10), Color(255, 0, 0))
         self.assertPixel(surface, Position(60, 10), Color(0, 0, 0))
         
@@ -65,7 +65,7 @@ class TestColorRectSizes(PyuiTest):
                                margin=Margin(10, 10, 10, 10))
         surface = pygame.Surface((100, 100))
         surface.fill(Color(0, 0, 0))
-        color_rect.render(surface, Position(0, 0), Size(100, 100))
+        color_rect.render(self.mouse, surface, Position(0, 0), Size(100, 100))
         self.assertPixel(surface, Position(10, 10), Color(0, 255, 0))
         self.assertPixel(surface, Position(10, 60), Color(0, 0, 0))
     
@@ -76,7 +76,7 @@ class TestColorRectSizes(PyuiTest):
                                expand=Expand.HORIZONTAL)
         surface = pygame.Surface((100, 100))
         surface.fill(Color(0, 0, 0))
-        color_rect.render(surface, Position(0, 0), Size(100, 100))
+        color_rect.render(self.mouse, surface, Position(0, 0), Size(100, 100))
         self.assertPixel(surface, Position(10, 70), Color(0, 0, 0))
         self.assertPixel(surface, Position(70, 10), Color(255, 0, 0))
 
@@ -87,7 +87,7 @@ class TestColorRectSizes(PyuiTest):
                                expand=Expand.VERTICAL)
         surface = pygame.Surface((100, 100))
         surface.fill(Color(0, 0, 0))
-        color_rect.render(surface, Position(0, 0), Size(100, 100))
+        color_rect.render(self.mouse, surface, Position(0, 0), Size(100, 100))
         self.assertPixel(surface, Position(70, 10), Color(0, 0, 0))
         self.assertPixel(surface, Position(10, 70), Color(255, 0, 0))
     
@@ -98,7 +98,7 @@ class TestColorRectSizes(PyuiTest):
                                expand=Expand.BOTH)
         surface = pygame.Surface((100, 100))
         surface.fill(Color(0, 0, 0))
-        color_rect.render(surface, Position(0, 0), Size(100, 100))
+        color_rect.render(self.mouse, surface, Position(0, 0), Size(100, 100))
         self.assertPixel(surface, Position(10, 10), Color(255, 0, 0))
         self.assertPixel(surface, Position(70, 10), Color(255, 0, 0))
         self.assertPixel(surface, Position(10, 70), Color(255, 0, 0))
@@ -108,7 +108,7 @@ class TestColorRectRender(PyuiTest):
     def test_render(self):
         color_rect = ColorRect(color=Color(255, 0, 0), size=Size(50, 50))
         surface = pygame.Surface((50, 50))
-        color_rect.render(surface, Position(0, 0), Size(50, 50))
+        color_rect.render(self.mouse, surface, Position(0, 0), Size(50, 50))
         self.assertPixel(surface, Position(0, 0), Color(255, 0, 0))
 
     def test_render_with_margin(self):
@@ -117,6 +117,6 @@ class TestColorRectRender(PyuiTest):
                                margin=Margin(10, 10, 10, 10))
         surface = pygame.Surface((70, 70))
         surface.fill(Color(0, 0, 0))
-        color_rect.render(surface, Position(0, 0), Size(70, 70))
+        color_rect.render(self.mouse, surface, Position(0, 0), Size(70, 70))
         self.assertPixel(surface, Position(0, 0), Color(0, 0, 0))
         self.assertPixel(surface, Position(10, 10), Color(255, 0, 0))
