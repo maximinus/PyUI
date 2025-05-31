@@ -6,6 +6,7 @@ from .label import Label
 from .stack import Stack
 from .frame import Frame
 from .menubar import MenuBar, Menu, MenuItem
+from .spacer import Spacer
 
 __all__ = ['ColorRect',
            'Image',

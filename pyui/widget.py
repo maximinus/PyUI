@@ -1,6 +1,7 @@
 import pygame
 from pygame import Surface
 
+from pyui.messaging import message_bus
 from pyui.helpers import Size, Margin, Align, Position, Expand, Mouse
 
 
@@ -37,6 +38,7 @@ class Widget:
         self.background = background
         self.parent = None
         self.image = ImageCache(None, None)
+        self.modal = False
 
     @property
     def min_size(self) -> Size:
@@ -111,3 +113,7 @@ class Widget:
 
     def render(self, mouse, surface: Surface, pos: Position, size: Size):
         pass
+
+    def __del__(self):
+        # Important: unsubscribe from all events
+        message_bus.unsubscribe(self)

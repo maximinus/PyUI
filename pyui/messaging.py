@@ -4,7 +4,7 @@ from enum import Enum, auto
 
 class MessageType(Enum):
     """Common message types that can be used throughout the application."""
-    ADD_WIDGET_LAYER = auto()
+    ADD_WIDGET = auto()
 
 
 class Message:

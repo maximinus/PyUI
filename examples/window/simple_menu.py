@@ -1,5 +1,5 @@
 from pyui.window import Window
-from pyui.widgets import VBox, MenuBar
+from pyui.widgets import VBox, MenuBar, Spacer
 from pyui.helpers import Size, Expand, Align
 
 
@@ -10,6 +10,7 @@ if __name__ == "__main__":
     menu.add_menu("File")
     menu.add_menu("Edit")
     menu.add_menu("Selection")
+    menu.add_child(Spacer(expand=Expand.HORIZONTAL))
     menu.add_menu("Help")
 
     box = VBox(expand=Expand.BOTH)

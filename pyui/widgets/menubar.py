@@ -3,6 +3,7 @@ import pygame
 from pyui.widgets import HBox, VBox, Label, Frame
 from pyui.helpers import Margin, Align, Expand
 from pyui.assets import get_font, get_nine_patch_data
+from pyui.messaging import message_bus, MessageType, Message
 
 
 class Menu(Frame):
@@ -20,15 +21,17 @@ class Menu(Frame):
 
 class MenuItem(Label):
     """A menu item that can be clicked."""
-    def __init__(self, text: str, font, menu: Menu):
-        super().__init__(text, font, (40, 40, 40), margin=Margin(12, 12, 5, 5))
+    def __init__(self, text: str, font, menu: Menu, **kwargs):
+        super().__init__(text, font, (40, 40, 40),
+                         margin=Margin(12, 12, 5, 5), **kwargs)
+        self.menu = menu
 
     def render(self, mouse, destination, position, size):
         self.image.clear()
         if self.is_mouse_over(mouse, position, size):
             if mouse.left_click_down:
                 # here we need to add the menu
-                print("Show the menu")
+                message_bus.post(Message(MessageType.ADD_WIDGET, self, self.menu))
             self.background = (100, 100, 100, 255)
         else:
             self.background = (0, 0, 0, 0)
@@ -42,7 +45,7 @@ class MenuBar(HBox):
                          expand=Expand.HORIZONTAL, **kwargs)
         self.font = get_font("creato.otf", 18)
     
-    def add_menu(self, menu: str):
+    def add_menu(self, menu: str, right: bool = False):
         label = MenuItem(menu, self.font, Menu())
         self.add_child(label)
     

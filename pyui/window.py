@@ -1,6 +1,7 @@
 import pygame
 
 from pyui.helpers import Size, Position, Mouse
+from pyui.messaging import message_bus, MessageType
 
 FRAMES_PER_SECOND = 30
 
@@ -32,7 +33,11 @@ class Window:
         else:
             pygame.display.set_caption(self.title)
             self.screen = pygame.display.set_mode(self.size.as_tuple)
-   
+
+        # define the callbacks
+        message_bus.subscribe(self, MessageType.ADD_WIDGET,
+                              lambda message: self.add_widget(message.data))
+
     @classmethod
     def default(cls):
         """Create a default window with a size of 800x600."""
