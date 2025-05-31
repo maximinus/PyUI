@@ -1,20 +1,34 @@
 import pygame
 
-from pyui.widgets import HBox, Label
+from pyui.widgets import HBox, VBox, Label, Frame
 from pyui.helpers import Margin, Align, Expand
-from pyui.assets import get_font
+from pyui.assets import get_font, get_nine_patch_data
+
+
+class Menu(Frame):
+    def __init__(self, *args, **kwargs):
+        patch_data = get_nine_patch_data("frame.json")
+        background = (180, 180, 220)
+        box = VBox()
+        font = get_font("creato.otf", 16)
+        for i in ["New File", "Open File", "Save", "Save As", "Exit"]:
+            box.add_child(Label(i, font, (40, 40, 40),
+                                margin=Margin(6, 6, 6, 6),
+                                align=Align(Align.LEFT, Align.CENTER)))
+        super().__init__(box, patch_data, background=background)
 
 
 class MenuItem(Label):
     """A menu item that can be clicked."""
-    def __init__(self, text: str, font):
+    def __init__(self, text: str, font, menu: Menu):
         super().__init__(text, font, (40, 40, 40), margin=Margin(12, 12, 5, 5))
-    
+
     def render(self, mouse, destination, position, size):
         self.image.clear()
         if self.is_mouse_over(mouse, position, size):
             if mouse.left_click_down:
-                print(f"Menu item '{self.text}' clicked")
+                # here we need to add the menu
+                print("Show the menu")
             self.background = (100, 100, 100, 255)
         else:
             self.background = (0, 0, 0, 0)
@@ -29,7 +43,7 @@ class MenuBar(HBox):
         self.font = get_font("creato.otf", 18)
     
     def add_menu(self, menu: str):
-        label = MenuItem(menu, self.font)
+        label = MenuItem(menu, self.font, Menu())
         self.add_child(label)
     
     def render(self, mouse, destination, position, size):

@@ -5,7 +5,7 @@ from .nine_patch import NinePatch, NinePatchData
 from .label import Label
 from .stack import Stack
 from .frame import Frame
-from .menubar import MenuBar
+from .menubar import MenuBar, Menu, MenuItem
 
 __all__ = ['ColorRect',
            'Image',
@@ -17,4 +17,6 @@ __all__ = ['ColorRect',
            'Font',
            'Stack',
            'Frame',
-           'MenuBar']
+           'MenuBar',
+           'Menu',
+           'MenuItem']
