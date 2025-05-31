@@ -1,97 +1,105 @@
 import unittest
-
-from pyui.helpers import Position, Mouse
-
+from pyui.helpers import Mouse, Position
 
 class TestMouse(unittest.TestCase):
-    def test_init(self):
-        # Test initial state
-        mouse = Mouse()
-        self.assertEqual(mouse.position.x, 0)
-        self.assertEqual(mouse.position.y, 0)
-        self.assertFalse(mouse.left_button)
-        self.assertFalse(mouse.middle_button)
-        self.assertFalse(mouse.right_button)
+    
+    def setUp(self):
+        self.mouse = Mouse()
+    
+    def test_initial_state(self):
+        self.assertEqual(self.mouse.position.x, 0)
+        self.assertEqual(self.mouse.position.y, 0)
+        self.assertEqual(self.mouse.old_position.x, 0)
+        self.assertEqual(self.mouse.old_position.y, 0)
+        self.assertFalse(self.mouse.current.left)
+        self.assertFalse(self.mouse.current.middle)
+        self.assertFalse(self.mouse.current.right)
+        self.assertFalse(self.mouse.previous.left)
+        self.assertFalse(self.mouse.previous.middle)
+        self.assertFalse(self.mouse.previous.right)
     
     def test_update_position(self):
-        # Test updating mouse position
-        mouse = Mouse()
+        self.mouse.update((100, 200), (False, False, False))
+        self.assertEqual(self.mouse.position.x, 100)
+        self.assertEqual(self.mouse.position.y, 200)
+        self.assertEqual(self.mouse.old_position.x, 0)
+        self.assertEqual(self.mouse.old_position.y, 0)
         
-        # Update with new position
-        mouse.update((100, 150), (False, False, False))
-        
-        # Check that position was updated
-        self.assertEqual(mouse.position.x, 100)
-        self.assertEqual(mouse.position.y, 150)
-        self.assertEqual(mouse.position, Position(100, 150))
+        self.mouse.update((150, 250), (False, False, False))
+        self.assertEqual(self.mouse.position.x, 150)
+        self.assertEqual(self.mouse.position.y, 250)
+        self.assertEqual(self.mouse.old_position.x, 100)
+        self.assertEqual(self.mouse.old_position.y, 200)
     
-    def test_update_buttons(self):
-        # Test updating button states
-        mouse = Mouse()
+    def test_set_left(self):
+        self.mouse.update((0, 0), (True, False, False))
+        self.assertTrue(self.mouse.current.left)
+        self.assertFalse(self.mouse.current.middle)
+        self.assertFalse(self.mouse.current.right)
         
-        # Test left button pressed
-        mouse.update((0, 0), (True, False, False))
-        self.assertTrue(mouse.left_button)
-        self.assertFalse(mouse.middle_button)
-        self.assertFalse(mouse.right_button)
+    def test_set_middle(self):
+        self.mouse.update((0, 0), (False, True, False))
+        self.assertFalse(self.mouse.current.left)
+        self.assertTrue(self.mouse.current.middle)
+        self.assertFalse(self.mouse.current.right)
         
-        # Test middle button pressed
-        mouse.update((0, 0), (False, True, False))
-        self.assertFalse(mouse.left_button)
-        self.assertTrue(mouse.middle_button)
-        self.assertFalse(mouse.right_button)
+    def test_set_right(self):
+        self.mouse.update((0, 0), (False, False, True))
+        self.assertFalse(self.mouse.current.left)
+        self.assertFalse(self.mouse.current.middle)
+        self.assertTrue(self.mouse.current.right)
         
-        # Test right button pressed
-        mouse.update((0, 0), (False, False, True))
-        self.assertFalse(mouse.left_button)
-        self.assertFalse(mouse.middle_button)
-        self.assertTrue(mouse.right_button)
-        
-        # Test multiple buttons pressed
-        mouse.update((0, 0), (True, True, True))
-        self.assertTrue(mouse.left_button)
-        self.assertTrue(mouse.middle_button)
-        self.assertTrue(mouse.right_button)
-        
-        # Test all buttons released
-        mouse.update((0, 0), (False, False, False))
-        self.assertFalse(mouse.left_button)
-        self.assertFalse(mouse.middle_button)
-        self.assertFalse(mouse.right_button)
+    def test_set_all_buttons(self):
+        self.mouse.update((0, 0), (True, True, True))
+        self.assertTrue(self.mouse.current.left)
+        self.assertTrue(self.mouse.current.middle)
+        self.assertTrue(self.mouse.current.right)
     
-    def test_update_position_and_buttons(self):
-        # Test updating both position and buttons at once
-        mouse = Mouse()
+    def test_left_click_down(self):
+        self.mouse.update((0, 0), (False, False, False))
+        self.mouse.update((0, 0), (True, False, False))
+        self.assertTrue(self.mouse.left_click_down)
+        self.assertFalse(self.mouse.left_click_up)
         
-        mouse.update((100, 150), (True, False, True))
+    def test_left_click_up(self):
+        self.mouse.update((0, 0), (True, False, False))
+        self.mouse.update((0, 0), (False, False, False))
+        self.assertFalse(self.mouse.left_click_down)
+        self.assertTrue(self.mouse.left_click_up)
+
+    def test_middle_click_down(self):
+        # Test middle click down
+        self.mouse.update((0, 0), (False, False, False))
+        self.mouse.update((0, 0), (False, True, False))
+        self.assertTrue(self.mouse.middle_click_down)
+        self.assertFalse(self.mouse.middle_click_up)
+    
+    def test_middle_click_up(self):
+        self.mouse.update((0, 0), (False, True, False))
+        self.mouse.update((0, 0), (False, False, False))
+        self.assertFalse(self.mouse.middle_click_down)
+        self.assertTrue(self.mouse.middle_click_up)
+    
+    def test_right_click_down(self):
+        # Test right click down
+        self.mouse.update((0, 0), (False, False, False))
+        self.mouse.update((0, 0), (False, False, True))
+        self.assertTrue(self.mouse.right_click_down)
+        self.assertFalse(self.mouse.right_click_up)
+    
+    def test_right_click_up(self):
+        self.mouse.update((0, 0), (False, False, True))
+        self.mouse.update((0, 0), (False, False, False))
+        self.assertFalse(self.mouse.right_click_down)
+        self.assertTrue(self.mouse.right_click_up)
+    
+    def test_no_click_when_held(self):
+        # Press button and check click down is true
+        self.mouse.update((0, 0), (False, False, False))
+        self.mouse.update((0, 0), (True, False, False))
+        self.assertTrue(self.mouse.left_click_down)
         
-        # Check position
-        self.assertEqual(mouse.position.x, 100)
-        self.assertEqual(mouse.position.y, 150)
-        
-        # Check buttons
-        self.assertTrue(mouse.left_button)
-        self.assertFalse(mouse.middle_button)
-        self.assertTrue(mouse.right_button)
-        
-    def test_consecutive_updates(self):
-        # Test multiple consecutive updates
-        mouse = Mouse()
-        
-        # First update
-        mouse.update((10, 20), (True, False, False))
-        self.assertEqual(mouse.position, Position(10, 20))
-        self.assertTrue(mouse.left_button)
-        
-        # Second update
-        mouse.update((30, 40), (False, True, False))
-        self.assertEqual(mouse.position, Position(30, 40))
-        self.assertFalse(mouse.left_button)
-        self.assertTrue(mouse.middle_button)
-        
-        # Third update
-        mouse.update((50, 60), (False, False, True))
-        self.assertEqual(mouse.position, Position(50, 60))
-        self.assertFalse(mouse.left_button)
-        self.assertFalse(mouse.middle_button)
-        self.assertTrue(mouse.right_button)
+        # Still holding button, check click down is now false
+        self.mouse.update((0, 0), (True, False, False))
+        self.assertFalse(self.mouse.left_click_down)
+        self.assertFalse(self.mouse.left_click_up)

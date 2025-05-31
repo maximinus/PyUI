@@ -11,6 +11,13 @@ class MenuItem(Label):
         super().__init__(text, font, (40, 40, 40), margin=Margin(12, 12, 5, 5))
     
     def render(self, mouse, destination, position, size):
+        self.image.clear()
+        if self.is_mouse_over(mouse, position, size):
+            if mouse.left_click_down:
+                print(f"Menu item '{self.text}' clicked")
+            self.background = (100, 100, 100, 255)
+        else:
+            self.background = (0, 0, 0, 0)
         return super().render(mouse, destination, position, size)
 
 

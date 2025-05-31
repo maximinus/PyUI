@@ -1,4 +1,4 @@
-from enum import Enum, IntEnum
+from enum import IntEnum
 from dataclasses import dataclass
 
 
@@ -46,6 +46,9 @@ class Position:
         if not isinstance(other, Position):
             return NotImplemented
         return Position(self.x + other.x, self.y + other.y)
+
+    def copy(self):
+        return Position(self.x, self.y)
 
     @property
     def as_tuple(self):
@@ -111,6 +114,19 @@ class Margin:
         return self.top + self.bottom
 
 
+class MouseButtonStatus:
+    def __init__(self):
+        # wether a button is pressed or not
+        self.left = False
+        self.middle = False
+        self.right = False
+    
+    def update(self, other):
+        self.left = other.left
+        self.middle = other.middle
+        self.right = other.right
+
+
 class Mouse:
     """
     A class that stores the state of the mouse.
@@ -118,9 +134,9 @@ class Mouse:
     """
     def __init__(self):
         self.position = Position(0, 0)
-        self.left_button = False
-        self.middle_button = False
-        self.right_button = False
+        self.old_position = Position(0, 0)
+        self.current = MouseButtonStatus()
+        self.previous = MouseButtonStatus()
     
     def update(self, position, buttons):
         """
@@ -130,7 +146,33 @@ class Mouse:
             position: A tuple of (x, y) coordinates
             buttons: A tuple of button states (left, middle, right)
         """
+        self.old_position = self.position.copy()
         self.position = Position(position[0], position[1])
-        self.left_button = buttons[0]
-        self.middle_button = buttons[1]
-        self.right_button = buttons[2]
+        self.previous.update(self.current)
+        self.current.left = buttons[0]
+        self.current.middle = buttons[1]
+        self.current.right = buttons[2]
+
+    @property
+    def left_click_down(self):
+        return (self.current.left and not self.previous.left)
+    
+    @property
+    def left_click_up(self):
+        return (not self.current.left and self.previous.left)
+    
+    @property
+    def middle_click_down(self):
+        return (self.current.middle and not self.previous.middle)
+    
+    @property
+    def middle_click_up(self):
+        return (not self.current.middle and self.previous.middle)
+    
+    @property
+    def right_click_down(self):
+        return (self.current.right and not self.previous.right)
+    
+    @property
+    def right_click_up(self):
+        return (not self.current.right and self.previous.right)

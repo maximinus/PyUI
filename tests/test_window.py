@@ -159,9 +159,9 @@ class TestWindow(PyuiTest):
         self.assertIsNotNone(self.window.mouse)
         self.assertEqual(self.window.mouse.position.x, 0)
         self.assertEqual(self.window.mouse.position.y, 0)
-        self.assertFalse(self.window.mouse.left_button)
-        self.assertFalse(self.window.mouse.middle_button)
-        self.assertFalse(self.window.mouse.right_button)
+        self.assertFalse(self.window.mouse.current.left)
+        self.assertFalse(self.window.mouse.current.middle)
+        self.assertFalse(self.window.mouse.current.right)
         
     def test_mouse_update_in_handle_events(self):
         # Test that mouse state is updated in handle_events
@@ -177,9 +177,9 @@ class TestWindow(PyuiTest):
         # Check that mouse state was updated
         self.assertEqual(self.window.mouse.position.x, 100)
         self.assertEqual(self.window.mouse.position.y, 150)
-        self.assertTrue(self.window.mouse.left_button)
-        self.assertFalse(self.window.mouse.middle_button)
-        self.assertTrue(self.window.mouse.right_button)
+        self.assertTrue(self.window.mouse.current.left)
+        self.assertFalse(self.window.mouse.current.middle)
+        self.assertTrue(self.window.mouse.current.right)
     
     def test_run_calls_handle_events_and_draw(self):
         # Test that run calls handle_events and draw
