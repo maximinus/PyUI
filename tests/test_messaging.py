@@ -23,7 +23,6 @@ class TestMessage(unittest.TestCase):
         sender = "test_sender"
         
         message = Message(msg_type, sender)
-        
         self.assertEqual(message.type, msg_type)
         self.assertEqual(message.sender, sender)
         self.assertIsNone(message.data)
