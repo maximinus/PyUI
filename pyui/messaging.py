@@ -20,6 +20,7 @@ class MessageBus:
     def __init__(self):
         self.subscribers: Dict[MessageType, List[Callable[[Message], None]]] = {}
         self.subscribed_objects: Dict[Any, Set[MessageType]] = {}
+        self.posts = []
     
     def subscribe(self, subscriber: Any, msg_type: MessageType, callback: Callable[[Message], None]) -> None:
         """Subscribe to a specific message type with a callback function."""
@@ -71,9 +72,14 @@ class MessageBus:
         """Post a message to all subscribers of that message type."""
         if message.type not in self.subscribers:
             return
-        
-        for callback in self.subscribers[message.type]:
-            callback(message)
+        self.posts.append(message)
+    
+    def consume(self):
+        # consume all messages in the queue
+        while len(self.posts) > 0:
+            message = self.posts.pop(0)
+            for callback in self.subscribers[message.type]:
+                callback(message)
 
 
 # Singleton instance that can be imported

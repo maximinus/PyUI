@@ -9,7 +9,7 @@ from pyui.messaging import message_bus, MessageType, Message
 class Menu(Frame):
     def __init__(self, *args, **kwargs):
         patch_data = get_nine_patch_data("frame.json")
-        background = (180, 180, 220)
+        background = (180, 180, 180)
         box = VBox()
         font = get_font("creato.otf", 16)
         for i in ["New File", "Open File", "Save", "Save As", "Exit"]:
@@ -25,6 +25,7 @@ class MenuItem(Label):
         super().__init__(text, font, (40, 40, 40),
                          margin=Margin(12, 12, 5, 5), **kwargs)
         self.menu = menu
+        self.menu.modal = True
 
     def render(self, mouse, destination, position, size):
         self.image.clear()

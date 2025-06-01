@@ -117,3 +117,6 @@ class Widget:
     def __del__(self):
         # Important: unsubscribe from all events
         message_bus.unsubscribe(self)
+    
+    def __str__(self):
+        return f"{self.__class__.__name__}"

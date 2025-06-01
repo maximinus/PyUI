@@ -11,6 +11,12 @@ def pyui_init():
         pygame.init()
 
 
+class ModalState:
+    def __init__(self, widget, capture):
+        self.widget = widget
+        self.capture = capture
+
+
 class Window:
     """
     A window class that manages multiple widgets.
@@ -18,6 +24,7 @@ class Window:
     Widgets are rendered in the order they were added (first to last).
     """
     def __init__(self, size: Size, background=(200, 200, 200), title: str = "PyUI Window"):
+        assert background is not None, "Background color cannot be None"
         pyui_init()
         self.title = title
         self.size = size
@@ -25,6 +32,7 @@ class Window:
         self.running = False
         self.background = background
         self.mouse = Mouse()
+        self.modal_backgrounds = []
         
         current_surface = pygame.display.get_surface()
         if current_surface is not None:
@@ -46,22 +54,44 @@ class Window:
     def add_widget(self, widget):
         self.widgets.append(widget)
         widget.parent = self
-        
+        if widget.modal:
+            self.capture_background(widget)
+    
+    def capture_background(self, widget):
+        capture = pygame.Surface(self.size.as_tuple).convert_alpha()
+        capture.fill(self.background)
+        # capture the current screen content
+        capture.blit(self.screen, (0, 0))
+        self.modal_backgrounds.append(ModalState(widget, capture))
+
     def remove_widget(self, widget):
         if widget in self.widgets:
+            # remove if a modal background exists
+            for i in self.modal_backgrounds:
+                if i.widget == widget:
+                    self.modal_backgrounds.remove(i)
+                    break
             self.widgets.remove(widget)
             widget.parent = None
-            
+
     def clear_widgets(self):
         for widget in self.widgets:
             widget.parent = None
         self.widgets = []
+        self.modal_backgrounds = []
 
     def draw(self) -> None:
         """Clear the screen and draw all widgets in order."""
-        self.screen.fill(self.background)
-        for widget in self.widgets:
-            widget.render(self.mouse, self.screen, Position(0, 0), self.size)
+        # is there a new modal widget?
+        if len(self.modal_backgrounds) > 0:
+            # draw the last captured background
+            self.screen.blit(self.modal_backgrounds[-1].capture, (0, 0))
+            # only the top widget needs to be handled
+            self.widgets[-1].render(self.mouse, self.screen, Position(0, 0), self.size)
+        else:
+            self.screen.fill(self.background)
+            for widget in self.widgets:
+                widget.render(self.mouse, self.screen, Position(0, 0), self.size)
         pygame.display.flip()
     
     def handle_events(self) -> bool:
@@ -87,6 +117,7 @@ class Window:
         while self.running:
             self.running = self.handle_events()
             self.draw()
-            # Control frame rate (60 FPS)
+            message_bus.consume()
+            # Control frame rate
             pygame.time.Clock().tick(FRAMES_PER_SECOND)
         pygame.quit()
