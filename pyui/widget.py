@@ -39,6 +39,7 @@ class Widget:
         self.parent = None
         self.image = ImageCache(None, None)
         self.modal = False
+        self.active = False
 
     @property
     def min_size(self) -> Size:
@@ -113,6 +114,9 @@ class Widget:
 
     def render(self, mouse, surface: Surface, pos: Position, size: Size):
         pass
+
+    def set_active(self, is_active):
+        self.active = is_active
 
     def __del__(self):
         # Important: unsubscribe from all events

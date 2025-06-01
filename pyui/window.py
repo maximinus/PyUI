@@ -53,6 +53,7 @@ class Window:
 
     def add_widget(self, widget):
         self.widgets.append(widget)
+        widget.set_active(True)
         widget.parent = self
         if widget.modal:
             self.capture_background(widget)

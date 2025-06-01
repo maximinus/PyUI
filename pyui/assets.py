@@ -39,10 +39,12 @@ class FileCache:
         self.images: Dict[str, pygame.Surface] = {}
         self.nine_patch: Dict[str, pygame.Surface] = {}
         self.fonts: Dict[str, pygame.font.Font] = {}
+        self.icons: Dict[str, pygame.Surface] = {}
 
     def clear(self):
         self.images = {}
         self.nine_patch = {}
+        self.icons = {}
         self.fonts = {}
 
 
@@ -64,6 +66,23 @@ def get_image(image_name: str) -> pygame.Surface:
     image = pygame.image.load(image_path).convert_alpha()
     file_cache.images[image_name] = image
     return image
+
+
+def get_icon(image_name: str) -> pygame.Surface:
+    """Get an image from the assets folder, using cache if available."""
+    # Check if the image is already in the cache
+    if image_name in file_cache.icons:
+        return file_cache.icons[image_name]
+    
+    # Load the image if not in cache
+    icon_path = ASSETS_FOLDER / "icons" / image_name
+    if not icon_path.exists():
+        raise FileNotFoundError(f"Icon '{image_name}' not found in assets.")
+    
+    # Load the image and store in cache
+    icon = pygame.image.load(icon_path).convert_alpha()
+    file_cache.icons[image_name] = icon
+    return icon
 
 
 def get_nine_patch(patch_name: str) -> pygame.Surface:

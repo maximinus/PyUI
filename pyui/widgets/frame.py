@@ -5,6 +5,7 @@ from pyui.widget import Widget
 from pyui.widgets.nine_patch import NinePatch, NinePatchData
 from pyui.helpers import Size, Position, Expand
 
+# Frames cannot cache their contents as the inner widgets may want to update
 
 class Frame(Widget):
     """
@@ -37,10 +38,6 @@ class Frame(Widget):
         """
         Render the nine patch frame and the child widget inside it.
         """
-        if self.image.matches(size):
-            destination.blit(self.image.image, position.as_tuple)
-            return
-
         new_image = self.get_new_image(size)
         render_pos = self.get_position(size)
         # Add the margin left and top
@@ -78,5 +75,8 @@ class Frame(Widget):
                              (child_pos.x, child_pos.y, child_size.width, child_size.height))
         self.child.render(mouse, frame_surface, child_pos, child_size)
         new_image.blit(frame_surface, render_pos.as_tuple)
-        self.image.update(new_image)
         destination.blit(new_image, position.as_tuple)
+
+    def set_active(self, is_active):
+        self.active = is_active
+        self.child.set_active(is_active)

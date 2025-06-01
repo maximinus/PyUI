@@ -1,7 +1,8 @@
+import pygame
 from pygame import Surface
 
 from pyui.widget import Widget
-from pyui.helpers import Size, Position
+from pyui.helpers import Size, Position, Align
 
 
 def split_pixels(total_children, spare_pixels):
@@ -33,11 +34,18 @@ class Container(Widget):
     def add_child(self, child: Widget):
         self.children.append(child)
         child.parent = self
+        child.set_active(self.active)
 
     def remove_child(self, child: Widget):
         if child in self.children:
             self.children.remove(child)
+            child.set_active(False)
             child.parent = None
+    
+    def set_active(self, is_active: bool):
+        self.active = is_active
+        for child in self.children:
+            child.set_active(is_active)
 
 
 class HBox(Container):
@@ -75,6 +83,9 @@ class HBox(Container):
             expansions = split_pixels(total_expanding_children, spare_width)
         else:
             expansions = [0] * len(self.children)
+        if self.background is not None:
+            pygame.draw.rect(destination, self.background,
+                             (pos.x, pos.y, size.width, size.height))
         # render each child
         current_x = pos.x + self.margin.left
         for i, child in enumerate(self.children):
@@ -126,6 +137,14 @@ class VBox(Container):
         else:
             expansions = [0] * len(self.children)
         # render each child
+
+        max_width = 0
+        for child in self.children:
+            if child.expand.horizontal:
+                max_width = size.width - self.margin.width
+                break
+            max_width = max(max_width, child.min_size.width)
+
         current_y = pos.y + self.margin.top
         for i, child in enumerate(self.children):
             child_size = child.min_size
@@ -134,6 +153,9 @@ class VBox(Container):
             # expand the child if needed
             if child.expand.horizontal:
                 child_size.width = available_size.width
+            elif child.align.horizontal == Align.FILL:
+                # this child will not expand, but it will fill
+                child_size.width = max_width
             if child.expand.vertical:
                 child_size.height += expansions.pop(0)
             # render the child

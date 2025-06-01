@@ -46,6 +46,11 @@ class Position:
         if not isinstance(other, Position):
             return NotImplemented
         return Position(self.x + other.x, self.y + other.y)
+    
+    def __sub__(self, other):
+        if not isinstance(other, Position):
+            return NotImplemented
+        return Position(self.x - other.x, self.y - other.y)
 
     def copy(self):
         return Position(self.x, self.y)

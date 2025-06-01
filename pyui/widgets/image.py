@@ -18,13 +18,12 @@ class Image(Widget):
     def min_size(self) -> Size:
         return self.size + self.margin.size
 
-
     def render(self, mouse, destination: Surface, position: Position, size: Size):
         """
         Render the image to the given surface at the specified position.
         """
         if self.image.matches(size):
-            destination.blit(self.image.image, position)
+            destination.blit(self.image.image, position.as_tuple)
             return
         new_image = self.get_new_image(size)
         render_pos = self.get_position(size)

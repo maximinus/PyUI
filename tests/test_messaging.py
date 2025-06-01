@@ -87,7 +87,7 @@ class TestMessageBus(unittest.TestCase):
         callback = subscriber.callback
         
         self.bus.subscribe(subscriber, msg_type, callback)
-        message = Message(msg_type, "sender")
+        message = Message(msg_type, subscriber)
         self.bus.post(message)
         self.bus.consume()
         
@@ -115,7 +115,7 @@ class TestMessageBus(unittest.TestCase):
         
         self.bus.subscribe(subscriber1, msg_type, subscriber1.callback)
         self.bus.subscribe(subscriber2, msg_type, subscriber2.callback)
-        message = Message(msg_type, "sender")
+        message = Message(msg_type, subscriber1)
         self.bus.post(message)
         self.bus.consume()
         

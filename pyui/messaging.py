@@ -5,6 +5,7 @@ from enum import Enum, auto
 class MessageType(Enum):
     """Common message types that can be used throughout the application."""
     ADD_WIDGET = auto()
+    ESCAPE_PRESSED = auto()
 
 
 class Message:
@@ -79,7 +80,8 @@ class MessageBus:
         while len(self.posts) > 0:
             message = self.posts.pop(0)
             for callback in self.subscribers[message.type]:
-                callback(message)
+                if message.sender.active:
+                    callback(message)
 
 
 # Singleton instance that can be imported
