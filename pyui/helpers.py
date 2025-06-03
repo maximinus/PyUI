@@ -119,18 +119,16 @@ class Margin:
         return self.top + self.bottom
 
 
-class MouseButtonStatus:
+class MouseButtonState:
     def __init__(self):
-        # wether a button is pressed or not
-        self.left = False
-        self.middle = False
-        self.right = False
-    
-    def update(self, other):
-        self.left = other.left
-        self.middle = other.middle
-        self.right = other.right
+        self.state = False
+        self.up = False
+        self.down = False
 
+    def update(self, new_state):
+        self.up = self.state and not new_state
+        self.down = not self.state and new_state
+        self.state = new_state
 
 class Mouse:
     """
@@ -140,9 +138,10 @@ class Mouse:
     def __init__(self):
         self.position = Position(0, 0)
         self.old_position = Position(0, 0)
-        self.current = MouseButtonStatus()
-        self.previous = MouseButtonStatus()
-    
+        self.left = MouseButtonState()
+        self.middle = MouseButtonState()
+        self.right = MouseButtonState()
+
     def update(self, position, buttons):
         """
         Update the mouse state with the current position and button states.
@@ -153,31 +152,7 @@ class Mouse:
         """
         self.old_position = self.position.copy()
         self.position = Position(position[0], position[1])
-        self.previous.update(self.current)
-        self.current.left = buttons[0]
-        self.current.middle = buttons[1]
-        self.current.right = buttons[2]
 
-    @property
-    def left_click_down(self):
-        return (self.current.left and not self.previous.left)
-    
-    @property
-    def left_click_up(self):
-        return (not self.current.left and self.previous.left)
-    
-    @property
-    def middle_click_down(self):
-        return (self.current.middle and not self.previous.middle)
-    
-    @property
-    def middle_click_up(self):
-        return (not self.current.middle and self.previous.middle)
-    
-    @property
-    def right_click_down(self):
-        return (self.current.right and not self.previous.right)
-    
-    @property
-    def right_click_up(self):
-        return (not self.current.right and self.previous.right)
+        self.left.update(buttons[0])
+        self.middle.update(buttons[1])
+        self.right.update(buttons[2])

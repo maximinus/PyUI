@@ -1,8 +1,10 @@
 import pygame
 from pygame import Surface
 
+from pyui.signals import SignalType
 from pyui.messaging import message_bus
-from pyui.helpers import Size, Margin, Align, Position, Expand, Mouse
+from pyui.helpers import (Size, Margin,Align,
+                          Position, Expand, Mouse)
 
 
 class ImageCache:
@@ -40,6 +42,10 @@ class Widget:
         self.image = ImageCache(None, None)
         self.modal = False
         self.active = False
+        # default signals all widgets have
+        self.signals = [SignalType.MOUSE_IN, SignalType.MOUSE_OUT,
+                        SignalType.MOUSE_LEFT_CLICK, SignalType.MOUSE_RIGHT_CLICK,
+                        SignalType.MOUSE_MIDDLE_CLICK]
 
     @property
     def min_size(self) -> Size:
