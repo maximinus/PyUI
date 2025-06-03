@@ -1,7 +1,7 @@
 import pygame
 from pygame import Surface
 
-from pyui.signals import SignalType
+from pyui.signals import SignalHandler, SignalType
 from pyui.messaging import message_bus
 from pyui.helpers import (Size, Margin,Align,
                           Position, Expand, Mouse)
@@ -43,9 +43,8 @@ class Widget:
         self.modal = False
         self.active = False
         # default signals all widgets have
-        self.signals = [SignalType.MOUSE_IN, SignalType.MOUSE_OUT,
-                        SignalType.MOUSE_LEFT_CLICK, SignalType.MOUSE_RIGHT_CLICK,
-                        SignalType.MOUSE_MIDDLE_CLICK]
+        self.signals = SignalHandler()
+        self.mouse_over = False
 
     @property
     def min_size(self) -> Size:
@@ -117,6 +116,24 @@ class Widget:
         # Check if mouse is within the content area
         return (widget_xpos <= mouse.position.x <= widget_xpos + content_width and 
                 widget_ypos <= mouse.position.y <= widget_ypos + content_height)
+
+    def handle_signals(self, mouse: Mouse, pos: Position, size: Size):
+        hovered = self.is_mouse_over(mouse, pos, size)
+        if hovered and not self.mouse_over:
+            self.mouse_over = True
+            self.signals.trigger(SignalType.MOUSE_IN, self)
+        elif not hovered and self.mouse_over:
+            self.mouse_over = False
+            self.signals.trigger(SignalType.MOUSE_OUT, self)
+        self.mouse_over = hovered
+        if not self.mouse_over:
+            return
+        if mouse.left.down:
+            self.signals.trigger(SignalType.MOUSE_LEFT_CLICK, self)
+        if mouse.right.down:
+            self.signals.trigger(SignalType.MOUSE_LEFT_CLICK, self)
+        if mouse.middle.down:
+            self.signals.trigger(SignalType.MOUSE_LEFT_CLICK, self)
 
     def render(self, mouse, surface: Surface, pos: Position, size: Size):
         pass

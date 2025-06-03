@@ -45,6 +45,8 @@ class Window:
         # define the callbacks
         message_bus.subscribe(self, MessageType.ADD_WIDGET,
                               lambda message: self.add_widget(message.data))
+        message_bus.subscribe(self, MessageType.REMOVE_MODAL,
+                              lambda message: self.remove_modal())
 
     @classmethod
     def default(cls):
@@ -74,6 +76,16 @@ class Window:
                     break
             self.widgets.remove(widget)
             widget.parent = None
+
+    def remove_modal(self):
+        # remove the last modal widget
+        if not self.widgets[-1].modal:
+            # no modal widget to remove
+            return
+        self.widgets.pop()
+        # remove the last captured background
+        if self.modal_backgrounds:
+            self.modal_backgrounds.pop()
 
     def clear_widgets(self):
         for widget in self.widgets:

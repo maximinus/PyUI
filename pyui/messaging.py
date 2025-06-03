@@ -6,6 +6,7 @@ class MessageType(Enum):
     """Common message types that can be used throughout the application."""
     ADD_WIDGET = auto()
     ESCAPE_PRESSED = auto()
+    REMOVE_MODAL = auto()
 
 
 class Message:

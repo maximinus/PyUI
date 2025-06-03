@@ -27,9 +27,13 @@ class MenuSelection(HBox):
     
     def render(self, mouse, destination, position, size):
         real_position = position + self.parent.parent.pos
-        if self.is_mouse_over(mouse, real_position, size):
+        self.handle_signals(mouse, real_position, size)
+        if self.mouse_over:
             self.background = (150, 150, 150, 255)
         else:
+            # if clicked, we need to close
+            if mouse.left.down:
+                message_bus.post(Message(MessageType.REMOVE_MODAL, self))
             self.background = None
         return super().render(mouse, destination, position, size)
 
@@ -62,7 +66,7 @@ class MenuItem(Label):
     def render(self, mouse, destination, position, size):
         self.image.clear()
         if self.is_mouse_over(mouse, position, size):
-            if mouse.left_click_down:
+            if mouse.left.down:
                 # here we need to add the menu
                 self.menu.pos = Position(position.x, position.y + size.height)
                 message_bus.post(Message(MessageType.ADD_WIDGET, self, self.menu))
