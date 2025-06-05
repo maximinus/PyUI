@@ -1,6 +1,6 @@
 from pyui.window import Window
 from pyui.widgets import VBox, MenuBar, Spacer
-from pyui.helpers import Size, Expand, Align
+from pyui.helpers import Size, Expand
 
 
 if __name__ == "__main__":

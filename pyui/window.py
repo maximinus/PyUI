@@ -2,6 +2,7 @@ import pygame
 
 from pyui.helpers import Size, Position, Mouse
 from pyui.messaging import message_bus, MessageType
+from pyui.keys import keys
 
 FRAMES_PER_SECOND = 30
 
@@ -113,10 +114,19 @@ class Window:
         mouse_buttons = pygame.mouse.get_pressed()
         self.mouse.update(mouse_pos, mouse_buttons)
         
-        # Process pygame events
+        keys_pressed = []
+        keys_released = []
+
         for event in pygame.event.get():
+            match event.type:
+                case pygame.KEYDOWN:
+                    keys_pressed.append(event.key)
+                case pygame.KEYUP:
+                    keys_released.append(event.key)
             if event.type == pygame.QUIT:
                 return False
+        
+        keys.update(keys_pressed, keys_released)
         return True
     
     def run(self) -> None:

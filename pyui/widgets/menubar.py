@@ -4,6 +4,7 @@ from pyui.widgets import HBox, VBox, Label, Frame, Image
 from pyui.helpers import Margin, Align, Expand, Position
 from pyui.assets import get_font, get_nine_patch_data, get_icon
 from pyui.messaging import message_bus, MessageType, Message
+from pyui.keys import keys, Key
 
 
 class MenuSelection(HBox):
@@ -26,6 +27,9 @@ class MenuSelection(HBox):
                                  (60, 60, 46), align=Align(Align.RIGHT, Align.CENTER)))
     
     def render(self, mouse, destination, position, size):
+        if keys.is_pressed(Key.ESCAPE):
+            message_bus.post(Message(MessageType.REMOVE_MODAL, self))
+            return
         real_position = position + self.parent.parent.pos
         self.handle_signals(mouse, real_position, size)
         if self.mouse_over:
@@ -34,7 +38,9 @@ class MenuSelection(HBox):
             # if clicked, we need to close
             if mouse.left.down:
                 message_bus.post(Message(MessageType.REMOVE_MODAL, self))
+                return
             self.background = None
+        # also close if the escape key is pressed
         return super().render(mouse, destination, position, size)
 
 
