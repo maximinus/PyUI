@@ -55,6 +55,9 @@ class Position:
     def copy(self):
         return Position(self.x, self.y)
 
+    def __repr__(self):
+        return f"Position(x={self.x}, y={self.y})"
+
     @property
     def as_tuple(self):
         return (self.x, self.y)
@@ -81,6 +84,9 @@ class Size:
         if not isinstance(other, Size):
             return NotImplemented
         return Size(self.width - other.width, self.height - other.height)
+
+    def __repr__(self):
+        return f"Size(width={self.width}, height={self.height})"
 
     @property
     def as_tuple(self):

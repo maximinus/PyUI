@@ -69,13 +69,20 @@ class MenuItem(Label):
         self.menu.modal = True
         message_bus.subscribe(self, MessageType.ESCAPE_PRESSED, self.escape_pressed)
 
+    def display_menu(self, position, size, width):
+        # if the width of the menu overflows the screen, move the menu to the left
+        overflow = (position.x + self.menu.min_size.width) - width
+        if overflow > 0:
+            self.menu.pos = Position(position.x - overflow, position.y + size.height)
+        else:
+            self.menu.pos = Position(position.x, position.y + size.height)
+        message_bus.post(Message(MessageType.ADD_WIDGET, self, self.menu))
+
     def render(self, mouse, destination, position, size):
         self.image.clear()
         if self.is_mouse_over(mouse, position, size):
             if mouse.left.down:
-                # here we need to add the menu
-                self.menu.pos = Position(position.x, position.y + size.height)
-                message_bus.post(Message(MessageType.ADD_WIDGET, self, self.menu))
+                self.display_menu(position, size, destination.get_width())
             self.background = (100, 100, 100, 255)
         else:
             self.background = (0, 0, 0, 0)
