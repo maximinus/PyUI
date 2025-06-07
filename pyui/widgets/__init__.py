@@ -7,6 +7,8 @@ from .stack import Stack
 from .frame import Frame
 from .menubar import MenuBar, Menu, MenuItem
 from .spacer import Spacer
+from .window_bar import WindowBar
+
 
 __all__ = ['ColorRect',
            'Image',
@@ -20,4 +22,6 @@ __all__ = ['ColorRect',
            'Frame',
            'MenuBar',
            'Menu',
-           'MenuItem']
+           'MenuItem',
+           'Spacer',
+           'WindowBar']

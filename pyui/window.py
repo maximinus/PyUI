@@ -1,8 +1,10 @@
 import pygame
 
-from pyui.helpers import Size, Position, Mouse
-from pyui.messaging import message_bus, MessageType
 from pyui.keys import keys
+from pyui.helpers import Size, Position, Mouse, Expand
+from pyui.widgets import WindowBar, VBox, Frame, NinePatchData
+from pyui.messaging import message_bus, MessageType
+
 
 FRAMES_PER_SECOND = 30
 
@@ -24,30 +26,49 @@ class Window:
     The window handles initialization, rendering, and the main event loop.
     Widgets are rendered in the order they were added (first to last).
     """
-    def __init__(self, size: Size, background=(200, 200, 200), title: str = "PyUI Window"):
-        assert background is not None, "Background color cannot be None"
+    def __init__(self, size: Size, child):
         pyui_init()
-        self.title = title
         self.size = size
         self.widgets = []
         self.running = False
-        self.background = background
+        self.background = None
         self.mouse = Mouse()
         self.modal_backgrounds = []
+        self.border_widget = None
         
         current_surface = pygame.display.get_surface()
         if current_surface is not None:
             # If a surface already exists, we assume pygame is already initialized
             self.screen = current_surface
         else:
-            pygame.display.set_caption(self.title)
-            self.screen = pygame.display.set_mode(self.size.as_tuple)
+            self.screen = pygame.display.set_mode(self.size.as_tuple, pygame.NOFRAME)
+        self.add_border()
+        self.widget_area_size = Size(0, 0)
+        self.widget_area_pos = Position(0, 0)
+        if child is not None:
+            self.add_widget(child)
 
         # define the callbacks
         message_bus.subscribe(self, MessageType.ADD_WIDGET,
                               lambda message: self.add_widget(message.data))
         message_bus.subscribe(self, MessageType.REMOVE_MODAL,
                               lambda message: self.remove_modal())
+
+
+    def add_border(self):
+        # the border is a VBox with a WindowBar at the top and a frame
+        # it is the first widget in the window
+        bar = WindowBar("Test Window")
+        patch_data = NinePatchData.from_json("window_frame.json")
+        frame = Frame(None, patch_data, expand=Expand.BOTH)
+        box = VBox(expand=Expand.BOTH)
+        box.add_child(bar)
+        box.add_child(frame)
+        self.widgets.append(box)
+        self.widget_area_pos = Position(frame.min_size.width // 2, bar.min_size.height)
+        self.widget_area_size = Size(self.size.width - self.widget_area_pos.x * 2,
+                                     self.size.height - self.widget_area_pos.y)
+        self.border_widget = frame
 
     @classmethod
     def default(cls):
@@ -104,8 +125,10 @@ class Window:
             self.widgets[-1].render(self.mouse, self.screen, Position(0, 0), self.size)
         else:
             self.screen.fill(self.background)
+            self.border_widget.render(self.mouse, self.screen, Position(0, 0), self.size)
             for widget in self.widgets:
-                widget.render(self.mouse, self.screen, Position(0, 0), self.size)
+                widget.render(self.mouse, self.screen,
+                              self.widget_area_pos, self.widget_area_size)
         pygame.display.flip()
     
     def handle_events(self) -> bool:

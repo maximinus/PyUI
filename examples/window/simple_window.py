@@ -17,5 +17,5 @@ if __name__ == "__main__":
                    align=Align(Align.CENTER, Align.CENTER))
     box = HBox(margin=Margin(10, 10, 10, 10), expand=Expand.BOTH)
     box.add_children([label1, label2, label3])
-    window = Window(Size(400, 300), box, background=(200, 200, 200))
+    window = Window(Size(400, 300), box)
     window.run()
