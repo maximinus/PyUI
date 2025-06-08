@@ -1,5 +1,6 @@
 import pygame
 
+<<<<<<< HEAD
 from pyui.keys import keys
 <<<<<<< HEAD
 from pyui.helpers import Size, Position, Mouse
@@ -7,8 +8,11 @@ from pyui.helpers import Size, Position, Mouse
 from pyui.helpers import Size, Position, Mouse, Expand
 from pyui.widgets import WindowBar, VBox, Frame, NinePatchData
 >>>>>>> parent of cdf953d (Moving away from borderless windows)
+=======
+from pyui.helpers import Size, Position, Mouse
+>>>>>>> parent of 30de153 (Added windowframe to window)
 from pyui.messaging import message_bus, MessageType
-
+from pyui.keys import keys
 
 FRAMES_PER_SECOND = 30
 
@@ -31,12 +35,18 @@ class Window:
     Widgets are rendered in the order they were added (first to last).
     """
 <<<<<<< HEAD
+<<<<<<< HEAD
     def __init__(self, size: Size, child=None, title: str = "PyUI Window",
                  background=(200, 200, 200)):
 =======
     def __init__(self, size: Size, child):
 >>>>>>> parent of cdf953d (Moving away from borderless windows)
+=======
+    def __init__(self, size: Size, background=(200, 200, 200), title: str = "PyUI Window"):
+        assert background is not None, "Background color cannot be None"
+>>>>>>> parent of 30de153 (Added windowframe to window)
         pyui_init()
+        self.title = title
         self.size = size
         self.widgets = []
         self.running = False
@@ -44,44 +54,27 @@ class Window:
         self.mouse = Mouse()
         self.modal_backgrounds = []
 <<<<<<< HEAD
+<<<<<<< HEAD
         self.title = title
 =======
         self.border_widget = None
 >>>>>>> parent of cdf953d (Moving away from borderless windows)
+=======
+>>>>>>> parent of 30de153 (Added windowframe to window)
         
         current_surface = pygame.display.get_surface()
         if current_surface is not None:
             # If a surface already exists, we assume pygame is already initialized
             self.screen = current_surface
         else:
-            self.screen = pygame.display.set_mode(self.size.as_tuple, pygame.NOFRAME)
-        self.add_border()
-        self.widget_area_size = Size(0, 0)
-        self.widget_area_pos = Position(0, 0)
-        if child is not None:
-            self.add_widget(child)
+            pygame.display.set_caption(self.title)
+            self.screen = pygame.display.set_mode(self.size.as_tuple)
 
         # define the callbacks
         message_bus.subscribe(self, MessageType.ADD_WIDGET,
                               lambda message: self.add_widget(message.data))
         message_bus.subscribe(self, MessageType.REMOVE_MODAL,
                               lambda message: self.remove_modal())
-
-
-    def add_border(self):
-        # the border is a VBox with a WindowBar at the top and a frame
-        # it is the first widget in the window
-        bar = WindowBar("Test Window")
-        patch_data = NinePatchData.from_json("window_frame.json")
-        frame = Frame(None, patch_data, expand=Expand.BOTH)
-        box = VBox(expand=Expand.BOTH)
-        box.add_child(bar)
-        box.add_child(frame)
-        self.widgets.append(box)
-        self.widget_area_pos = Position(frame.min_size.width // 2, bar.min_size.height)
-        self.widget_area_size = Size(self.size.width - self.widget_area_pos.x * 2,
-                                     self.size.height - self.widget_area_pos.y)
-        self.border_widget = frame
 
     @classmethod
     def default(cls):
@@ -138,9 +131,12 @@ class Window:
         else:
             self.screen.fill(self.background)
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
             self.border_widget.render(self.mouse, self.screen, Position(0, 0), self.size)
 >>>>>>> parent of cdf953d (Moving away from borderless windows)
+=======
+>>>>>>> parent of 30de153 (Added windowframe to window)
             for widget in self.widgets:
                 widget.render(self.mouse, self.screen, Position(0, 0), self.size)
         pygame.display.flip()

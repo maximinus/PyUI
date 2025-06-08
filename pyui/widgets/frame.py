@@ -15,8 +15,7 @@ class Frame(Widget):
     def __init__(self, child: Widget, nine_patch_data: NinePatchData, **kwargs):
         super().__init__(**kwargs)
         self.child = child
-        if child is not None:
-            self.child.parent = self
+        self.child.parent = self
         self.nine_patch_data = nine_patch_data
         # Don't create the NinePatch here as we need dynamic sizing based on the child
 
@@ -30,14 +29,6 @@ class Frame(Widget):
             child_size.height + n.top + n.bottom
         )
         return frame_size + self.margin.size
-
-    @property
-    def has_child(self) -> bool:
-        return self.child is not None
-
-    def add_child(self, widget):
-        widget.parent = self
-        self.child = widget
 
     def get_new_image(self, size: Size) -> Surface:
         # The surface needs to have alpha
@@ -81,7 +72,6 @@ class Frame(Widget):
         n = self.nine_patch_data
         nine_patch = NinePatch(self.nine_patch_data, frame_size)
         nine_patch.render(mouse, frame_surface, Position(0, 0), frame_size)
-
         child_pos = Position(n.left, n.top)
         child_size = Size(
             frame_size.width - n.left - n.right,
@@ -92,8 +82,7 @@ class Frame(Widget):
         if self.background is not None:
             pygame.draw.rect(frame_surface, self.background, 
                              (child_pos.x, child_pos.y, child_size.width, child_size.height))
-        if self.child is not None:
-            self.child.render(mouse, frame_surface, child_pos, child_size)
+        self.child.render(mouse, frame_surface, child_pos, child_size)
         new_image.blit(frame_surface, render_pos.as_tuple)
         destination.blit(new_image, position.as_tuple)
 <<<<<<< HEAD
@@ -103,5 +92,4 @@ class Frame(Widget):
 
     def set_active(self, is_active):
         self.active = is_active
-        if self.child is not None:
-            self.child.set_active(is_active)
+        self.child.set_active(is_active)
