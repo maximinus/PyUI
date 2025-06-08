@@ -43,7 +43,7 @@ class TestWindow(PyuiTest):
         self.assertEqual(self.window.size, self.size)
         self.assertEqual(self.window.widgets, [])
         self.assertFalse(self.window.running)
-        self.assertEqual(self.window.background, None)
+        self.assertEqual(self.window.background, (200, 200, 200))
     
     def test_add_widget(self):
         # Test adding a widget

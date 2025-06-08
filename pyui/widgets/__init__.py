@@ -7,10 +7,6 @@ from .stack import Stack
 from .frame import Frame
 from .menubar import MenuBar, Menu, MenuItem
 from .spacer import Spacer
-<<<<<<< HEAD
-
-=======
->>>>>>> parent of 30de153 (Added windowframe to window)
 
 __all__ = ['ColorRect',
            'Image',
@@ -24,9 +20,5 @@ __all__ = ['ColorRect',
            'Frame',
            'MenuBar',
            'Menu',
-<<<<<<< HEAD
            'MenuItem',
            'Spacer']
-=======
-           'MenuItem']
->>>>>>> parent of 30de153 (Added windowframe to window)

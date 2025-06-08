@@ -1,16 +1,6 @@
 import pygame
 
-<<<<<<< HEAD
-from pyui.keys import keys
-<<<<<<< HEAD
 from pyui.helpers import Size, Position, Mouse
-=======
-from pyui.helpers import Size, Position, Mouse, Expand
-from pyui.widgets import WindowBar, VBox, Frame, NinePatchData
->>>>>>> parent of cdf953d (Moving away from borderless windows)
-=======
-from pyui.helpers import Size, Position, Mouse
->>>>>>> parent of 30de153 (Added windowframe to window)
 from pyui.messaging import message_bus, MessageType
 from pyui.keys import keys
 
@@ -34,17 +24,8 @@ class Window:
     The window handles initialization, rendering, and the main event loop.
     Widgets are rendered in the order they were added (first to last).
     """
-<<<<<<< HEAD
-<<<<<<< HEAD
-    def __init__(self, size: Size, child=None, title: str = "PyUI Window",
-                 background=(200, 200, 200)):
-=======
-    def __init__(self, size: Size, child):
->>>>>>> parent of cdf953d (Moving away from borderless windows)
-=======
     def __init__(self, size: Size, background=(200, 200, 200), title: str = "PyUI Window"):
         assert background is not None, "Background color cannot be None"
->>>>>>> parent of 30de153 (Added windowframe to window)
         pyui_init()
         self.title = title
         self.size = size
@@ -53,15 +34,8 @@ class Window:
         self.background = background
         self.mouse = Mouse()
         self.modal_backgrounds = []
-<<<<<<< HEAD
-<<<<<<< HEAD
         self.title = title
-=======
-        self.border_widget = None
->>>>>>> parent of cdf953d (Moving away from borderless windows)
-=======
->>>>>>> parent of 30de153 (Added windowframe to window)
-        
+
         current_surface = pygame.display.get_surface()
         if current_surface is not None:
             # If a surface already exists, we assume pygame is already initialized
@@ -130,13 +104,6 @@ class Window:
             self.widgets[-1].render(self.mouse, self.screen, Position(0, 0), self.size)
         else:
             self.screen.fill(self.background)
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-            self.border_widget.render(self.mouse, self.screen, Position(0, 0), self.size)
->>>>>>> parent of cdf953d (Moving away from borderless windows)
-=======
->>>>>>> parent of 30de153 (Added windowframe to window)
             for widget in self.widgets:
                 widget.render(self.mouse, self.screen, Position(0, 0), self.size)
         pygame.display.flip()

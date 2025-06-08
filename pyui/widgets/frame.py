@@ -38,15 +38,6 @@ class Frame(Widget):
         """
         Render the nine patch frame and the child widget inside it.
         """
-<<<<<<< HEAD
-        if self.image.matches(size):
-            destination.blit(self.image.image, position.as_tuple)
-            if self.child is not None:
-                self.child.render(mouse, destination, position, size)
-            return
-
-=======
->>>>>>> parent of cdf953d (Moving away from borderless windows)
         new_image = self.get_new_image(size)
         render_pos = self.get_position(size)
         # Add the margin left and top
@@ -85,10 +76,6 @@ class Frame(Widget):
         self.child.render(mouse, frame_surface, child_pos, child_size)
         new_image.blit(frame_surface, render_pos.as_tuple)
         destination.blit(new_image, position.as_tuple)
-<<<<<<< HEAD
-        self.image.update(new_image)
-=======
->>>>>>> parent of cdf953d (Moving away from borderless windows)
 
     def set_active(self, is_active):
         self.active = is_active
