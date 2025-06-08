@@ -1,8 +1,7 @@
 import pygame
 
 from pyui.keys import keys
-from pyui.helpers import Size, Position, Mouse, Expand, Align
-from pyui.widgets import WindowBar, VBox, Frame, NinePatchData
+from pyui.helpers import Size, Position, Mouse
 from pyui.messaging import message_bus, MessageType
 
 
@@ -34,7 +33,6 @@ class Window:
         self.background = None
         self.mouse = Mouse()
         self.modal_backgrounds = []
-        self.border_widget = None
         self.title = title
         
         current_surface = pygame.display.get_surface()
@@ -107,8 +105,7 @@ class Window:
             self.widgets[-1].render(self.mouse, self.screen, Position(0, 0), self.size)
         else:
             for widget in self.widgets:
-                widget.render(self.mouse, self.screen,
-                              self.widget_area_pos, self.widget_area_size)
+                widget.render(self.mouse, self.screen, Position(0, 0), self.size)
         pygame.display.flip()
     
     def handle_events(self) -> bool:
@@ -123,9 +120,6 @@ class Window:
         for event in pygame.event.get():
             match event.type:
                 case pygame.KEYDOWN:
-                    if event.key == pygame.K_F12:
-                        # exit on F12
-                        return False
                     keys_pressed.append(event.key)
                 case pygame.KEYUP:
                     keys_released.append(event.key)

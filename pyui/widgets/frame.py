@@ -47,19 +47,6 @@ class Frame(Widget):
         # The surface needs to have alpha
         return Surface((size.width, size.height), flags=pygame.SRCALPHA)
 
-    def render_child(self, mouse, destination: Surface, position: Position, size: Size):
-        """
-        Render the child widget inside the frame.
-        """
-        if self.child is not None:
-            self.render_child(mouse, destination, position, size)
-            child_pos = Position(self.nine_patch_data.left, self.nine_patch_data.top)
-            child_size = Size(
-                size.width - self.nine_patch_data.left - self.nine_patch_data.right,
-                size.height - self.nine_patch_data.top - self.nine_patch_data.bottom
-            )
-            self.child.render(mouse, destination, child_pos, child_size)
-
     def render(self, mouse, destination: Surface, position: Position, size: Size):
         """
         Render the nine patch frame and the child widget inside it.
@@ -110,7 +97,6 @@ class Frame(Widget):
             self.child.render(mouse, frame_surface, child_pos, child_size)
         new_image.blit(frame_surface, render_pos.as_tuple)
         destination.blit(new_image, position.as_tuple)
-        self.render_child(mouse, destination, position, size)
         self.image.update(new_image)
 
     def set_active(self, is_active):
