@@ -25,12 +25,13 @@ class Window:
     The window handles initialization, rendering, and the main event loop.
     Widgets are rendered in the order they were added (first to last).
     """
-    def __init__(self, size: Size, child=None, title: str = "PyUI Window"):
+    def __init__(self, size: Size, child=None, title: str = "PyUI Window",
+                 background=(200, 200, 200)):
         pyui_init()
         self.size = size
         self.widgets = []
         self.running = False
-        self.background = None
+        self.background = background
         self.mouse = Mouse()
         self.modal_backgrounds = []
         self.title = title
@@ -64,7 +65,6 @@ class Window:
     
     def capture_background(self, widget):
         capture = pygame.Surface(self.size.as_tuple).convert_alpha()
-        capture.fill(self.background)
         # capture the current screen content
         capture.blit(self.screen, (0, 0))
         self.modal_backgrounds.append(ModalState(widget, capture))
@@ -104,6 +104,7 @@ class Window:
             # only the top widget needs to be handled
             self.widgets[-1].render(self.mouse, self.screen, Position(0, 0), self.size)
         else:
+            self.screen.fill(self.background)
             for widget in self.widgets:
                 widget.render(self.mouse, self.screen, Position(0, 0), self.size)
         pygame.display.flip()

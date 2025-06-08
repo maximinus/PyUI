@@ -4,7 +4,7 @@ from pyui.helpers import Size, Expand
 
 
 if __name__ == "__main__":
-    window = Window(Size(640, 480), background=(200, 200, 200))
+    window = Window(Size(640, 480))
     
     menu = MenuBar(background=(150, 150, 150))
     menu.add_menu("File")

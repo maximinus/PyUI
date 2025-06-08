@@ -53,7 +53,8 @@ class Frame(Widget):
         """
         if self.image.matches(size):
             destination.blit(self.image.image, position.as_tuple)
-            self.render_child(mouse, destination, position, size)
+            if self.child is not None:
+                self.child.render(mouse, destination, position, size)
             return
 
         new_image = self.get_new_image(size)
