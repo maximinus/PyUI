@@ -135,7 +135,7 @@ class Widget:
         if mouse.middle.down:
             self.signals.trigger(SignalType.MOUSE_LEFT_CLICK, self)
 
-    def render(self, mouse, surface: Surface, pos: Position, size: Size):
+    def render(self, mouse, destination: Surface, pos: Position, size: Size):
         pass
 
     def set_active(self, is_active):
