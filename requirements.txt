@@ -1,6 +1,0 @@
-pygame-ce==2.5.2
--e git+ssh://git@github.com/maximinus/PyUI.git@474eb34926ed4ada8238f8435b668efdfe498af6#egg=pyui
-pytest
-coverage
-pytest-cov
-
